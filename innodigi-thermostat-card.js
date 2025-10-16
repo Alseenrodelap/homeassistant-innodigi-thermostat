@@ -221,18 +221,57 @@ class InnodigiThermostatCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: ${isCompact ? '8px' : '20px'};
+          position: relative;
         }
 
         .header {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          position: relative;
         }
 
         .title {
           font-size: 18px;
           font-weight: 500;
           color: var(--primary-text-color);
+        }
+
+        .outdoor-compact {
+          position: absolute;
+          left: 0;
+          top: ${isCompact ? '0' : '0'};
+          font-size: 12px;
+          font-weight: 300;
+          color: ${colorOutdoorTemp};
+          display: none;
+          opacity: 0.8;
+          z-index: 10;
+          padding: 2px 4px;
+          background: rgba(0, 0, 0, 0.1);
+          border-radius: 4px;
+        }
+
+        /* Show compact outdoor temp on narrow screens when outdoor is enabled */
+        @media (max-width: 400px) {
+          .outdoor-compact {
+            display: ${hasOutdoor ? 'block' : 'none'} !important;
+          }
+          .temp-item.outdoor {
+            display: none !important;
+          }
+          /* Adjust temperature display padding when outdoor temp is shown */
+          ${hasOutdoor && isCompact ? `
+          .temperature-display {
+            margin-top: 20px;
+          }
+          ` : ''}
+          /* Adjust title position when outdoor temp is shown in normal mode */
+          ${hasOutdoor && !isCompact ? `
+          .title {
+            margin-left: 55px;
+          }
+          ` : ''}
         }
 
         .mode-buttons {
@@ -429,6 +468,9 @@ class InnodigiThermostatCard extends HTMLElement {
 
       <ha-card>
         <div class="card-content">
+          ${hasOutdoor ? `
+          <div class="outdoor-compact">${outdoorTemp.toFixed(1)}${unit}</div>
+          ` : ''}
           ${!isCompact ? `
           <div class="header">
             <div class="title">${this._config.name || entity.attributes.friendly_name || 'Thermostaat'}</div>
@@ -520,6 +562,10 @@ class InnodigiThermostatCard extends HTMLElement {
         const outdoorTemp = parseFloat(outdoorEntity.state) || 0;
         const outdoorValue = this.shadowRoot.querySelector('.temp-value.outdoor');
         if (outdoorValue) outdoorValue.innerHTML = `${outdoorTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
+        
+        // Update compact outdoor display
+        const outdoorCompact = this.shadowRoot.querySelector('.outdoor-compact');
+        if (outdoorCompact) outdoorCompact.textContent = `${outdoorTemp.toFixed(1)}${unit}`;
       }
     }
 

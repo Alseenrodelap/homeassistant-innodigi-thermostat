@@ -5,6 +5,115 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.9.0] - 2025-10-16
+
+### 📱 NIEUWE FEATURE - Responsive Buitentemperatuur Display
+
+#### Automatische Layout Aanpassing
+- **Smart responsive**: Detecteert automatisch of er genoeg ruimte is voor 3 kolommen
+- **Compact display**: Bij smalle schermen (<400px) wordt outdoor temp klein links bovenaan getoond
+- **Geen label**: Alleen temperatuurwaarde in compact mode
+- **Automatisch verbergen**: Outdoor kaartje verdwijnt uit hoofddisplay op smalle schermen
+
+#### Responsive Gedrag
+
+**Breed scherm** (>400px):
+- Normale weergave met 3 kolommen: Buiten | Huidig | Doel
+- Outdoor temp met label "Buiten"
+- Volledig kaartje (indien kaartjes ingeschakeld)
+
+**Smal scherm** (<400px):
+- Compact outdoor display links bovenaan
+- Klein: 12px font
+- Geen label, alleen waarde: "15.3°C"
+- 2 kolommen: Huidig | Doel
+- Outdoor kaartje verborgen uit hoofddisplay
+
+#### Styling Details
+
+**Outdoor Compact Display**:
+- Positie: Absolute links bovenaan in card
+- Font: 12px, font-weight 300
+- Kleur: Gebruikt outdoor temp kleur instelling
+- Opacity: 0.8 voor subtiel effect
+- Background: rgba(0, 0, 0, 0.1) voor leesbaarheid
+- Border-radius: 4px
+- Padding: 2px 4px
+- Z-index: 10 (altijd bovenop)
+
+**Layout Aanpassingen**:
+- Normal mode: Titel schuift 55px naar rechts
+- Compact mode: Temperature display margin-top 20px
+- Automatisch ruimte maken voor compact display
+
+#### Media Query
+```css
+@media (max-width: 400px) {
+  .outdoor-compact {
+    display: block !important;
+  }
+  .temp-item.outdoor {
+    display: none !important;
+  }
+}
+```
+
+#### Technische Details
+
+**HTML Structuur**:
+- Compact display altijd in DOM (voor smooth transitions)
+- Verborgen via CSS op brede schermen
+- Verschijnt via media query op smalle schermen
+
+**Update Logic**:
+- `updateValues()` update beide displays (normal + compact)
+- Sync houden met outdoor entity state
+- Dezelfde temperatuur, andere weergave
+
+**CSS Positie**:
+```css
+.outdoor-compact {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+```
+
+#### Use Cases
+
+**Smalle Dashboard Kolommen**:
+- Perfect voor 1-kolom layouts op tablet
+- Mobiele weergave op smartphone
+- Split-screen mode
+
+**Responsive Dashboards**:
+- Automatische aanpassing aan schermgrootte
+- Geen handmatige configuratie nodig
+- Smooth transitions tussen modes
+
+**Space Saving**:
+- Maximale info in minimale ruimte
+- Outdoor temp altijd zichtbaar
+- Geen horizontale scroll
+
+#### Voordelen
+- ✅ Automatisch responsive (geen config)
+- ✅ Outdoor temp altijd zichtbaar
+- ✅ Optimaal ruimtegebruik
+- ✅ Smooth degradation op smalle schermen
+- ✅ Behoud van functionaliteit
+- ✅ Duidelijke visuele hierarchie
+- ✅ Werkt met alle layouts (normal/compact)
+- ✅ Backwards compatible
+
+### Technische Implementatie
+- Media query breakpoint: 400px
+- CSS `display: none !important` voor override
+- Absolute positioning voor overlay
+- Beide displays blijven gesynchroniseerd
+- Z-index voor correcte layering
+
 ## [1.8.0] - 2025-10-16
 
 ### 🎨 NIEUWE FEATURES - Alpha Waarden & Border Styling
