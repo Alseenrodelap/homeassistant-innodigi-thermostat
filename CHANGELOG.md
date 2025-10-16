@@ -5,6 +5,99 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.11.0] - 2025-10-16
+
+### 🎨 UI/UX VERBETERINGEN - Compact Mode & Control Buttons
+
+#### Compact Mode Optimalisaties
+- **Volledige breedte**: Bij compact outdoor mode gebruiken de 2 temperatuur kaartjes nu de volle breedte
+- **Outdoor kaart verwijderd**: Derde kaartje (outdoor) wordt volledig verborgen in compact mode
+- **Equal width**: Huidig en Doel kaartjes krijgen elk 50% breedte via `flex: 1`
+- **"buiten" label**: Compact outdoor display toont nu "15.3°C buiten" i.p.v. alleen "15.3°C"
+- **2px omhoog**: Compact display staat nu 2px hoger (`top: -2px`)
+
+#### Grotere Control Buttons
+- **5px groter**: Plus/Min buttons zijn nu groter voor betere usability
+  - Normal: 48px → 53px (width/height)
+  - Compact: 40px → 45px (width/height)
+- **Grotere icons**: Font-size ook vergroot voor duidelijkheid
+  - Normal: 24px → 29px
+  - Compact: 20px → 25px
+
+#### Gecompenseerde Spacing
+Om grotere buttons te compenseren zonder hoogte toename:
+- **Card padding**: 16px → 14px (normal), 8px → 6px (compact)
+- **Card-content gap**: 20px → 16px (normal), 8px → 6px (compact)
+- **Controls gap**: 16px → 12px (normal), 8px → 6px (compact)
+- **Slider container padding**: 30px → 25px (normal), 15px → 12px (compact)
+- **Slider container margin**: 10px → 8px (normal), 4px → 2px (compact)
+
+#### Visual Changes
+
+**Voor (compact mode met outdoor):**
+```
+[15.3°C]
+┌──────┬──────┬──────┐
+│Buiten│Huidig│ Doel │  ← 3 kaartjes, smaller
+│15.3°C│21.5°C│22.0°C│
+└──────┴──────┴──────┘
+```
+
+**Na (compact mode met outdoor):**
+```
+[15.3°C buiten]  ← 2px hoger + label
+┌─────────┬─────────┐
+│ Huidig  │  Doel   │  ← 2 kaartjes, volle breedte
+│ 21.5°C  │ 22.0°C  │
+└─────────┴─────────┘
+   ⊖  22.0°C  ⊕      ← 5px grotere buttons
+```
+
+#### Technische Details
+
+**Flex Layout**:
+```css
+.temp-item {
+  flex: 1;  /* Bij compact mode met outdoor */
+}
+```
+
+**Button Sizes**:
+```css
+.control-btn {
+  width: 53px;   /* was 48px */
+  height: 53px;  /* was 48px */
+  font-size: 29px; /* was 24px */
+}
+```
+
+**Compact Display**:
+```html
+<div class="outdoor-compact">
+  15.3°C buiten  <!-- was: 15.3°C -->
+</div>
+```
+
+**Spacing Reductions**:
+- Total reduction: ~16px vertical space
+- Allows for 5px larger buttons
+- Net result: Same or slightly less height
+
+#### Voordelen
+- ✅ **Betere ruimtebenutting**: 2 kaartjes gebruiken volle breedte
+- ✅ **Duidelijkere outdoor label**: "buiten" maakt het direct herkenbaar
+- ✅ **Betere usability**: Grotere buttons zijn makkelijker te klikken
+- ✅ **Geen hoogte toename**: Gecompenseerde spacing houdt card compact
+- ✅ **Visueel evenwicht**: 2 gelijke kaartjes ogen symmetrisch
+- ✅ **Touch-friendly**: 53px/45px buttons perfect voor touch screens
+
+#### Use Case
+Perfect voor:
+- Touch screen interfaces (grotere touch targets)
+- Smalle dashboard kolommen (volle breedte benutting)
+- Minimalistisch design (2 kaartjes symmetrisch)
+- Betere leesbaarheid outdoor temp (met "buiten" label)
+
 ## [1.10.0] - 2025-10-16
 
 ### ⚙️ NIEUWE FEATURE - Configureerbare Buitentemperatuur Weergave

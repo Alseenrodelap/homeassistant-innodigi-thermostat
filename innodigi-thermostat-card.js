@@ -213,7 +213,7 @@ class InnodigiThermostatCard extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>
         ha-card {
-          padding: ${isCompact ? '8px' : '16px'};
+          padding: ${isCompact ? '6px' : '14px'};
           background: var(--ha-card-background, var(--card-background-color, white));
           border-radius: var(--ha-card-border-radius, 12px);
           box-shadow: var(--ha-card-box-shadow, 0 2px 4px rgba(0,0,0,0.1));
@@ -222,7 +222,7 @@ class InnodigiThermostatCard extends HTMLElement {
         .card-content {
           display: flex;
           flex-direction: column;
-          gap: ${isCompact ? '8px' : '20px'};
+          gap: ${isCompact ? '6px' : '16px'};
           position: relative;
         }
 
@@ -242,7 +242,7 @@ class InnodigiThermostatCard extends HTMLElement {
         .outdoor-compact {
           position: absolute;
           left: 0;
-          top: ${isCompact ? '0' : '0'};
+          top: -2px;
           font-size: 12px;
           font-weight: 300;
           color: ${colorOutdoorTemp};
@@ -344,6 +344,7 @@ class InnodigiThermostatCard extends HTMLElement {
 
         .temp-item {
           text-align: center;
+          ${outdoorDisplayMode === 'compact' && hasOutdoor ? 'flex: 1;' : ''}
           ${showTempCards ? `
             background: ${tempCardBg};
             padding: ${isCompact ? '8px' : '12px'};
@@ -384,8 +385,8 @@ class InnodigiThermostatCard extends HTMLElement {
 
         .slider-container {
           position: relative;
-          padding: ${isCompact ? '15px 0' : '30px 0'};
-          margin: ${isCompact ? '4px 0' : '10px 0'};
+          padding: ${isCompact ? '12px 0' : '25px 0'};
+          margin: ${isCompact ? '2px 0' : '8px 0'};
         }
 
         .slider-track {
@@ -457,18 +458,18 @@ class InnodigiThermostatCard extends HTMLElement {
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: ${isCompact ? '8px' : '16px'};
+          gap: ${isCompact ? '6px' : '12px'};
           ${isCompact ? 'flex-wrap: wrap;' : ''}
         }
 
         .control-btn {
-          width: ${isCompact ? '40px' : '48px'};
-          height: ${isCompact ? '40px' : '48px'};
+          width: ${isCompact ? '45px' : '53px'};
+          height: ${isCompact ? '45px' : '53px'};
           border: none;
           border-radius: 50%;
           background: ${colorButtons};
           color: white;
-          font-size: ${isCompact ? '20px' : '24px'};
+          font-size: ${isCompact ? '25px' : '29px'};
           cursor: pointer;
           transition: all 0.3s;
           display: flex;
@@ -502,7 +503,7 @@ class InnodigiThermostatCard extends HTMLElement {
       <ha-card>
         <div class="card-content">
           ${hasOutdoor ? `
-          <div class="outdoor-compact">${outdoorTemp.toFixed(1)}${unit}</div>
+          <div class="outdoor-compact">${outdoorTemp.toFixed(1)}${unit} buiten</div>
           ` : ''}
           ${!isCompact ? `
           <div class="header">
@@ -598,7 +599,7 @@ class InnodigiThermostatCard extends HTMLElement {
         
         // Update compact outdoor display
         const outdoorCompact = this.shadowRoot.querySelector('.outdoor-compact');
-        if (outdoorCompact) outdoorCompact.textContent = `${outdoorTemp.toFixed(1)}${unit}`;
+        if (outdoorCompact) outdoorCompact.textContent = `${outdoorTemp.toFixed(1)}${unit} buiten`;
       }
     }
 
