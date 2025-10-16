@@ -125,6 +125,7 @@ class InnodigiThermostatCard extends HTMLElement {
       name: '',
       layout: 'normal',
       outdoor_entity: '',
+      outdoor_display_mode: 'auto',
       // Slider gradient colors
       color_cold: '#3498db',
       color_medium: '#2ecc71',
@@ -181,6 +182,7 @@ class InnodigiThermostatCard extends HTMLElement {
     const outdoorEntity = outdoorEntityId ? this._hass.states[outdoorEntityId] : null;
     const outdoorTemp = outdoorEntity ? (parseFloat(outdoorEntity.state) || 0) : null;
     const hasOutdoor = outdoorTemp !== null;
+    const outdoorDisplayMode = this._config.outdoor_display_mode || 'auto';
     
     // Colors with defaults
     const colorButtons = this._config.color_buttons || '#3498db';
@@ -244,7 +246,7 @@ class InnodigiThermostatCard extends HTMLElement {
           font-size: 12px;
           font-weight: 300;
           color: ${colorOutdoorTemp};
-          display: none;
+          display: ${outdoorDisplayMode === 'compact' && hasOutdoor ? 'block' : 'none'};
           opacity: 0.8;
           z-index: 10;
           padding: 2px 4px;
@@ -252,7 +254,37 @@ class InnodigiThermostatCard extends HTMLElement {
           border-radius: 4px;
         }
 
-        /* Show compact outdoor temp on narrow screens when outdoor is enabled */
+        ${outdoorDisplayMode === 'compact' && hasOutdoor ? `
+        /* Hide inline outdoor when compact mode is forced */
+        .temp-item.outdoor {
+          display: none !important;
+        }
+        /* Adjust temperature display padding when outdoor temp is shown */
+        ${isCompact ? `
+        .temperature-display {
+          margin-top: 20px;
+        }
+        ` : ''}
+        /* Adjust title position when outdoor temp is shown in normal mode */
+        ${!isCompact ? `
+        .title {
+          margin-left: 55px;
+        }
+        ` : ''}
+        ` : ''}
+
+        ${outdoorDisplayMode === 'inline' && hasOutdoor ? `
+        /* Force inline display, hide compact */
+        .outdoor-compact {
+          display: none !important;
+        }
+        .temp-item.outdoor {
+          display: flex !important;
+        }
+        ` : ''}
+
+        /* Auto mode: Show compact outdoor temp on narrow screens when outdoor is enabled */
+        ${outdoorDisplayMode === 'auto' ? `
         @media (max-width: 400px) {
           .outdoor-compact {
             display: ${hasOutdoor ? 'block' : 'none'} !important;
@@ -273,6 +305,7 @@ class InnodigiThermostatCard extends HTMLElement {
           }
           ` : ''}
         }
+        ` : ''}
 
         .mode-buttons {
           display: flex;
@@ -765,6 +798,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       name: '',
       layout: 'normal',
       outdoor_entity: '',
+      outdoor_display_mode: 'auto',
       // Slider colors
       color_cold: '#3498db',
       color_medium: '#2ecc71',
@@ -933,7 +967,17 @@ class InnodigiThermostatCardEditor extends HTMLElement {
             <select id="outdoor-entity-select">
               ${outdoorEntityOptions}
             </select>
-            <div class="description">Selecteer een sensor voor buitentemperatuur (optioneel, toont 3 kolommen)</div>
+            <div class="description">Selecteer een sensor voor buitentemperatuur (optioneel)</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Buitentemperatuur Weergave</label>
+            <select id="outdoor-display-mode">
+              <option value="auto" ${this._config.outdoor_display_mode === 'auto' ? 'selected' : ''}>Auto - Responsive (compact op smalle schermen)</option>
+              <option value="compact" ${this._config.outdoor_display_mode === 'compact' ? 'selected' : ''}>Altijd Compact (klein links bovenaan)</option>
+              <option value="inline" ${this._config.outdoor_display_mode === 'inline' ? 'selected' : ''}>Altijd Inline (in temperatuur display)</option>
+            </select>
+            <div class="description">Auto past zich aan schermgrootte aan, Compact toont altijd klein bovenaan, Inline toont altijd als kolom</div>
           </div>
         </div>
 
@@ -1116,6 +1160,14 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     if (outdoorEntitySelect) {
       outdoorEntitySelect.addEventListener('change', (e) => {
         this._config.outdoor_entity = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    const outdoorDisplayMode = this.shadowRoot.querySelector('#outdoor-display-mode');
+    if (outdoorDisplayMode) {
+      outdoorDisplayMode.addEventListener('change', (e) => {
+        this._config.outdoor_display_mode = e.target.value;
         this.configChanged(this._config);
       });
     }

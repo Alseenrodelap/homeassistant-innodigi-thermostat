@@ -5,6 +5,138 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.10.0] - 2025-10-16
+
+### ⚙️ NIEUWE FEATURE - Configureerbare Buitentemperatuur Weergave
+
+#### Drie Weergave Modes
+- **Auto (default)**: Responsive - compact op smalle schermen (<400px), inline op brede schermen
+- **Compact**: Altijd klein links bovenaan weergeven, ongeacht schermgrootte
+- **Inline**: Altijd als kolom in temperatuur display weergeven, nooit compact
+
+#### Configuratie Dropdown
+- **Locatie**: Editor > Basis Instellingen > Buitentemperatuur Weergave
+- **Opties**: 
+  1. Auto - Responsive (compact op smalle schermen)
+  2. Altijd Compact (klein links bovenaan)
+  3. Altijd Inline (in temperatuur display)
+- **Default**: Auto (backwards compatible)
+
+#### Gedrag per Mode
+
+**Auto Mode** (responsive):
+- Breed scherm (>400px): 3 kolommen met Buiten | Huidig | Doel
+- Smal scherm (<400px): Compact display bovenaan + 2 kolommen Huidig | Doel
+- Automatische aanpassing via media query
+
+**Compact Mode** (altijd klein):
+- Altijd compact display links bovenaan
+- Alleen temperatuurwaarde (geen label)
+- Klein: 12px font met background
+- 2 kolommen: Huidig | Doel
+- Perfect voor space-saving op elk scherm
+
+**Inline Mode** (altijd volledig):
+- Altijd 3-kolommen layout
+- Volledig kaartje met label "Buiten"
+- Geen compact display
+- Perfecte voor brede dashboards
+
+#### Config Optie
+```yaml
+outdoor_display_mode: 'auto'  # 'auto', 'compact', of 'inline'
+```
+
+#### CSS Implementatie
+
+**Compact Mode**:
+```css
+.outdoor-compact {
+  display: block;
+}
+.temp-item.outdoor {
+  display: none !important;
+}
+```
+
+**Inline Mode**:
+```css
+.outdoor-compact {
+  display: none !important;
+}
+.temp-item.outdoor {
+  display: flex !important;
+}
+```
+
+**Auto Mode**:
+```css
+@media (max-width: 400px) {
+  .outdoor-compact { display: block !important; }
+  .temp-item.outdoor { display: none !important; }
+}
+```
+
+#### Use Cases
+
+**Compact Mode**:
+- Smalle dashboard kolommen (altijd)
+- Minimalistisch design voorkeur
+- Maximale ruimte voor andere elementen
+- Consistent gedrag op alle schermen
+
+**Inline Mode**:
+- Brede dashboard layouts
+- Volledige informatieweergave gewenst
+- Kaartjes styling voor outdoor temp
+- Symmetrische 3-kolommen layout
+
+**Auto Mode**:
+- Responsive dashboards
+- Mixed device usage (desktop/mobile)
+- Geen voorkeur, automatisch aanpassen
+- Default gedrag (backwards compatible)
+
+#### Editor Verbetering
+- **Nieuwe dropdown**: Direct onder outdoor entity selector
+- **Duidelijke labels**: Beschrijft elk gedrag
+- **Live update**: Direct zichtbaar na wijziging
+- **Helpende beschrijving**: Uitleg bij elke optie
+
+#### Technische Details
+
+**State Management**:
+- `outdoor_display_mode` property in config
+- Default: 'auto' (backwards compatible)
+- Gebruikt in CSS conditionals
+
+**CSS Logic**:
+- Template literals voor conditional CSS
+- Display properties per mode
+- Layout adjustments (margin, padding)
+- Z-index management voor overlay
+
+**Event Handling**:
+- Dropdown change event in editor
+- Config update via configChanged()
+- Immediate re-render van card
+
+#### Voordelen
+- ✅ Volledige controle over weergave
+- ✅ Keuze tussen ruimtebesparend en volledig
+- ✅ Altijd compact mogelijk (niet alleen responsive)
+- ✅ Altijd inline mogelijk (3 kolommen geforceerd)
+- ✅ Backwards compatible (auto is default)
+- ✅ Geen breaking changes
+- ✅ Intuïtieve configuratie
+- ✅ Live preview in editor
+
+### Backwards Compatibility
+- Default: 'auto' behoudt responsive gedrag
+- Bestaande configs blijven werken
+- Nieuwe optie is volledig optioneel
+- Geen migratie nodig
+
 ## [1.9.0] - 2025-10-16
 
 ### 📱 NIEUWE FEATURE - Responsive Buitentemperatuur Display
