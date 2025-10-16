@@ -14,6 +14,7 @@ Een moderne, touch-vriendelijke thermostaat kaart voor Home Assistant met een in
 - 🎨 **Moderne UI**: Vloeiende animaties en gradient slider
 - 🔄 **Realtime updates**: Onmiddellijke feedback bij interactie
 - ✅ **Compatibel**: Werkt met alle generieke thermostaat entiteiten
+- 🎛️ **Visuele editor**: Eenvoudig configureren via de UI zonder YAML
 
 ## Installatie
 
@@ -43,16 +44,30 @@ lovelace:
 
 ## Configuratie
 
-Voeg de kaart toe aan je dashboard via de UI of via YAML:
+### Via de Visuele Editor (Aanbevolen) ⭐
 
-### Basis configuratie
+1. Ga naar je dashboard
+2. Klik rechtsboven op het menu (⋮) en selecteer "Bewerken dashboard"
+3. Klik op "+ VOEG KAART TOE"
+4. Scroll naar beneden en selecteer **"Custom: Innodigi Thermostaat Kaart"**
+5. Selecteer je thermostaat entity via de dropdown
+6. Voeg optioneel een aangepaste naam toe
+7. Klik op "OPSLAAN"
+
+De kaart heeft een visuele editor, dus je hoeft geen YAML te schrijven! 🎉
+
+### Via YAML (Alternatief)
+
+Je kunt de kaart ook handmatig configureren:
+
+#### Basis configuratie
 
 ```yaml
 type: custom:innodigi-thermostat-card
 entity: climate.woonkamer
 ```
 
-### Volledige configuratie
+#### Volledige configuratie
 
 ```yaml
 type: custom:innodigi-thermostat-card

@@ -92,33 +92,31 @@ lovelace:
 
 ## Kaart Toevoegen aan Dashboard
 
-### Via de UI
+### Via de Visuele Editor (Aanbevolen) ⭐
 
 1. Ga naar je dashboard
 2. Klik rechtsboven op het menu (⋮)
 3. Selecteer "Bewerken dashboard"
 4. Klik op "+ VOEG KAART TOE"
-5. Scroll naar beneden en selecteer "Custom: Innodigi Thermostat Card"
-6. Configureer de kaart:
+5. Scroll naar beneden en selecteer **"Custom: Innodigi Thermostat Card"**
+6. **Selecteer je thermostaat** via de entity picker dropdown
+7. Voeg optioneel een **aangepaste naam** toe
+8. Klik op "OPSLAAN"
+
+**Nieuwe feature!** De kaart heeft nu een visuele editor, dus je hoeft geen YAML meer te schrijven! 🎉
+
+### Via YAML (Alternatief)
+
+Als je liever met YAML werkt:
+
+1. Klik op het menu (⋮) en selecteer "Code-editor"
+2. Configureer de kaart:
    ```yaml
    type: custom:innodigi-thermostat-card
    entity: climate.jouw_thermostaat
    name: Woonkamer
    ```
-7. Klik op "OPSLAAN"
-
-### Via YAML
-
-Voeg toe aan je dashboard configuratie:
-
-```yaml
-views:
-  - title: Home
-    cards:
-      - type: custom:innodigi-thermostat-card
-        entity: climate.woonkamer
-        name: Woonkamer Thermostaat
-```
+3. Klik op "OPSLAAN"
 
 ## Verificatie
 

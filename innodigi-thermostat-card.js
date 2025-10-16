@@ -24,6 +24,17 @@ class InnodigiThermostatCard extends HTMLElement {
     return 3;
   }
 
+  static getConfigElement() {
+    return document.createElement('innodigi-thermostat-card-editor');
+  }
+
+  static getStubConfig() {
+    return {
+      entity: '',
+      name: ''
+    };
+  }
+
   updateCard() {
     if (!this._hass || !this._config) return;
 
@@ -402,7 +413,130 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 }
 
+// Editor Class for Visual Configuration
+class InnodigiThermostatCardEditor extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+  }
+
+  setConfig(config) {
+    this._config = config;
+    this.render();
+  }
+
+  configChanged(newConfig) {
+    const event = new Event('config-changed', {
+      bubbles: true,
+      composed: true,
+    });
+    event.detail = { config: newConfig };
+    this.dispatchEvent(event);
+  }
+
+  render() {
+    if (!this._hass || !this._config) return;
+
+    this.shadowRoot.innerHTML = `
+      <style>
+        .card-config {
+          padding: 16px;
+        }
+        
+        .config-row {
+          margin-bottom: 16px;
+        }
+        
+        .config-row label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 500;
+          color: var(--primary-text-color);
+        }
+        
+        ha-entity-picker,
+        ha-textfield {
+          width: 100%;
+        }
+
+        .description {
+          font-size: 12px;
+          color: var(--secondary-text-color);
+          margin-top: 4px;
+        }
+      </style>
+      
+      <div class="card-config">
+        <div class="config-row">
+          <label>Thermostaat Entity (Verplicht)</label>
+          <ha-entity-picker
+            .hass="${this._hass}"
+            .value="${this._config.entity || ''}"
+            .configValue="${'entity'}"
+            .includeDomains="${['climate']}"
+            allow-custom-entity
+          ></ha-entity-picker>
+          <div class="description">Selecteer een climate entiteit (thermostaat)</div>
+        </div>
+        
+        <div class="config-row">
+          <label>Naam (Optioneel)</label>
+          <ha-textfield
+            .label="${'Naam'}"
+            .value="${this._config.name || ''}"
+            .configValue="${'name'}"
+            placeholder="Laat leeg voor standaard naam"
+          ></ha-textfield>
+          <div class="description">Aangepaste naam voor de kaart</div>
+        </div>
+      </div>
+    `;
+
+    this.attachEventListeners();
+  }
+
+  attachEventListeners() {
+    const entityPicker = this.shadowRoot.querySelector('ha-entity-picker');
+    const nameField = this.shadowRoot.querySelector('ha-textfield');
+
+    if (entityPicker) {
+      entityPicker.addEventListener('value-changed', (ev) => {
+        if (!this._config || !this._hass) return;
+        const newConfig = { ...this._config };
+        
+        if (ev.detail.value) {
+          newConfig.entity = ev.detail.value;
+        } else {
+          delete newConfig.entity;
+        }
+        
+        this.configChanged(newConfig);
+      });
+    }
+
+    if (nameField) {
+      nameField.addEventListener('input', (ev) => {
+        if (!this._config || !this._hass) return;
+        const newConfig = { ...this._config };
+        
+        if (ev.target.value) {
+          newConfig.name = ev.target.value;
+        } else {
+          delete newConfig.name;
+        }
+        
+        this.configChanged(newConfig);
+      });
+    }
+  }
+}
+
 customElements.define('innodigi-thermostat-card', InnodigiThermostatCard);
+customElements.define('innodigi-thermostat-card-editor', InnodigiThermostatCardEditor);
 
 // Register the card with Home Assistant
 window.customCards = window.customCards || [];
@@ -415,7 +549,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.0.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.1.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );

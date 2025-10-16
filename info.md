@@ -19,6 +19,11 @@ Een moderne thermostaat kaart voor Home Assistant met een intuïtieve horizontal
 - Thuis modus voor comfort
 - Visuele indicatie van actieve modus
 
+🎛️ **Visuele editor**
+- Eenvoudig configureren via de UI
+- Entity picker voor climate entiteiten
+- Geen YAML kennis nodig
+
 🎨 **Moderne styling**
 - Gebruikt Home Assistant design tokens
 - Vloeiende animaties
@@ -31,8 +36,17 @@ Een moderne thermostaat kaart voor Home Assistant met een intuïtieve horizontal
 3. Herstart Home Assistant
 4. Voeg de kaart toe aan je dashboard
 
-## Basis configuratie
+## Gebruik
 
+### Via de Visuele Editor (Aanbevolen)
+1. Dashboard bewerken
+2. Voeg kaart toe
+3. Selecteer "Custom: Innodigi Thermostaat Kaart"
+4. Kies je thermostaat entity
+5. Voeg optioneel een naam toe
+6. Opslaan
+
+### Via YAML (Optioneel)
 ```yaml
 type: custom:innodigi-thermostat-card
 entity: climate.woonkamer

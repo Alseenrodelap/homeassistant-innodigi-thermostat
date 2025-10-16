@@ -5,6 +5,21 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.1.0] - 2025-10-16
+
+### Toegevoegd
+- Visuele editor voor eenvoudige configuratie via de UI
+- Entity picker voor het selecteren van climate entiteiten
+- Configuratie veld voor aangepaste naam
+- Automatische filtering op climate domain in entity selector
+- `getConfigElement()` methode voor editor ondersteuning
+- `getStubConfig()` methode voor standaard configuratie
+
+### Verbeterd
+- Kaart kan nu volledig via de visuele editor worden ingesteld
+- Geen handmatige YAML configuratie meer nodig
+- Betere gebruikerservaring bij het toevoegen van de kaart
+
 ## [1.0.0] - 2025-10-16
 
 ### Toegevoegd
