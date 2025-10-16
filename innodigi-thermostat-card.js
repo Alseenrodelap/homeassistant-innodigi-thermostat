@@ -200,7 +200,7 @@ class InnodigiThermostatCard extends HTMLElement {
           display: flex;
           justify-content: space-around;
           align-items: center;
-          margin: 10px 0;
+          margin: ${isCompact ? '4px 0' : '10px 0'};
         }
 
         .temp-item {
@@ -208,36 +208,36 @@ class InnodigiThermostatCard extends HTMLElement {
         }
 
         .temp-label {
-          font-size: 12px;
+          font-size: ${isCompact ? '11px' : '12px'};
           color: var(--secondary-text-color);
-          margin-bottom: 4px;
+          margin-bottom: ${isCompact ? '2px' : '4px'};
         }
 
         .temp-value {
-          font-size: 32px;
+          font-size: ${isCompact ? '24px' : '32px'};
           font-weight: 300;
           color: var(--primary-text-color);
         }
 
         .temp-unit {
-          font-size: 20px;
+          font-size: ${isCompact ? '16px' : '20px'};
           margin-left: 2px;
         }
 
         .slider-container {
           position: relative;
-          padding: 30px 0;
-          margin: 10px 0;
+          padding: ${isCompact ? '15px 0' : '30px 0'};
+          margin: ${isCompact ? '4px 0' : '10px 0'};
         }
 
         .slider-track {
           position: relative;
-          height: 60px;
+          height: ${isCompact ? '30px' : '60px'};
           background: linear-gradient(to right, 
             ${this._config.color_cold || '#3498db'} 0%, 
             ${this._config.color_medium || '#2ecc71'} 50%, 
             ${this._config.color_hot || '#e74c3c'} 100%);
-          border-radius: 30px;
+          border-radius: ${isCompact ? '15px' : '30px'};
           cursor: pointer;
           overflow: visible;
         }
@@ -250,8 +250,8 @@ class InnodigiThermostatCard extends HTMLElement {
         }
 
         .slider-marker.current {
-          width: 4px;
-          height: 70px;
+          width: ${isCompact ? '3px' : '4px'};
+          height: ${isCompact ? '36px' : '70px'};
           background: rgba(255, 255, 255, 0.7);
           border: 2px solid var(--primary-text-color);
           border-radius: 2px;
@@ -259,8 +259,8 @@ class InnodigiThermostatCard extends HTMLElement {
         }
 
         .slider-marker.target {
-          width: 40px;
-          height: 40px;
+          width: ${isCompact ? '28px' : '40px'};
+          height: ${isCompact ? '28px' : '40px'};
           background: white;
           border: 3px solid var(--primary-color);
           border-radius: 50%;
@@ -275,14 +275,14 @@ class InnodigiThermostatCard extends HTMLElement {
 
         .drag-value {
           position: absolute;
-          top: -50px;
+          top: ${isCompact ? '-40px' : '-50px'};
           left: 50%;
           transform: translateX(-50%);
           background: var(--primary-color);
           color: white;
-          padding: 8px 16px;
-          border-radius: 8px;
-          font-size: 24px;
+          padding: ${isCompact ? '6px 12px' : '8px 16px'};
+          border-radius: ${isCompact ? '6px' : '8px'};
+          font-size: ${isCompact ? '18px' : '24px'};
           font-weight: 500;
           white-space: nowrap;
           opacity: 0;
@@ -510,18 +510,23 @@ class InnodigiThermostatCard extends HTMLElement {
       const percent = Math.max(0, Math.min(100, (x / rect.width) * 100));
       const temp = this._percentToTemp(percent, minTemp, maxTemp, step);
       
-      this._dragValue = temp;
-      this._dragging = true;
-      this._interacting = true;
-      this.updateValues();
+      if (this._dragValue !== temp) {
+        this._dragValue = temp;
+        this._interacting = true;
+        this.updateValues();
+      }
     };
 
     const handleEnd = () => {
-      if (this._dragging && this._dragValue !== null) {
-        this._setLocalTemperature(this._dragValue);
-      }
+      const wasDragging = this._dragging;
+      const finalValue = this._dragValue;
+      
       this._dragging = false;
       this._dragValue = null;
+      
+      if (wasDragging && finalValue !== null) {
+        this._setLocalTemperature(finalValue);
+      }
     };
 
     sliderTrack.addEventListener('mousedown', (e) => {
@@ -944,7 +949,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.4.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.4.1 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );

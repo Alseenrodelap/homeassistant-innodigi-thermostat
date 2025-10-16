@@ -5,6 +5,35 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.4.1] - 2025-10-16
+
+### Opgelost
+- **Slider werkt nu consistent**: Na eerste drag blijft slider vloeiend werken
+- `_dragging` flag wordt nu correct gereset na elke interactie
+- Alleen update als temperatuur echt verandert (performance)
+
+### Verbeterd - Compact Mode
+- **50% smallere slider**: 30px hoogte i.p.v. 60px
+- **Minder ruimte rondom slider**:
+  - Padding: 15px i.p.v. 30px
+  - Margin: 4px i.p.v. 10px
+- **Kleinere temperatuur displays**:
+  - Temperatuur: 24px i.p.v. 32px
+  - Labels: 11px i.p.v. 12px
+  - Units: 16px i.p.v. 20px
+  - Margins: 4px i.p.v. 10px
+- **Compactere slider markers**:
+  - Target knop: 28px i.p.v. 40px
+  - Current marker: 36px hoog i.p.v. 70px
+- **Kleiner drag-value kaartje**:
+  - Font: 18px i.p.v. 24px
+  - Padding: 6px/12px i.p.v. 8px/16px
+
+### Technisch
+- handleEnd slaat waarden lokaal op voor betere flow
+- Conditional check of temp veranderd is voor updateValues
+- Alle compact styling via dynamic template literals
+
 ## [1.4.0] - 2025-10-16
 
 ### 🎨 NIEUWE FEATURES
