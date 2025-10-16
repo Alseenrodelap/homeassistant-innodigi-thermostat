@@ -482,179 +482,163 @@ class InnodigiThermostatCardEditor extends HTMLElement {
   render() {
     if (!this._hass || !this._config) return;
 
-    const style = document.createElement('style');
-    style.textContent = `
-      .card-config {
-        padding: 16px;
-      }
-      
-      .config-section {
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--divider-color);
-      }
-      
-      .config-section:last-child {
-        border-bottom: none;
-      }
-      
-      .section-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--primary-text-color);
-        margin-bottom: 16px;
-      }
-      
-      .config-row {
-        margin-bottom: 16px;
-      }
-      
-      .config-row label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: var(--primary-text-color);
-      }
-      
-      .config-row input,
-      .config-row select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid var(--divider-color);
-        border-radius: 4px;
-        background: var(--card-background-color);
-        color: var(--primary-text-color);
-        font-size: 14px;
-        box-sizing: border-box;
-      }
+    // Get all climate entities
+    const climateEntities = Object.keys(this._hass.states)
+      .filter(eid => eid.startsWith('climate.'))
+      .map(eid => ({
+        id: eid,
+        name: this._hass.states[eid].attributes.friendly_name || eid
+      }));
 
-      .config-row input[type="color"] {
-        height: 40px;
-        cursor: pointer;
-      }
-
-      .config-row input[type="number"] {
-        width: 100px;
-      }
-
-      .description {
-        font-size: 12px;
-        color: var(--secondary-text-color);
-        margin-top: 4px;
-      }
-
-      .color-preview {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-      }
-
-      .color-preview input {
-        width: 80px;
-      }
-
-      .color-value {
-        font-family: monospace;
-        font-size: 12px;
-        color: var(--secondary-text-color);
-      }
-    `;
-
-    const container = document.createElement('div');
-    container.className = 'card-config';
-    
-    // Basic Settings Section
-    const basicSection = document.createElement('div');
-    basicSection.className = 'config-section';
-    basicSection.innerHTML = `
-      <div class="section-title">Basis Instellingen</div>
-      <div class="config-row">
-        <label>Thermostaat Entity (Verplicht)</label>
-        <select id="entity-select">
-          <option value="">-- Selecteer een thermostaat --</option>
-        </select>
-        <div class="description">Selecteer een climate entiteit (thermostaat)</div>
-      </div>
-      
-      <div class="config-row">
-        <label>Naam (Optioneel)</label>
-        <input type="text" id="name-input" placeholder="Laat leeg voor standaard naam" value="${this._config.name || ''}">
-        <div class="description">Aangepaste naam voor de kaart</div>
-      </div>
-    `;
-
-    // Populate entity select
-    const entitySelect = basicSection.querySelector('#entity-select');
-    Object.keys(this._hass.states).forEach(entityId => {
-      if (entityId.startsWith('climate.')) {
-        const option = document.createElement('option');
-        option.value = entityId;
-        option.textContent = this._hass.states[entityId].attributes.friendly_name || entityId;
-        if (entityId === this._config.entity) {
-          option.selected = true;
-        }
-        entitySelect.appendChild(option);
-      }
+    // Build entity options
+    let entityOptions = '<option value="">-- Selecteer een thermostaat --</option>';
+    climateEntities.forEach(entity => {
+      const selected = entity.id === this._config.entity ? 'selected' : '';
+      entityOptions += `<option value="${entity.id}" ${selected}>${entity.name}</option>`;
     });
 
-    // Temperature Settings Section
-    const tempSection = document.createElement('div');
-    tempSection.className = 'config-section';
-    tempSection.innerHTML = `
-      <div class="section-title">Temperatuur Instellingen</div>
-      <div class="config-row">
-        <label>Eco Doeltemperatuur (°C)</label>
-        <input type="number" id="eco-temp" min="5" max="35" step="0.5" value="${this._config.eco_temperature}">
-        <div class="description">Temperatuur wanneer Eco mode wordt ingeschakeld</div>
-      </div>
+    this.shadowRoot.innerHTML = `
+      <style>
+        .card-config {
+          padding: 16px;
+        }
+        
+        .config-section {
+          margin-bottom: 24px;
+          padding-bottom: 16px;
+          border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .config-section:last-child {
+          border-bottom: none;
+        }
+        
+        .section-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--primary-text-color);
+          margin-bottom: 16px;
+        }
+        
+        .config-row {
+          margin-bottom: 16px;
+        }
+        
+        .config-row label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 500;
+          color: var(--primary-text-color);
+        }
+        
+        .config-row input,
+        .config-row select {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid var(--divider-color);
+          border-radius: 4px;
+          background: var(--card-background-color);
+          color: var(--primary-text-color);
+          font-size: 14px;
+          box-sizing: border-box;
+        }
+
+        .config-row input[type="color"] {
+          height: 40px;
+          cursor: pointer;
+        }
+
+        .config-row input[type="number"] {
+          width: 100px;
+        }
+
+        .description {
+          font-size: 12px;
+          color: var(--secondary-text-color);
+          margin-top: 4px;
+        }
+
+        .color-preview {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+
+        .color-preview input {
+          width: 80px;
+        }
+
+        .color-value {
+          font-family: monospace;
+          font-size: 12px;
+          color: var(--secondary-text-color);
+        }
+      </style>
       
-      <div class="config-row">
-        <label>Thuis Doeltemperatuur (°C)</label>
-        <input type="number" id="home-temp" min="5" max="35" step="0.5" value="${this._config.home_temperature}">
-        <div class="description">Temperatuur wanneer Thuis mode wordt ingeschakeld</div>
+      <div class="card-config">
+        <div class="config-section">
+          <div class="section-title">Basis Instellingen</div>
+          <div class="config-row">
+            <label>Thermostaat Entity (Verplicht)</label>
+            <select id="entity-select">
+              ${entityOptions}
+            </select>
+            <div class="description">Selecteer een climate entiteit (thermostaat)</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Naam (Optioneel)</label>
+            <input type="text" id="name-input" placeholder="Laat leeg voor standaard naam" value="${this._config.name || ''}">
+            <div class="description">Aangepaste naam voor de kaart</div>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <div class="section-title">Temperatuur Instellingen</div>
+          <div class="config-row">
+            <label>Eco Doeltemperatuur (°C)</label>
+            <input type="number" id="eco-temp" min="5" max="35" step="0.5" value="${this._config.eco_temperature}">
+            <div class="description">Temperatuur wanneer Eco mode wordt ingeschakeld</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Thuis Doeltemperatuur (°C)</label>
+            <input type="number" id="home-temp" min="5" max="35" step="0.5" value="${this._config.home_temperature}">
+            <div class="description">Temperatuur wanneer Thuis mode wordt ingeschakeld</div>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <div class="section-title">Kleur Instellingen</div>
+          <div class="config-row">
+            <label>Kleur Koud (Links)</label>
+            <div class="color-preview">
+              <input type="color" id="color-cold" value="${this._config.color_cold}">
+              <span class="color-value" id="color-cold-value">${this._config.color_cold}</span>
+            </div>
+            <div class="description">Kleur aan de linkerkant van de balk (koude temperaturen)</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Kleur Middel (Midden)</label>
+            <div class="color-preview">
+              <input type="color" id="color-medium" value="${this._config.color_medium}">
+              <span class="color-value" id="color-medium-value">${this._config.color_medium}</span>
+            </div>
+            <div class="description">Kleur in het midden van de balk</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Kleur Warm (Rechts)</label>
+            <div class="color-preview">
+              <input type="color" id="color-hot" value="${this._config.color_hot}">
+              <span class="color-value" id="color-hot-value">${this._config.color_hot}</span>
+            </div>
+            <div class="description">Kleur aan de rechterkant van de balk (warme temperaturen)</div>
+          </div>
+        </div>
       </div>
     `;
-
-    // Color Settings Section
-    const colorSection = document.createElement('div');
-    colorSection.className = 'config-section';
-    colorSection.innerHTML = `
-      <div class="section-title">Kleur Instellingen</div>
-      <div class="config-row">
-        <label>Kleur Koud (Links)</label>
-        <div class="color-preview">
-          <input type="color" id="color-cold" value="${this._config.color_cold}">
-          <span class="color-value">${this._config.color_cold}</span>
-        </div>
-        <div class="description">Kleur aan de linkerkant van de balk (koude temperaturen)</div>
-      </div>
-      
-      <div class="config-row">
-        <label>Kleur Middel (Midden)</label>
-        <div class="color-preview">
-          <input type="color" id="color-medium" value="${this._config.color_medium}">
-          <span class="color-value">${this._config.color_medium}</span>
-        </div>
-        <div class="description">Kleur in het midden van de balk</div>
-      </div>
-      
-      <div class="config-row">
-        <label>Kleur Warm (Rechts)</label>
-        <div class="color-preview">
-          <input type="color" id="color-hot" value="${this._config.color_hot}">
-          <span class="color-value">${this._config.color_hot}</span>
-        </div>
-        <div class="description">Kleur aan de rechterkant van de balk (warme temperaturen)</div>
-      </div>
-    `;
-
-    container.appendChild(basicSection);
-    container.appendChild(tempSection);
-    container.appendChild(colorSection);
-
-    this.shadowRoot.innerHTML = '';
-    this.shadowRoot.appendChild(style);
-    this.shadowRoot.appendChild(container);
 
     this.attachEventListeners();
   }
@@ -667,6 +651,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     const colorCold = this.shadowRoot.querySelector('#color-cold');
     const colorMedium = this.shadowRoot.querySelector('#color-medium');
     const colorHot = this.shadowRoot.querySelector('#color-hot');
+    const colorColdValue = this.shadowRoot.querySelector('#color-cold-value');
+    const colorMediumValue = this.shadowRoot.querySelector('#color-medium-value');
+    const colorHotValue = this.shadowRoot.querySelector('#color-hot-value');
 
     if (entitySelect) {
       entitySelect.addEventListener('change', (e) => {
@@ -696,35 +683,26 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       });
     }
 
-    const updateColorValue = (input, valueSpan) => {
-      if (valueSpan) {
-        valueSpan.textContent = input.value;
-      }
-    };
-
-    if (colorCold) {
-      const valueSpan = colorCold.nextElementSibling;
+    if (colorCold && colorColdValue) {
       colorCold.addEventListener('input', (e) => {
         this._config.color_cold = e.target.value;
-        updateColorValue(e.target, valueSpan);
+        colorColdValue.textContent = e.target.value;
         this.configChanged(this._config);
       });
     }
 
-    if (colorMedium) {
-      const valueSpan = colorMedium.nextElementSibling;
+    if (colorMedium && colorMediumValue) {
       colorMedium.addEventListener('input', (e) => {
         this._config.color_medium = e.target.value;
-        updateColorValue(e.target, valueSpan);
+        colorMediumValue.textContent = e.target.value;
         this.configChanged(this._config);
       });
     }
 
-    if (colorHot) {
-      const valueSpan = colorHot.nextElementSibling;
+    if (colorHot && colorHotValue) {
       colorHot.addEventListener('input', (e) => {
         this._config.color_hot = e.target.value;
-        updateColorValue(e.target, valueSpan);
+        colorHotValue.textContent = e.target.value;
         this.configChanged(this._config);
       });
     }
@@ -745,7 +723,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.1 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
