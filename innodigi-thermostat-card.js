@@ -15,8 +15,8 @@ class InnodigiThermostatCard extends HTMLElement {
     if (!oldHass || !this._cardInitialized) {
       this.updateCard();
       this._cardInitialized = true;
-    } else {
-      // Just update the displayed values without re-rendering
+    } else if (!this._interacting) {
+      // Only update values if we're not currently interacting with controls
       this.updateValues();
     }
   }
@@ -395,13 +395,23 @@ class InnodigiThermostatCard extends HTMLElement {
     // Plus/minus buttons
     this.shadowRoot.querySelectorAll('.control-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
+        this._interacting = true;
         const action = e.target.dataset.action;
         const currentTarget = parseFloat(entity.attributes.temperature) || 20;
         
+        let newTemp;
         if (action === 'increase') {
-          this._setTemperature(Math.min(maxTemp, currentTarget + step));
+          newTemp = Math.min(maxTemp, currentTarget + step);
         } else if (action === 'decrease') {
-          this._setTemperature(Math.max(minTemp, currentTarget - step));
+          newTemp = Math.max(minTemp, currentTarget - step);
+        }
+        
+        if (newTemp !== undefined) {
+          this._setTemperature(newTemp);
+          // Allow state updates after a delay
+          setTimeout(() => {
+            this._interacting = false;
+          }, 1000);
         }
       });
     });
@@ -420,6 +430,7 @@ class InnodigiThermostatCard extends HTMLElement {
       
       this._dragValue = temp;
       this._dragging = true;
+      this._interacting = true;
       this.updateValues();
     };
 
@@ -429,7 +440,12 @@ class InnodigiThermostatCard extends HTMLElement {
       }
       this._dragging = false;
       this._dragValue = null;
-      this.updateValues();
+      
+      // Allow state updates after a delay
+      setTimeout(() => {
+        this._interacting = false;
+        this.updateValues();
+      }, 1000);
     };
 
     sliderTrack.addEventListener('mousedown', (e) => {
@@ -461,31 +477,41 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   _setPresetMode(mode) {
-    // Als er custom temperaturen zijn ingesteld, zet die in plaats van preset mode
+    this._interacting = true;
+    
+    // Gebruik altijd de geconfigureerde temperaturen
     let targetTemp = null;
     
-    if (mode === 'eco' && this._config.eco_temperature) {
+    if (mode === 'eco' && this._config.eco_temperature !== undefined) {
       targetTemp = this._config.eco_temperature;
-    } else if (mode === 'home' && this._config.home_temperature) {
+    } else if (mode === 'home' && this._config.home_temperature !== undefined) {
       targetTemp = this._config.home_temperature;
     }
 
     if (targetTemp !== null) {
-      // Zet de temperatuur
+      // Zet alleen de temperatuur, GEEN preset mode
+      // (preset mode kan eigen temperaturen hebben die we niet willen)
       this._hass.callService('climate', 'set_temperature', {
         entity_id: this._config.entity,
         temperature: targetTemp
       });
-    }
-    
-    // Probeer ook de preset mode in te stellen (als de thermostaat dit ondersteunt)
-    try {
+      
+      // Allow state updates after a delay
+      setTimeout(() => {
+        this._interacting = false;
+      }, 1000);
+    } else {
+      // Geen custom temperatuur ingesteld, probeer preset mode
       this._hass.callService('climate', 'set_preset_mode', {
         entity_id: this._config.entity,
         preset_mode: mode
+      }).catch(() => {
+        // Thermostaat ondersteunt geen preset modes
+      }).finally(() => {
+        setTimeout(() => {
+          this._interacting = false;
+        }, 1000);
       });
-    } catch (e) {
-      // Sommige thermostaten ondersteunen geen preset modes, dat is OK
     }
   }
 
@@ -508,7 +534,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
 
   set hass(hass) {
     this._hass = hass;
-    // Only render on first hass set, not on every state update
+    // Render once when both hass and config are available
     if (this._config && !this._initialized) {
       this._initialized = true;
       this.render();
@@ -527,9 +553,8 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       ...config
     };
     
-    // Only render once on initialization, never re-render afterwards
-    // (input values are updated directly via event handlers)
-    if (this._hass && !this._initialized) {
+    // Always render on config change (editor needs to show new values)
+    if (this._hass) {
       this._initialized = true;
       this.render();
     }
@@ -841,7 +866,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.4 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.5 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );

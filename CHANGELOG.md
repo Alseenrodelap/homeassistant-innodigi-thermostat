@@ -5,6 +5,21 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.2.5] - 2025-10-16
+
+### Opgelost
+- **Colorpicker is weer zichtbaar**: Editor rendert nu correct bij config changes
+- **Eco/Thuis temperaturen werken correct**: Gebruikt alleen geconfigureerde temperaturen (18°C voor eco)
+- **Slider schiet niet meer heen en weer**: Updates worden geblokkeerd tijdens interactie
+- **Plus/Min knoppen werken betrouwbaar**: Updates worden geblokkeerd tijdens gebruik
+- Eco/Thuis knoppen roepen GEEN preset_mode API meer aan (voorkomt conflict met thermostaat presets)
+
+### Technisch
+- Toegevoegd `_interacting` flag om state updates te blokkeren tijdens gebruikersinteractie
+- 1 seconde cooldown na elke actie voordat updates weer worden toegestaan
+- Editor rendert bij setConfig maar niet bij elke hass update
+- Preset mode buttons zetten alleen temperatuur, geen preset mode API calls meer
+
 ## [1.2.4] - 2025-10-16
 
 ### Opgelost
