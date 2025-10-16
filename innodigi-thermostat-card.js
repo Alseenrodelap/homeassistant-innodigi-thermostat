@@ -144,6 +144,10 @@ class InnodigiThermostatCard extends HTMLElement {
       temperature_card_border_color: '#3498db',
       temperature_card_border_alpha: 50,
       temperature_card_border_width: 1,
+      // Temperature tap actions
+      temp_current_tap_action: 'more-info',
+      temp_target_tap_action: 'more-info',
+      temp_outdoor_tap_action: 'more-info',
       eco_temperature: 18,
       home_temperature: 21
     };
@@ -354,6 +358,19 @@ class InnodigiThermostatCard extends HTMLElement {
           ` : ''}
         }
 
+        .temp-item.clickable {
+          cursor: pointer;
+          transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .temp-item.clickable:hover {
+          opacity: 0.8;
+        }
+
+        .temp-item.clickable:active {
+          transform: scale(0.98);
+        }
+
         .temp-label {
           font-size: ${isCompact ? '11px' : '12px'};
           color: var(--secondary-text-color);
@@ -520,21 +537,21 @@ class InnodigiThermostatCard extends HTMLElement {
           ` : ''}
 
           <div class="temperature-display">
-            ${hasOutdoor ? `
-            <div class="temp-item">
+            ${hasOutdoor && outdoorDisplayMode !== 'compact' ? `
+            <div class="temp-item ${this._config.temp_outdoor_tap_action !== 'none' ? 'clickable' : ''}" data-temp-type="outdoor">
               <div class="temp-label">Buiten</div>
               <div class="temp-value outdoor">
                 ${outdoorTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
               </div>
             </div>
             ` : ''}
-            <div class="temp-item">
+            <div class="temp-item ${this._config.temp_current_tap_action !== 'none' ? 'clickable' : ''}" data-temp-type="current">
               <div class="temp-label">Huidig</div>
               <div class="temp-value current">
                 ${currentTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
               </div>
             </div>
-            <div class="temp-item">
+            <div class="temp-item ${this._config.temp_target_tap_action !== 'none' ? 'clickable' : ''}" data-temp-type="target">
               <div class="temp-label">Doel</div>
               <div class="temp-value target">
                 ${targetTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
@@ -735,6 +752,49 @@ class InnodigiThermostatCard extends HTMLElement {
     // Store references for cleanup
     this._moveHandler = handleMove;
     this._endHandler = handleEnd;
+
+    // Temperature item click handlers
+    this.shadowRoot.querySelectorAll('.temp-item.clickable').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const tempType = item.dataset.tempType;
+        this._handleTempClick(tempType);
+      });
+    });
+  }
+
+  _handleTempClick(tempType) {
+    let action = 'none';
+    let entityId = this._config.entity;
+    
+    // Determine action and entity based on temp type
+    if (tempType === 'current') {
+      action = this._config.temp_current_tap_action || 'more-info';
+    } else if (tempType === 'target') {
+      action = this._config.temp_target_tap_action || 'more-info';
+    } else if (tempType === 'outdoor') {
+      action = this._config.temp_outdoor_tap_action || 'more-info';
+      entityId = this._config.outdoor_entity;
+    }
+    
+    if (action === 'none' || !entityId) return;
+    
+    // Handle the action
+    if (action === 'more-info') {
+      // Fire Home Assistant event to show more-info dialog
+      const event = new Event('hass-more-info', {
+        bubbles: true,
+        composed: true
+      });
+      event.detail = { entityId };
+      this.dispatchEvent(event);
+    } else if (action === 'toggle') {
+      // Toggle the entity (if applicable)
+      this._hass.callService('homeassistant', 'toggle', {
+        entity_id: entityId
+      });
+    }
   }
 
   _setPresetMode(mode) {
@@ -818,6 +878,10 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       temperature_card_border_color: '#3498db',
       temperature_card_border_alpha: 50,
       temperature_card_border_width: 1,
+      // Temperature tap actions
+      temp_current_tap_action: 'more-info',
+      temp_target_tap_action: 'more-info',
+      temp_outdoor_tap_action: 'more-info',
       eco_temperature: 18,
       home_temperature: 21,
       ...config
@@ -1098,6 +1162,39 @@ class InnodigiThermostatCardEditor extends HTMLElement {
             </div>
           </div>
         </div>
+
+        <div class="config-section">
+          <div class="section-title">Temperatuur Klik Acties</div>
+          <div class="config-row">
+            <label>Actie bij klik op Huidige Temperatuur</label>
+            <select id="temp-current-tap-action">
+              <option value="none" ${this._config.temp_current_tap_action === 'none' ? 'selected' : ''}>Geen actie</option>
+              <option value="more-info" ${this._config.temp_current_tap_action === 'more-info' ? 'selected' : ''}>Toon entiteit info</option>
+              <option value="toggle" ${this._config.temp_current_tap_action === 'toggle' ? 'selected' : ''}>Schakel aan/uit</option>
+            </select>
+            <div class="description">Wat gebeurt er als je op de huidige temperatuur klikt</div>
+          </div>
+
+          <div class="config-row">
+            <label>Actie bij klik op Doel Temperatuur</label>
+            <select id="temp-target-tap-action">
+              <option value="none" ${this._config.temp_target_tap_action === 'none' ? 'selected' : ''}>Geen actie</option>
+              <option value="more-info" ${this._config.temp_target_tap_action === 'more-info' ? 'selected' : ''}>Toon entiteit info</option>
+              <option value="toggle" ${this._config.temp_target_tap_action === 'toggle' ? 'selected' : ''}>Schakel aan/uit</option>
+            </select>
+            <div class="description">Wat gebeurt er als je op de doel temperatuur klikt</div>
+          </div>
+
+          <div class="config-row">
+            <label>Actie bij klik op Buiten Temperatuur</label>
+            <select id="temp-outdoor-tap-action">
+              <option value="none" ${this._config.temp_outdoor_tap_action === 'none' ? 'selected' : ''}>Geen actie</option>
+              <option value="more-info" ${this._config.temp_outdoor_tap_action === 'more-info' ? 'selected' : ''}>Toon entiteit info</option>
+              <option value="toggle" ${this._config.temp_outdoor_tap_action === 'toggle' ? 'selected' : ''}>Schakel aan/uit</option>
+            </select>
+            <div class="description">Wat gebeurt er als je op de buiten temperatuur klikt</div>
+          </div>
+        </div>
       </div>
     `;
 
@@ -1301,6 +1398,31 @@ class InnodigiThermostatCardEditor extends HTMLElement {
         this.configChanged(this._config);
       });
     }
+
+    // Temperature tap action selects
+    const tempCurrentTapAction = this.shadowRoot.querySelector('#temp-current-tap-action');
+    if (tempCurrentTapAction) {
+      tempCurrentTapAction.addEventListener('change', (e) => {
+        this._config.temp_current_tap_action = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    const tempTargetTapAction = this.shadowRoot.querySelector('#temp-target-tap-action');
+    if (tempTargetTapAction) {
+      tempTargetTapAction.addEventListener('change', (e) => {
+        this._config.temp_target_tap_action = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    const tempOutdoorTapAction = this.shadowRoot.querySelector('#temp-outdoor-tap-action');
+    if (tempOutdoorTapAction) {
+      tempOutdoorTapAction.addEventListener('change', (e) => {
+        this._config.temp_outdoor_tap_action = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
   }
 }
 
@@ -1318,7 +1440,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.5.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.12.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );

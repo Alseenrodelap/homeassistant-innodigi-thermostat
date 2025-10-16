@@ -5,6 +5,241 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.12.0] - 2025-10-16
+
+### ✨ NIEUWE FUNCTIES
+
+#### Temperatuur Klik Acties
+- **Configureerbare klik acties**: Stel in wat er gebeurt bij klik op temperatuur kaartjes
+- **3 opties per temperatuur**:
+  - `Geen actie`: Temperatuur is niet klikbaar
+  - `Toon entiteit info`: Opent de Home Assistant more-info dialog
+  - `Schakel aan/uit`: Toggle de entiteit (voor schakelbare entiteiten)
+- **Onafhankelijk instelbaar**: Elke temperatuur (Huidig, Doel, Buiten) heeft eigen actie
+- **Visual feedback**: Klikbare items krijgen hover effect en pointer cursor
+- **Smooth animaties**: Scale animatie bij klik voor betere UX
+
+#### Outdoor Display Mode Fix
+- **Compact mode correctie**: Bij 'Altijd compact' wordt outdoor kaartje nu correct verwijderd
+- **Voorheen**: Outdoor kaartje bleef zichtbaar ondanks compact mode instelling
+- **Nu**: Alleen inline outdoor display toont bij compact mode, kaartje is weg
+
+### 🎨 UI/UX VERBETERINGEN
+
+#### Klikbare Temperaturen
+```
+┌─────────┬─────────┬─────────┐
+│ Huidig  │  Doel   │ Buiten  │  ← Klikbaar met cursor pointer
+│ 21.5°C  │ 22.0°C  │ 15.3°C  │     Hover: opacity 0.8
+└─────────┴─────────┴─────────┘     Active: scale(0.98)
+```
+
+#### Visual States
+- **Default**: Normale weergave
+- **Hover**: 80% opacity voor feedback
+- **Active**: Scale naar 98% voor druk effect
+- **Transition**: Smooth 0.2s opacity, 0.1s transform
+
+### 🔧 TECHNISCHE DETAILS
+
+#### Nieuwe Config Opties
+```yaml
+temp_current_tap_action: 'more-info'   # Actie bij klik op huidige temp
+temp_target_tap_action: 'more-info'    # Actie bij klik op doel temp
+temp_outdoor_tap_action: 'more-info'   # Actie bij klik op outdoor temp
+```
+
+#### Event Handling
+**HTML Attributen**:
+```html
+<div class="temp-item clickable" data-temp-type="current">
+  <!-- clickable class voor styling -->
+  <!-- data-temp-type voor identificatie -->
+</div>
+```
+
+**Event Flow**:
+```javascript
+_handleTempClick(tempType) {
+  // 1. Bepaal actie en entiteit op basis van temp type
+  // 2. Vuur 'hass-more-info' event voor more-info dialog
+  // 3. Of call 'homeassistant.toggle' service voor toggle
+}
+```
+
+**More-Info Event**:
+```javascript
+const event = new Event('hass-more-info', {
+  bubbles: true,    // Event bubbles naar parent
+  composed: true    // Event passeert Shadow DOM boundary
+});
+event.detail = { entityId };  // Entity ID voor dialog
+```
+
+#### CSS Styling
+```css
+.temp-item.clickable {
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.temp-item.clickable:hover {
+  opacity: 0.8;
+}
+
+.temp-item.clickable:active {
+  transform: scale(0.98);
+}
+```
+
+#### Editor UI
+Nieuwe sectie "Temperatuur Klik Acties" met 3 dropdowns:
+```
+┌─────────────────────────────────────┐
+│ Temperatuur Klik Acties             │
+├─────────────────────────────────────┤
+│ Actie bij klik op Huidige Temp:    │
+│ [Toon entiteit info ▼]              │
+├─────────────────────────────────────┤
+│ Actie bij klik op Doel Temp:       │
+│ [Toon entiteit info ▼]              │
+├─────────────────────────────────────┤
+│ Actie bij klik op Buiten Temp:     │
+│ [Toon entiteit info ▼]              │
+└─────────────────────────────────────┘
+```
+
+### 🐛 BUG FIXES
+
+#### Outdoor Display Mode
+**Probleem**: Bij `outdoor_display_mode: 'compact'` bleef het outdoor kaartje zichtbaar in de temperature-display, waardoor er 3 kaartjes getoond werden.
+
+**Oorzaak**: HTML rendering checked alleen `hasOutdoor`, niet de display mode.
+
+**Oplossing**: 
+```javascript
+// Voor:
+${hasOutdoor ? `<div class="temp-item">` : ''}
+
+// Na:
+${hasOutdoor && outdoorDisplayMode !== 'compact' ? `<div class="temp-item">` : ''}
+```
+
+**Resultaat**: 
+- `auto` mode: 3 kaartjes op grote schermen, compact op kleine
+- `compact` mode: Altijd compact inline display, geen kaartje
+- `inline` mode: Altijd 3 kaartjes
+
+### 📊 VOOR/NA VERGELIJKING
+
+#### Compact Mode Display
+**Voor (bug)**:
+```
+[15.3°C buiten]
+┌──────┬──────┬──────┐
+│Buiten│Huidig│ Doel │  ← 3 kaartjes (bug!)
+│15.3°C│21.5°C│22.0°C│
+└──────┴──────┴──────┘
+```
+
+**Na (correct)**:
+```
+[15.3°C buiten]
+┌─────────┬─────────┐
+│ Huidig  │  Doel   │  ← 2 kaartjes (correct)
+│ 21.5°C  │ 22.0°C  │
+└─────────┴─────────┘
+```
+
+#### Klikbare Temperaturen
+**Voor**: Geen interactie mogelijk met temperatuur displays
+
+**Na**: 
+- Klik op Huidig → Thermostaat more-info
+- Klik op Doel → Thermostaat more-info
+- Klik op Buiten → Outdoor sensor more-info
+- Configureerbaar per temperatuur
+- Visual feedback bij hover/active
+
+### 💡 USE CASES
+
+#### Use Case 1: Snel Entity Info Openen
+**Scenario**: Gebruiker wil snel historie/details van een sensor zien
+
+**Oplossing**: Klik op temperatuur → more-info dialog opent automatisch
+
+**Voorbeeld**:
+```yaml
+temp_outdoor_tap_action: 'more-info'  # Klik op outdoor temp
+# → Opent more-info van sensor.outdoor_temperature
+# → Toont geschiedenis grafiek, attributen, etc.
+```
+
+#### Use Case 2: Schakelbare Verwarming
+**Scenario**: Temperatuur display ook gebruikt voor schakelbare heater
+
+**Oplossing**: Gebruik toggle actie
+```yaml
+temp_target_tap_action: 'toggle'  # Klik schakelt aan/uit
+```
+
+#### Use Case 3: Alleen Info Tonen
+**Scenario**: Temperaturen zijn puur informatief, geen interactie gewenst
+
+**Oplossing**: Zet acties op 'none'
+```yaml
+temp_current_tap_action: 'none'
+temp_target_tap_action: 'none'
+temp_outdoor_tap_action: 'none'
+```
+
+### 🎯 VOORDELEN
+
+#### Gebruikerservaring
+1. **Directe toegang**: Geen navigatie nodig voor entity details
+2. **Visual feedback**: Duidelijk welke items klikbaar zijn
+3. **Consistente UX**: Volgt Home Assistant patterns
+4. **Flexibiliteit**: Per temperatuur instelbaar
+
+#### Development
+1. **Clean implementation**: Hergebruikt HA's event system
+2. **Type-safe**: Data attributes voor type identificatie
+3. **Extensible**: Gemakkelijk meer acties toe te voegen
+4. **Maintainable**: Clear separation of concerns
+
+#### Performance
+1. **Efficient events**: Gebruikt event delegation waar mogelijk
+2. **Smooth animations**: Hardware-accelerated transforms
+3. **No re-renders**: Alleen CSS changes voor hover states
+
+### 🔄 MIGRATIE
+
+**Van v1.11.0 naar v1.12.0**:
+
+Automatische migratie - geen actie vereist:
+- Nieuwe config opties krijgen default waarde 'more-info'
+- Bestaande kaarten werken zonder aanpassingen
+- Optioneel: Configureer acties in editor naar wens
+
+### 📝 CONFIGURATIE VOORBEELD
+
+```yaml
+type: custom:innodigi-thermostat-card
+entity: climate.woonkamer
+outdoor_entity: sensor.outdoor_temperature
+outdoor_display_mode: compact
+
+# Nieuwe opties
+temp_current_tap_action: more-info    # Klik op huidig → info
+temp_target_tap_action: more-info     # Klik op doel → info  
+temp_outdoor_tap_action: more-info    # Klik op buiten → info
+
+# Of uitschakelen
+# temp_current_tap_action: none
+# temp_target_tap_action: none
+# temp_outdoor_tap_action: none
+```
+
 ## [1.11.0] - 2025-10-16
 
 ### 🎨 UI/UX VERBETERINGEN - Compact Mode & Control Buttons
