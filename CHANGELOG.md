@@ -5,6 +5,20 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.2.3] - 2025-10-16
+
+### Opgelost
+- **Alle invoervelden werken nu correct**: Kleurkiezers en andere velden kunnen nu worden aangepast zonder vastlopen
+- **Volledig opgelost browser freeze**: Editor rendert nu alleen bij initialisatie, nooit meer daarna
+- Kleurkiezers tonen live preview maar slaan pas op bij definitieve selectie
+- Editor reageert niet meer op elke Home Assistant state update
+
+### Technisch
+- Kleurkiezer events gescheiden: `input` voor preview, `change` voor opslaan
+- Editor rendert alleen eenmalig bij initialisatie
+- `setConfig` voorkomt onnodige re-renders na initialisatie
+- Alle input event handlers werken nu zonder DOM re-render
+
 ## [1.2.2] - 2025-10-16
 
 ### Opgelost

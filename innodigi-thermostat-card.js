@@ -467,8 +467,10 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       home_temperature: 21,
       ...config
     };
-    this._initialized = false; // Reset to allow re-render on config change
-    if (this._hass) {
+    
+    // Only render once on initialization, never re-render afterwards
+    // (input values are updated directly via event handlers)
+    if (this._hass && !this._initialized) {
       this._initialized = true;
       this.render();
     }
@@ -688,25 +690,34 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     }
 
     if (colorCold && colorColdValue) {
+      // Update preview on input, save on change
       colorCold.addEventListener('input', (e) => {
-        this._config.color_cold = e.target.value;
         colorColdValue.textContent = e.target.value;
+      });
+      colorCold.addEventListener('change', (e) => {
+        this._config.color_cold = e.target.value;
         this.configChanged(this._config);
       });
     }
 
     if (colorMedium && colorMediumValue) {
+      // Update preview on input, save on change
       colorMedium.addEventListener('input', (e) => {
-        this._config.color_medium = e.target.value;
         colorMediumValue.textContent = e.target.value;
+      });
+      colorMedium.addEventListener('change', (e) => {
+        this._config.color_medium = e.target.value;
         this.configChanged(this._config);
       });
     }
 
     if (colorHot && colorHotValue) {
+      // Update preview on input, save on change
       colorHot.addEventListener('input', (e) => {
-        this._config.color_hot = e.target.value;
         colorHotValue.textContent = e.target.value;
+      });
+      colorHot.addEventListener('change', (e) => {
+        this._config.color_hot = e.target.value;
         this.configChanged(this._config);
       });
     }
@@ -727,7 +738,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.2 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.3 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
