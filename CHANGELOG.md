@@ -5,6 +5,18 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.2.6] - 2025-10-16
+
+### Verbeterd
+- **Snellere respons**: Vertraging verkort van 1000ms naar 300ms voor directere feedback
+- **Plus/Min knoppen**: Geforceerd op halve graden (0.5°C) stappen voor nauwkeurige controle
+- Slider werkt ook met halve graden stappen
+
+### Technisch
+- Interactie timeout verkort van 1s naar 300ms voor alle knoppen
+- Step geforceerd naar 0.5 in plaats van thermostaat attribuut gebruiken
+- Consistente halve graad stappen door hele kaart
+
 ## [1.2.5] - 2025-10-16
 
 ### Opgelost
