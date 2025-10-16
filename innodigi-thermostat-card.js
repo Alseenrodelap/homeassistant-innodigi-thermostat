@@ -105,6 +105,7 @@ class InnodigiThermostatCard extends HTMLElement {
     return {
       entity: '',
       name: '',
+      layout: 'normal',
       color_cold: '#3498db',
       color_medium: '#2ecc71',
       color_hot: '#e74c3c',
@@ -138,11 +139,13 @@ class InnodigiThermostatCard extends HTMLElement {
     const step = 0.5;
     const unit = this._hass.config.unit_system.temperature;
     const presetMode = entity.attributes.preset_mode || 'none';
+    const layout = this._config.layout || 'normal';
+    const isCompact = layout === 'compact';
 
     this.shadowRoot.innerHTML = `
       <style>
         ha-card {
-          padding: 16px;
+          padding: ${isCompact ? '8px' : '16px'};
           background: var(--ha-card-background, var(--card-background-color, white));
           border-radius: var(--ha-card-border-radius, 12px);
           box-shadow: var(--ha-card-box-shadow, 0 2px 4px rgba(0,0,0,0.1));
@@ -151,7 +154,7 @@ class InnodigiThermostatCard extends HTMLElement {
         .card-content {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: ${isCompact ? '8px' : '20px'};
         }
 
         .header {
@@ -296,17 +299,18 @@ class InnodigiThermostatCard extends HTMLElement {
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 16px;
+          gap: ${isCompact ? '8px' : '16px'};
+          ${isCompact ? 'flex-wrap: wrap;' : ''}
         }
 
         .control-btn {
-          width: 48px;
-          height: 48px;
+          width: ${isCompact ? '40px' : '48px'};
+          height: ${isCompact ? '40px' : '48px'};
           border: none;
           border-radius: 50%;
           background: var(--primary-color);
           color: white;
-          font-size: 24px;
+          font-size: ${isCompact ? '20px' : '24px'};
           cursor: pointer;
           transition: all 0.3s;
           display: flex;
@@ -330,10 +334,16 @@ class InnodigiThermostatCard extends HTMLElement {
           min-width: 80px;
           text-align: center;
         }
+
+        .mode-btn.compact {
+          padding: 6px 12px;
+          font-size: 12px;
+        }
       </style>
 
       <ha-card>
         <div class="card-content">
+          ${!isCompact ? `
           <div class="header">
             <div class="title">${this._config.name || entity.attributes.friendly_name || 'Thermostaat'}</div>
             <div class="mode-buttons">
@@ -345,6 +355,7 @@ class InnodigiThermostatCard extends HTMLElement {
               </button>
             </div>
           </div>
+          ` : ''}
 
           <div class="temperature-display">
             <div class="temp-item">
@@ -372,11 +383,20 @@ class InnodigiThermostatCard extends HTMLElement {
             </div>
           </div>
 
+          ${isCompact ? `
+          <div class="controls">
+            <button class="mode-btn compact ${presetMode === 'eco' ? 'active' : ''}" data-mode="eco">Eco</button>
+            <button class="control-btn" data-action="decrease">−</button>
+            <button class="control-btn" data-action="increase">+</button>
+            <button class="mode-btn compact ${presetMode === 'home' || presetMode === 'comfort' ? 'active' : ''}" data-mode="home">Thuis</button>
+          </div>
+          ` : `
           <div class="controls">
             <button class="control-btn" data-action="decrease">−</button>
             <div class="target-display">${targetTemp.toFixed(1)}${unit}</div>
             <button class="control-btn" data-action="increase">+</button>
           </div>
+          `}
         </div>
       </ha-card>
     `;
@@ -585,6 +605,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     this._config = {
       entity: '',
       name: '',
+      layout: 'normal',
       color_cold: '#3498db',
       color_medium: '#2ecc71',
       color_hot: '#e74c3c',
@@ -726,6 +747,15 @@ class InnodigiThermostatCardEditor extends HTMLElement {
             <input type="text" id="name-input" placeholder="Laat leeg voor standaard naam" value="${this._config.name || ''}">
             <div class="description">Aangepaste naam voor de kaart</div>
           </div>
+          
+          <div class="config-row">
+            <label>Layout</label>
+            <select id="layout-select">
+              <option value="normal" ${this._config.layout === 'normal' ? 'selected' : ''}>Normal - Volledige weergave met titel</option>
+              <option value="compact" ${this._config.layout === 'compact' ? 'selected' : ''}>Compact - Minder ruimte, knoppen naast elkaar</option>
+            </select>
+            <div class="description">Normal toont titel en knoppen apart, Compact bespaart ruimte</div>
+          </div>
         </div>
 
         <div class="config-section">
@@ -787,6 +817,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
   attachEventListeners() {
     const entitySelect = this.shadowRoot.querySelector('#entity-select');
     const nameInput = this.shadowRoot.querySelector('#name-input');
+    const layoutSelect = this.shadowRoot.querySelector('#layout-select');
     const ecoTemp = this.shadowRoot.querySelector('#eco-temp');
     const homeTemp = this.shadowRoot.querySelector('#home-temp');
     const colorCold = this.shadowRoot.querySelector('#color-cold');
@@ -806,6 +837,13 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     if (nameInput) {
       nameInput.addEventListener('change', (e) => {
         this._config.name = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (layoutSelect) {
+      layoutSelect.addEventListener('change', (e) => {
+        this._config.layout = e.target.value;
         this.configChanged(this._config);
       });
     }
@@ -906,7 +944,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.3.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.4.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );

@@ -5,6 +5,36 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.4.0] - 2025-10-16
+
+### 🎨 NIEUWE FEATURES
+
+#### Compact Layout
+- **Nieuwe layout optie**: Kies tussen 'Normal' en 'Compact' in de visuele editor
+- **Compact mode**:
+  - Minder ruimte in hoogte (8px padding i.p.v. 16px)
+  - Geen titel getoond
+  - Eco/Thuis knoppen naast Plus/Min knoppen
+  - Geen doeltemperatuur tussen +/- knoppen
+  - Kleinere knoppen (40px i.p.v. 48px)
+  - Perfekt voor dashboards met beperkte ruimte
+
+#### Verbeterde Slider
+- **Drag value kaartje**: Toont altijd de temperatuur tijdens slepen (al geïmplementeerd)
+- Sleepbolletje volgt je vinger/muis perfect
+- Temperatuur wordt pas naar entity gestuurd bij loslaten (via lokale state)
+
+### Layout Opties
+- **Normal**: Volledige weergave met titel, gescheiden knoppen
+- **Compact**: Ruimtebesparend, alle knoppen op één rij
+
+### Technisch
+- Layout selecteerbaar via visuele editor
+- Dynamische CSS styling op basis van layout
+- Conditionale rendering van header
+- Flex-wrap voor compact mode knoppen
+- Layout optie toegevoegd aan config defaults
+
 ## [1.3.0] - 2025-10-16
 
 ### 🚀 MAJEURE ARCHITECTUUR VERBETERING
