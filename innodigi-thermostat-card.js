@@ -124,9 +124,18 @@ class InnodigiThermostatCard extends HTMLElement {
       entity: '',
       name: '',
       layout: 'normal',
+      outdoor_entity: '',
+      // Slider gradient colors
       color_cold: '#3498db',
       color_medium: '#2ecc71',
       color_hot: '#e74c3c',
+      // Button colors
+      color_buttons: '#3498db',
+      color_mode_buttons: '#2ecc71',
+      // Temperature colors
+      color_current_temp: '#3498db',
+      color_target_temp: '#2ecc71',
+      color_outdoor_temp: '#95a5a6',
       eco_temperature: 18,
       home_temperature: 21
     };
@@ -159,6 +168,19 @@ class InnodigiThermostatCard extends HTMLElement {
     const presetMode = entity.attributes.preset_mode || 'none';
     const layout = this._config.layout || 'normal';
     const isCompact = layout === 'compact';
+    
+    // Outdoor temperature
+    const outdoorEntityId = this._config.outdoor_entity;
+    const outdoorEntity = outdoorEntityId ? this._hass.states[outdoorEntityId] : null;
+    const outdoorTemp = outdoorEntity ? (parseFloat(outdoorEntity.state) || 0) : null;
+    const hasOutdoor = outdoorTemp !== null;
+    
+    // Colors with defaults
+    const colorButtons = this._config.color_buttons || '#3498db';
+    const colorModeButtons = this._config.color_mode_buttons || '#2ecc71';
+    const colorCurrentTemp = this._config.color_current_temp || '#3498db';
+    const colorTargetTemp = this._config.color_target_temp || '#2ecc71';
+    const colorOutdoorTemp = this._config.color_outdoor_temp || '#95a5a6';
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -210,7 +232,7 @@ class InnodigiThermostatCard extends HTMLElement {
         }
 
         .mode-btn.active {
-          background: var(--primary-color);
+          background: ${colorModeButtons};
           color: white;
         }
 
@@ -235,6 +257,18 @@ class InnodigiThermostatCard extends HTMLElement {
           font-size: ${isCompact ? '24px' : '32px'};
           font-weight: 300;
           color: var(--primary-text-color);
+        }
+
+        .temp-value.outdoor {
+          color: ${colorOutdoorTemp};
+        }
+
+        .temp-value.current {
+          color: ${colorCurrentTemp};
+        }
+
+        .temp-value.target {
+          color: ${colorTargetTemp};
         }
 
         .temp-unit {
@@ -326,7 +360,7 @@ class InnodigiThermostatCard extends HTMLElement {
           height: ${isCompact ? '40px' : '48px'};
           border: none;
           border-radius: 50%;
-          background: var(--primary-color);
+          background: ${colorButtons};
           color: white;
           font-size: ${isCompact ? '20px' : '24px'};
           cursor: pointer;
@@ -376,15 +410,23 @@ class InnodigiThermostatCard extends HTMLElement {
           ` : ''}
 
           <div class="temperature-display">
+            ${hasOutdoor ? `
+            <div class="temp-item">
+              <div class="temp-label">Buiten</div>
+              <div class="temp-value outdoor">
+                ${outdoorTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
+              </div>
+            </div>
+            ` : ''}
             <div class="temp-item">
               <div class="temp-label">Huidig</div>
-              <div class="temp-value">
+              <div class="temp-value current">
                 ${currentTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
               </div>
             </div>
             <div class="temp-item">
               <div class="temp-label">Doel</div>
-              <div class="temp-value">
+              <div class="temp-value target">
                 ${targetTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
               </div>
             </div>
@@ -436,10 +478,22 @@ class InnodigiThermostatCard extends HTMLElement {
     const unit = this._hass.config.unit_system.temperature;
     const presetMode = entity.attributes.preset_mode || 'none';
 
+    // Update outdoor temperature if available
+    const outdoorEntityId = this._config.outdoor_entity;
+    if (outdoorEntityId) {
+      const outdoorEntity = this._hass.states[outdoorEntityId];
+      if (outdoorEntity) {
+        const outdoorTemp = parseFloat(outdoorEntity.state) || 0;
+        const outdoorValue = this.shadowRoot.querySelector('.temp-value.outdoor');
+        if (outdoorValue) outdoorValue.innerHTML = `${outdoorTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
+      }
+    }
+
     // Update temperature displays
-    const tempValues = this.shadowRoot.querySelectorAll('.temp-value');
-    if (tempValues[0]) tempValues[0].innerHTML = `${currentTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
-    if (tempValues[1]) tempValues[1].innerHTML = `${targetTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
+    const currentValue = this.shadowRoot.querySelector('.temp-value.current');
+    const targetValue = this.shadowRoot.querySelector('.temp-value.target');
+    if (currentValue) currentValue.innerHTML = `${currentTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
+    if (targetValue) targetValue.innerHTML = `${targetTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
 
     // Update slider positions
     const currentMarker = this.shadowRoot.querySelector('.slider-marker.current');
@@ -630,9 +684,18 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       entity: '',
       name: '',
       layout: 'normal',
+      outdoor_entity: '',
+      // Slider colors
       color_cold: '#3498db',
       color_medium: '#2ecc71',
       color_hot: '#e74c3c',
+      // Button colors
+      color_buttons: '#3498db',
+      color_mode_buttons: '#2ecc71',
+      // Temperature colors
+      color_current_temp: '#3498db',
+      color_target_temp: '#2ecc71',
+      color_outdoor_temp: '#95a5a6',
       eco_temperature: 18,
       home_temperature: 21,
       ...config
@@ -670,6 +733,21 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     climateEntities.forEach(entity => {
       const selected = entity.id === this._config.entity ? 'selected' : '';
       entityOptions += `<option value="${entity.id}" ${selected}>${entity.name}</option>`;
+    });
+
+    // Get all sensor entities (for outdoor temperature)
+    const sensorEntities = Object.keys(this._hass.states)
+      .filter(eid => (eid.startsWith('sensor.') || eid.startsWith('weather.')))
+      .map(eid => ({
+        id: eid,
+        name: this._hass.states[eid].attributes.friendly_name || eid
+      }));
+
+    // Build outdoor entity options
+    let outdoorEntityOptions = '<option value="">-- Geen buitentemperatuur --</option>';
+    sensorEntities.forEach(entity => {
+      const selected = entity.id === this._config.outdoor_entity ? 'selected' : '';
+      outdoorEntityOptions += `<option value="${entity.id}" ${selected}>${entity.name}</option>`;
     });
 
     this.shadowRoot.innerHTML = `
@@ -728,30 +806,12 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           margin-top: 4px;
         }
 
-        .color-row {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-        }
-
-        .color-swatch {
-          width: 48px;
-          height: 48px;
-          border-radius: 8px;
-          border: 2px solid var(--divider-color);
+        input[type="color"] {
+          width: 100px;
+          height: 40px;
+          border: 1px solid var(--divider-color);
+          border-radius: 4px;
           cursor: pointer;
-          flex-shrink: 0;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .color-input-wrapper {
-          flex: 1;
-        }
-
-        .color-input-wrapper input {
-          width: 100%;
-          font-family: monospace;
-          text-transform: uppercase;
         }
       </style>
       
@@ -780,6 +840,14 @@ class InnodigiThermostatCardEditor extends HTMLElement {
             </select>
             <div class="description">Normal toont titel en knoppen apart, Compact bespaart ruimte</div>
           </div>
+          
+          <div class="config-row">
+            <label>Buitentemperatuur Entity (Optioneel)</label>
+            <select id="outdoor-entity-select">
+              ${outdoorEntityOptions}
+            </select>
+            <div class="description">Selecteer een sensor voor buitentemperatuur (optioneel, toont 3 kolommen)</div>
+          </div>
         </div>
 
         <div class="config-section">
@@ -798,38 +866,59 @@ class InnodigiThermostatCardEditor extends HTMLElement {
         </div>
 
         <div class="config-section">
-          <div class="section-title">Kleur Instellingen</div>
+          <div class="section-title">Slider Kleuren</div>
           <div class="config-row">
             <label>Kleur Koud (Links)</label>
-            <div class="color-row">
-              <div class="color-swatch" id="color-cold-swatch" style="background-color: ${this._config.color_cold};"></div>
-              <div class="color-input-wrapper">
-                <input type="text" id="color-cold" value="${this._config.color_cold}" placeholder="#3498db" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
-              </div>
-            </div>
-            <div class="description">Kleur aan de linkerkant van de balk (koude temperaturen)</div>
+            <input type="color" id="color-cold" value="${this._config.color_cold}">
+            <div class="description">Kleur aan de linkerkant van de slider (koude temperaturen)</div>
           </div>
           
           <div class="config-row">
             <label>Kleur Middel (Midden)</label>
-            <div class="color-row">
-              <div class="color-swatch" id="color-medium-swatch" style="background-color: ${this._config.color_medium};"></div>
-              <div class="color-input-wrapper">
-                <input type="text" id="color-medium" value="${this._config.color_medium}" placeholder="#2ecc71" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
-              </div>
-            </div>
-            <div class="description">Kleur in het midden van de balk</div>
+            <input type="color" id="color-medium" value="${this._config.color_medium}">
+            <div class="description">Kleur in het midden van de slider</div>
           </div>
           
           <div class="config-row">
             <label>Kleur Warm (Rechts)</label>
-            <div class="color-row">
-              <div class="color-swatch" id="color-hot-swatch" style="background-color: ${this._config.color_hot};"></div>
-              <div class="color-input-wrapper">
-                <input type="text" id="color-hot" value="${this._config.color_hot}" placeholder="#e74c3c" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
-              </div>
-            </div>
-            <div class="description">Kleur aan de rechterkant van de balk (warme temperaturen)</div>
+            <input type="color" id="color-hot" value="${this._config.color_hot}">
+            <div class="description">Kleur aan de rechterkant van de slider (warme temperaturen)</div>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <div class="section-title">Knop Kleuren</div>
+          <div class="config-row">
+            <label>Plus/Min Knoppen</label>
+            <input type="color" id="color-buttons" value="${this._config.color_buttons}">
+            <div class="description">Kleur van de + en - knoppen</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Eco/Thuis Knoppen</label>
+            <input type="color" id="color-mode-buttons" value="${this._config.color_mode_buttons}">
+            <div class="description">Kleur van de Eco en Thuis knoppen wanneer actief</div>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <div class="section-title">Temperatuur Kleuren</div>
+          <div class="config-row">
+            <label>Huidige Temperatuur</label>
+            <input type="color" id="color-current-temp" value="${this._config.color_current_temp}">
+            <div class="description">Kleur van de huidige temperatuur weergave</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Doel Temperatuur</label>
+            <input type="color" id="color-target-temp" value="${this._config.color_target_temp}">
+            <div class="description">Kleur van de doel temperatuur weergave</div>
+          </div>
+          
+          <div class="config-row">
+            <label>Buiten Temperatuur</label>
+            <input type="color" id="color-outdoor-temp" value="${this._config.color_outdoor_temp}">
+            <div class="description">Kleur van de buiten temperatuur weergave</div>
           </div>
         </div>
       </div>
@@ -842,14 +931,23 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     const entitySelect = this.shadowRoot.querySelector('#entity-select');
     const nameInput = this.shadowRoot.querySelector('#name-input');
     const layoutSelect = this.shadowRoot.querySelector('#layout-select');
+    const outdoorEntitySelect = this.shadowRoot.querySelector('#outdoor-entity-select');
     const ecoTemp = this.shadowRoot.querySelector('#eco-temp');
     const homeTemp = this.shadowRoot.querySelector('#home-temp');
+    
+    // Slider color inputs
     const colorCold = this.shadowRoot.querySelector('#color-cold');
     const colorMedium = this.shadowRoot.querySelector('#color-medium');
     const colorHot = this.shadowRoot.querySelector('#color-hot');
-    const colorColdSwatch = this.shadowRoot.querySelector('#color-cold-swatch');
-    const colorMediumSwatch = this.shadowRoot.querySelector('#color-medium-swatch');
-    const colorHotSwatch = this.shadowRoot.querySelector('#color-hot-swatch');
+    
+    // Button color inputs
+    const colorButtons = this.shadowRoot.querySelector('#color-buttons');
+    const colorModeButtons = this.shadowRoot.querySelector('#color-mode-buttons');
+    
+    // Temperature color inputs
+    const colorCurrentTemp = this.shadowRoot.querySelector('#color-current-temp');
+    const colorTargetTemp = this.shadowRoot.querySelector('#color-target-temp');
+    const colorOutdoorTemp = this.shadowRoot.querySelector('#color-outdoor-temp');
 
     if (entitySelect) {
       entitySelect.addEventListener('change', (e) => {
@@ -872,6 +970,13 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       });
     }
 
+    if (outdoorEntitySelect) {
+      outdoorEntitySelect.addEventListener('change', (e) => {
+        this._config.outdoor_entity = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
     if (ecoTemp) {
       ecoTemp.addEventListener('change', (e) => {
         this._config.eco_temperature = parseFloat(e.target.value);
@@ -886,69 +991,60 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       });
     }
 
-    // Helper function to validate and format hex color
-    const validateColor = (color) => {
-      const hex = color.trim().toUpperCase();
-      return /^#[0-9A-F]{6}$/.test(hex) ? hex : null;
-    };
-
-    if (colorCold && colorColdSwatch) {
-      // Update swatch preview on input
-      colorCold.addEventListener('input', (e) => {
-        const color = validateColor(e.target.value);
-        if (color) {
-          colorColdSwatch.style.backgroundColor = color;
-        }
-      });
-      // Save on change (blur or enter)
+    // Native color pickers - simple change event
+    if (colorCold) {
       colorCold.addEventListener('change', (e) => {
-        const color = validateColor(e.target.value);
-        if (color) {
-          e.target.value = color;
-          colorColdSwatch.style.backgroundColor = color;
-          this._config.color_cold = color;
-          this.configChanged(this._config);
-        }
+        this._config.color_cold = e.target.value;
+        this.configChanged(this._config);
       });
     }
 
-    if (colorMedium && colorMediumSwatch) {
-      // Update swatch preview on input
-      colorMedium.addEventListener('input', (e) => {
-        const color = validateColor(e.target.value);
-        if (color) {
-          colorMediumSwatch.style.backgroundColor = color;
-        }
-      });
-      // Save on change (blur or enter)
+    if (colorMedium) {
       colorMedium.addEventListener('change', (e) => {
-        const color = validateColor(e.target.value);
-        if (color) {
-          e.target.value = color;
-          colorMediumSwatch.style.backgroundColor = color;
-          this._config.color_medium = color;
-          this.configChanged(this._config);
-        }
+        this._config.color_medium = e.target.value;
+        this.configChanged(this._config);
       });
     }
 
-    if (colorHot && colorHotSwatch) {
-      // Update swatch preview on input
-      colorHot.addEventListener('input', (e) => {
-        const color = validateColor(e.target.value);
-        if (color) {
-          colorHotSwatch.style.backgroundColor = color;
-        }
-      });
-      // Save on change (blur or enter)
+    if (colorHot) {
       colorHot.addEventListener('change', (e) => {
-        const color = validateColor(e.target.value);
-        if (color) {
-          e.target.value = color;
-          colorHotSwatch.style.backgroundColor = color;
-          this._config.color_hot = color;
-          this.configChanged(this._config);
-        }
+        this._config.color_hot = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (colorButtons) {
+      colorButtons.addEventListener('change', (e) => {
+        this._config.color_buttons = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (colorModeButtons) {
+      colorModeButtons.addEventListener('change', (e) => {
+        this._config.color_mode_buttons = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (colorCurrentTemp) {
+      colorCurrentTemp.addEventListener('change', (e) => {
+        this._config.color_current_temp = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (colorTargetTemp) {
+      colorTargetTemp.addEventListener('change', (e) => {
+        this._config.color_target_temp = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (colorOutdoorTemp) {
+      colorOutdoorTemp.addEventListener('change', (e) => {
+        this._config.color_outdoor_temp = e.target.value;
+        this.configChanged(this._config);
       });
     }
   }

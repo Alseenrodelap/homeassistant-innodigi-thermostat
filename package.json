@@ -1,6 +1,6 @@
 {
   "name": "innodigi-thermostat-card",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Een moderne thermostaat kaart voor Home Assistant met horizontale slider interface",
   "main": "innodigi-thermostat-card.js",
   "scripts": {

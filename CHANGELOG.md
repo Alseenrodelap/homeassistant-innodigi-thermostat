@@ -5,6 +5,76 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.6.0] - 2025-10-16
+
+### 🎨 NIEUWE FEATURES - Uitgebreide Kleur Controle & Buitentemperatuur
+
+#### Native Color Pickers
+- **Browser-native colorpickers**: Gebruik je browser's eigen kleurenkiezer (geen OS picker)
+- **Instant preview**: Zie direct het resultaat van je kleurkeuze
+- **Simpelere configuratie**: Geen hex codes meer handmatig intypen
+
+#### Uitgebreide Kleur Opties
+
+**Slider Kleuren** (zoals voorheen):
+- Kleur Koud (Links) - Blauwtint voor lage temperaturen
+- Kleur Middel (Midden) - Groentint voor comfortabele temperaturen  
+- Kleur Warm (Rechts) - Roodtint voor hoge temperaturen
+
+**Nieuwe Knop Kleuren**:
+- Plus/Min Knoppen - Kleur van de +/- temperatuur knoppen
+- Eco/Thuis Knoppen - Kleur van de mode knoppen wanneer actief
+
+**Nieuwe Temperatuur Kleuren**:
+- Huidige Temperatuur - Kleur van de "Huidig" temperatuur display
+- Doel Temperatuur - Kleur van de "Doel" temperatuur display
+- Buiten Temperatuur - Kleur van de "Buiten" temperatuur display
+
+#### Buitentemperatuur Feature
+- **Optionele buitentemperatuur**: Voeg een sensor toe om buitentemperatuur te tonen
+- **3-kolommen layout**: Bij outdoor sensor: Buiten | Huidig | Doel
+- **2-kolommen layout**: Zonder outdoor sensor: Huidig | Doel
+- **Flexibele configuratie**: Kies elke sensor of weather entiteit
+- **Consistente styling**: Buitentemp heeft eigen instelbare kleur
+
+### Editor Verbeteringen
+- **Gegroepeerde instellingen**:
+  - Slider Kleuren (gradient)
+  - Knop Kleuren (buttons)
+  - Temperatuur Kleuren (displays)
+- **Outdoor entity selector**: Dropdown met alle sensor/weather entiteiten
+- **Duidelijke beschrijvingen**: Elke optie heeft uitleg
+
+### Technische Details
+
+**Config Opties (nieuw)**:
+```javascript
+outdoor_entity: ''              // Sensor voor buitentemperatuur
+color_buttons: '#3498db'        // Plus/Min knoppen
+color_mode_buttons: '#2ecc71'   // Eco/Thuis knoppen  
+color_current_temp: '#3498db'   // Huidige temp display
+color_target_temp: '#2ecc71'    // Doel temp display
+color_outdoor_temp: '#95a5a6'   // Buiten temp display
+```
+
+**Dynamische Layout**:
+- Outdoor temp kolom verschijnt alleen als entity is geconfigureerd
+- Kleuren worden toegepast via CSS classes (outdoor/current/target)
+- UpdateValues() update nu ook outdoor temperatuur
+
+**Backwards Compatible**:
+- Alle nieuwe opties hebben defaults
+- Bestaande configuraties blijven werken
+- Oude slider kleuren behouden
+
+### Voordelen
+- ✅ Native colorpicker - browser UI in plaats van OS UI
+- ✅ Meer controle - elke UI element eigen kleur
+- ✅ Buitentemperatuur - zie binnen vs buiten verschil
+- ✅ Flexibele layout - 2 of 3 kolommen
+- ✅ Backwards compatible - oude configs werken nog
+- ✅ Betere organisatie - kleuren gegroepeerd per functie
+
 ## [1.5.0] - 2025-10-16
 
 ### 🚀 MAJEURE ARCHITECTUUR WIJZIGING - Pure Lokale State
