@@ -5,6 +5,117 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.8.0] - 2025-10-16
+
+### 🎨 NIEUWE FEATURES - Alpha Waarden & Border Styling
+
+#### Alpha Waarden (Transparantie)
+- **Achtergrond transparantie**: Instelbare alpha waarde via slider (0-100%)
+- **Border transparantie**: Instelbare alpha waarde via slider (0-100%)
+- **Live preview**: Sliders tonen percentage real-time tijdens aanpassen
+- **RGBA ondersteuning**: Automatische conversie van hex + alpha naar rgba()
+
+#### Border Styling
+- **Border kleur**: Eigen kleur voor de rand via colorpicker
+- **Border alpha**: Aparte transparantie instelling voor border
+- **Border breedte**: Instelbare dikte van 0-5 pixels
+- **Flexibele styling**: Border kan volledig transparant (0%) of volledig zichtbaar (100%)
+
+#### Features Detail
+
+**Alpha Sliders**:
+- Range: 0% (volledig transparant) tot 100% (volledig ondoorzichtig)
+- Default achtergrond: 80% (subtiel transparant)
+- Default border: 50% (half transparant)
+- Live percentage display tijdens slepen
+
+**Border Opties**:
+- Kleur: Volledig aanpasbaar via colorpicker (default: #3498db)
+- Alpha: Transparantie van 0-100% (default: 50%)
+- Breedte: 0-5 pixels (default: 1px, 0 = geen border)
+- Styling: Solid border met rgba kleur
+
+**Hex naar RGBA Conversie**:
+```javascript
+hexToRgba('#3498db', 50)  // rgba(52, 152, 219, 0.5)
+```
+
+#### Config Opties (nieuw)
+```javascript
+temperature_card_background_alpha: 80      // 0-100%
+temperature_card_border_color: '#3498db'   // Hex kleur
+temperature_card_border_alpha: 50          // 0-100%
+temperature_card_border_width: 1           // 0-5 pixels
+```
+
+#### Editor Verbeteringen
+- **Uitgebreide sectie**: Alle kaartje instellingen gegroepeerd
+- **Range sliders**: Intuïtieve percentage sliders voor alpha waarden
+- **Live feedback**: Percentage display naast elke slider
+- **Input validatie**: Min/max waarden voor alle inputs
+- **Conditionele weergave**: Alle opties alleen zichtbaar bij aangevinkt
+
+**Structuur**:
+1. Checkbox: Toon kaartjes aan/uit
+2. Achtergrondkleur colorpicker
+3. Achtergrond alpha slider (0-100%)
+4. Border kleur colorpicker
+5. Border alpha slider (0-100%)
+6. Border breedte input (0-5px)
+
+#### Technische Details
+
+**Helper Function**:
+```javascript
+const hexToRgba = (hex, alpha) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha / 100})`;
+};
+```
+
+**CSS Output**:
+```css
+.temp-item {
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(52, 152, 219, 0.5);
+}
+```
+
+**Event Listeners**:
+- `input` event: Live percentage update tijdens slepen
+- `change` event: Config opslaan bij release
+- Beide alpha sliders hebben aparte display spans
+
+#### Voordelen
+- ✅ Volledige controle over transparantie
+- ✅ Subtiele achtergrond mogelijk (bijv 30%)
+- ✅ Border kan subtiel of opvallend zijn
+- ✅ Past zich aan achtergrond dashboards aan
+- ✅ Moderne glasmorphism effecten mogelijk
+- ✅ Border kan volledig verborgen (0% of 0px)
+- ✅ Live feedback tijdens aanpassen
+- ✅ Intuïtieve percentage sliders
+- ✅ Backwards compatible met defaults
+
+### Voorbeelden
+
+**Subtiele kaartjes**:
+- Achtergrond: donkergrijs, 30% alpha (bijna transparant)
+- Border: blauw, 20% alpha (subtiele rand)
+- Breedte: 1px
+
+**Opvallende kaartjes**:
+- Achtergrond: zwart, 90% alpha (bijna solid)
+- Border: blauw, 100% alpha (volledig zichtbaar)
+- Breedte: 2px
+
+**Glasmorphism**:
+- Achtergrond: wit, 10% alpha (zeer transparant)
+- Border: wit, 30% alpha (subtiel)
+- Breedte: 1px
+
 ## [1.7.0] - 2025-10-16
 
 ### 🎨 NIEUWE FEATURE - Temperatuur Kaartjes

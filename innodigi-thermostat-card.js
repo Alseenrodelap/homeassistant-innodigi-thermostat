@@ -139,6 +139,10 @@ class InnodigiThermostatCard extends HTMLElement {
       // Temperature cards
       show_temperature_cards: false,
       temperature_card_background: '#1a1a1a',
+      temperature_card_background_alpha: 80,
+      temperature_card_border_color: '#3498db',
+      temperature_card_border_alpha: 50,
+      temperature_card_border_width: 1,
       eco_temperature: 18,
       home_temperature: 21
     };
@@ -187,7 +191,22 @@ class InnodigiThermostatCard extends HTMLElement {
     
     // Temperature cards
     const showTempCards = this._config.show_temperature_cards || false;
-    const tempCardBg = this._config.temperature_card_background || '#1a1a1a';
+    const tempCardBgColor = this._config.temperature_card_background || '#1a1a1a';
+    const tempCardBgAlpha = this._config.temperature_card_background_alpha ?? 80;
+    const tempCardBorderColor = this._config.temperature_card_border_color || '#3498db';
+    const tempCardBorderAlpha = this._config.temperature_card_border_alpha ?? 50;
+    const tempCardBorderWidth = this._config.temperature_card_border_width ?? 1;
+    
+    // Helper function to convert hex to rgba
+    const hexToRgba = (hex, alpha) => {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha / 100})`;
+    };
+    
+    const tempCardBg = hexToRgba(tempCardBgColor, tempCardBgAlpha);
+    const tempCardBorder = hexToRgba(tempCardBorderColor, tempCardBorderAlpha);
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -258,6 +277,7 @@ class InnodigiThermostatCard extends HTMLElement {
             padding: ${isCompact ? '8px' : '12px'};
             border-radius: ${isCompact ? '8px' : '12px'};
             min-width: ${isCompact ? '70px' : '90px'};
+            border: ${tempCardBorderWidth}px solid ${tempCardBorder};
           ` : ''}
         }
 
@@ -713,6 +733,10 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       // Temperature cards
       show_temperature_cards: false,
       temperature_card_background: '#1a1a1a',
+      temperature_card_background_alpha: 80,
+      temperature_card_border_color: '#3498db',
+      temperature_card_border_alpha: 50,
+      temperature_card_border_width: 1,
       eco_temperature: 18,
       home_temperature: 21,
       ...config
@@ -946,13 +970,41 @@ class InnodigiThermostatCardEditor extends HTMLElement {
               <input type="checkbox" id="show-temperature-cards" ${this._config.show_temperature_cards ? 'checked' : ''}>
               Toon temperaturen in kaartjes
             </label>
-            <div class="description">Geeft elke temperatuur een eigen achtergrondkleur met afgeronde hoeken</div>
+            <div class="description">Geeft elke temperatuur een eigen achtergrondkleur met afgeronde hoeken en border</div>
           </div>
           
-          <div class="config-row" id="card-background-row" style="display: ${this._config.show_temperature_cards ? 'block' : 'none'};">
-            <label>Achtergrondkleur Kaartjes</label>
-            <input type="color" id="temperature-card-background" value="${this._config.temperature_card_background}">
-            <div class="description">Achtergrondkleur van de temperatuur kaartjes</div>
+          <div id="card-settings" style="display: ${this._config.show_temperature_cards ? 'block' : 'none'};">
+            <div class="config-row">
+              <label>Achtergrondkleur</label>
+              <input type="color" id="temperature-card-background" value="${this._config.temperature_card_background}">
+              <div class="description">Basiskleur van de achtergrond</div>
+            </div>
+            
+            <div class="config-row">
+              <label>Achtergrond Transparantie (%)</label>
+              <input type="range" id="temperature-card-background-alpha" min="0" max="100" value="${this._config.temperature_card_background_alpha}" style="width: 200px;">
+              <span id="bg-alpha-value">${this._config.temperature_card_background_alpha}%</span>
+              <div class="description">0% = volledig transparant, 100% = volledig ondoorzichtig</div>
+            </div>
+            
+            <div class="config-row">
+              <label>Border Kleur</label>
+              <input type="color" id="temperature-card-border-color" value="${this._config.temperature_card_border_color}">
+              <div class="description">Kleur van de rand rond de kaartjes</div>
+            </div>
+            
+            <div class="config-row">
+              <label>Border Transparantie (%)</label>
+              <input type="range" id="temperature-card-border-alpha" min="0" max="100" value="${this._config.temperature_card_border_alpha}" style="width: 200px;">
+              <span id="border-alpha-value">${this._config.temperature_card_border_alpha}%</span>
+              <div class="description">0% = volledig transparant, 100% = volledig ondoorzichtig</div>
+            </div>
+            
+            <div class="config-row">
+              <label>Border Breedte (pixels)</label>
+              <input type="number" id="temperature-card-border-width" min="0" max="5" value="${this._config.temperature_card_border_width}">
+              <div class="description">Dikte van de border (0 = geen border, 1-5 pixels)</div>
+            </div>
           </div>
         </div>
       </div>
@@ -985,8 +1037,14 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     
     // Temperature cards
     const showTempCards = this.shadowRoot.querySelector('#show-temperature-cards');
+    const cardSettings = this.shadowRoot.querySelector('#card-settings');
     const tempCardBg = this.shadowRoot.querySelector('#temperature-card-background');
-    const cardBgRow = this.shadowRoot.querySelector('#card-background-row');
+    const tempCardBgAlpha = this.shadowRoot.querySelector('#temperature-card-background-alpha');
+    const bgAlphaValue = this.shadowRoot.querySelector('#bg-alpha-value');
+    const tempCardBorderColor = this.shadowRoot.querySelector('#temperature-card-border-color');
+    const tempCardBorderAlpha = this.shadowRoot.querySelector('#temperature-card-border-alpha');
+    const borderAlphaValue = this.shadowRoot.querySelector('#border-alpha-value');
+    const tempCardBorderWidth = this.shadowRoot.querySelector('#temperature-card-border-width');
 
     if (entitySelect) {
       entitySelect.addEventListener('change', (e) => {
@@ -1090,9 +1148,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     if (showTempCards) {
       showTempCards.addEventListener('change', (e) => {
         this._config.show_temperature_cards = e.target.checked;
-        // Show/hide background color picker based on checkbox
-        if (cardBgRow) {
-          cardBgRow.style.display = e.target.checked ? 'block' : 'none';
+        // Show/hide all card settings based on checkbox
+        if (cardSettings) {
+          cardSettings.style.display = e.target.checked ? 'block' : 'none';
         }
         this.configChanged(this._config);
       });
@@ -1101,6 +1159,46 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     if (tempCardBg) {
       tempCardBg.addEventListener('change', (e) => {
         this._config.temperature_card_background = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (tempCardBgAlpha) {
+      tempCardBgAlpha.addEventListener('input', (e) => {
+        // Update the display value
+        if (bgAlphaValue) {
+          bgAlphaValue.textContent = `${e.target.value}%`;
+        }
+      });
+      tempCardBgAlpha.addEventListener('change', (e) => {
+        this._config.temperature_card_background_alpha = parseInt(e.target.value);
+        this.configChanged(this._config);
+      });
+    }
+
+    if (tempCardBorderColor) {
+      tempCardBorderColor.addEventListener('change', (e) => {
+        this._config.temperature_card_border_color = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (tempCardBorderAlpha) {
+      tempCardBorderAlpha.addEventListener('input', (e) => {
+        // Update the display value
+        if (borderAlphaValue) {
+          borderAlphaValue.textContent = `${e.target.value}%`;
+        }
+      });
+      tempCardBorderAlpha.addEventListener('change', (e) => {
+        this._config.temperature_card_border_alpha = parseInt(e.target.value);
+        this.configChanged(this._config);
+      });
+    }
+
+    if (tempCardBorderWidth) {
+      tempCardBorderWidth.addEventListener('change', (e) => {
+        this._config.temperature_card_border_width = parseInt(e.target.value);
         this.configChanged(this._config);
       });
     }
