@@ -5,6 +5,19 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.2.2] - 2025-10-16
+
+### Opgelost
+- **Focus verlies probleem**: Focus gaat niet meer verloren bij het typen in tekstvelden
+- **Browser freeze**: Opgelost probleem waarbij de browser vastliep door te veel re-renders
+- Editor rendert nu alleen wanneer nodig in plaats van bij elke state update
+- Naam input veld gebruikt nu 'change' event in plaats van 'input' event
+
+### Technisch
+- Verbeterde render performance van de configuratie editor
+- Toegevoegd `_initialized` flag om onnodige re-renders te voorkomen
+- Optimalisatie van de `set hass()` setter in de editor class
+
 ## [1.2.0] - 2025-10-16
 
 ### Toegevoegd

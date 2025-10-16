@@ -449,7 +449,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
 
   set hass(hass) {
     this._hass = hass;
-    if (this._config) {
+    // Only render on first hass set, not on every state update
+    if (this._config && !this._initialized) {
+      this._initialized = true;
       this.render();
     }
   }
@@ -465,7 +467,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       home_temperature: 21,
       ...config
     };
+    this._initialized = false; // Reset to allow re-render on config change
     if (this._hass) {
+      this._initialized = true;
       this.render();
     }
   }
@@ -663,7 +667,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     }
 
     if (nameInput) {
-      nameInput.addEventListener('input', (e) => {
+      nameInput.addEventListener('change', (e) => {
         this._config.name = e.target.value;
         this.configChanged(this._config);
       });
@@ -723,7 +727,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.1 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.2 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
