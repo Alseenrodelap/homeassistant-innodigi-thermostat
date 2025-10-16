@@ -5,6 +5,25 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.2.4] - 2025-10-16
+
+### Opgelost
+- **Slider werkt nu correct**: Volgt je vinger/muis tijdens het slepen
+- **Knoppen functioneren**: Eco, Thuis, Plus en Min knoppen werken allemaal
+- **Browser-native colorpicker**: Kleuren kiezen via tekstveld met hex codes in plaats van OS picker
+- Kaart update nu alleen wanneer nodig in plaats van bij elke state change
+
+### Toegevoegd
+- Live kleur preview swatches in de configuratie editor
+- Hex kleur validatie en auto-formatting (uppercase)
+- Visuele kleur preview die real-time update tijdens typen
+
+### Technisch
+- Kaart gebruikt nu `updateValues()` voor state updates zonder volledige DOM re-render
+- Event listeners blijven behouden tussen updates
+- Slimme render strategie: volledige render alleen bij initialisatie en config wijzigingen
+- Colorpicker vervangen door text input met pattern validatie en swatch preview
+
 ## [1.2.3] - 2025-10-16
 
 ### Opgelost

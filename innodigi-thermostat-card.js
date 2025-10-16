@@ -7,9 +7,18 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   set hass(hass) {
+    const oldHass = this._hass;
     this._hass = hass;
     if (!this._config) return;
-    this.updateCard();
+    
+    // Only re-render if entity state actually changed or first render
+    if (!oldHass || !this._cardInitialized) {
+      this.updateCard();
+      this._cardInitialized = true;
+    } else {
+      // Just update the displayed values without re-rendering
+      this.updateValues();
+    }
   }
 
   setConfig(config) {
@@ -17,7 +26,11 @@ class InnodigiThermostatCard extends HTMLElement {
       throw new Error('Please define an entity');
     }
     this._config = config;
-    this.updateCard();
+    this._cardInitialized = false; // Force re-render on config change
+    if (this._hass) {
+      this.updateCard();
+      this._cardInitialized = true;
+    }
   }
 
   getCardSize() {
@@ -310,6 +323,52 @@ class InnodigiThermostatCard extends HTMLElement {
     this._attachEventListeners();
   }
 
+  updateValues() {
+    if (!this._hass || !this._config || !this.shadowRoot.querySelector('.temp-value')) return;
+    
+    const entityId = this._config.entity;
+    const entity = this._hass.states[entityId];
+    if (!entity) return;
+
+    const currentTemp = parseFloat(entity.attributes.current_temperature) || 0;
+    const targetTemp = this._dragging ? this._dragValue : (parseFloat(entity.attributes.temperature) || 20);
+    const minTemp = parseFloat(entity.attributes.min_temp) || 5;
+    const maxTemp = parseFloat(entity.attributes.max_temp) || 35;
+    const unit = this._hass.config.unit_system.temperature;
+    const presetMode = entity.attributes.preset_mode || 'none';
+
+    // Update temperature displays
+    const tempValues = this.shadowRoot.querySelectorAll('.temp-value');
+    if (tempValues[0]) tempValues[0].innerHTML = `${currentTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
+    if (tempValues[1]) tempValues[1].innerHTML = `${targetTemp.toFixed(1)}<span class="temp-unit">${unit}</span>`;
+
+    // Update slider positions
+    const currentMarker = this.shadowRoot.querySelector('.slider-marker.current');
+    const targetMarker = this.shadowRoot.querySelector('.slider-marker.target');
+    if (currentMarker) currentMarker.style.left = `${this._tempToPercent(currentTemp, minTemp, maxTemp)}%`;
+    if (targetMarker) targetMarker.style.left = `${this._tempToPercent(targetTemp, minTemp, maxTemp)}%`;
+
+    // Update control display
+    const targetDisplay = this.shadowRoot.querySelector('.target-display');
+    if (targetDisplay) targetDisplay.textContent = `${targetTemp.toFixed(1)}${unit}`;
+
+    // Update mode buttons
+    this.shadowRoot.querySelectorAll('.mode-btn').forEach(btn => {
+      if (btn.dataset.mode === 'eco') {
+        btn.classList.toggle('active', presetMode === 'eco');
+      } else if (btn.dataset.mode === 'home') {
+        btn.classList.toggle('active', presetMode === 'home' || presetMode === 'comfort');
+      }
+    });
+
+    // Update drag value if dragging
+    const dragValue = this.shadowRoot.querySelector('.drag-value');
+    if (dragValue) {
+      dragValue.textContent = `${targetTemp.toFixed(1)}${unit}`;
+      dragValue.classList.toggle('visible', this._dragging);
+    }
+  }
+
   _tempToPercent(temp, min, max) {
     return Math.max(0, Math.min(100, ((temp - min) / (max - min)) * 100));
   }
@@ -361,7 +420,7 @@ class InnodigiThermostatCard extends HTMLElement {
       
       this._dragValue = temp;
       this._dragging = true;
-      this.updateCard();
+      this.updateValues();
     };
 
     const handleEnd = () => {
@@ -370,7 +429,7 @@ class InnodigiThermostatCard extends HTMLElement {
       }
       this._dragging = false;
       this._dragValue = null;
-      this.updateCard();
+      this.updateValues();
     };
 
     sliderTrack.addEventListener('mousedown', (e) => {
@@ -549,11 +608,6 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           box-sizing: border-box;
         }
 
-        .config-row input[type="color"] {
-          height: 40px;
-          cursor: pointer;
-        }
-
         .config-row input[type="number"] {
           width: 100px;
         }
@@ -564,20 +618,30 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           margin-top: 4px;
         }
 
-        .color-preview {
+        .color-row {
           display: flex;
-          gap: 8px;
+          gap: 12px;
           align-items: center;
         }
 
-        .color-preview input {
-          width: 80px;
+        .color-swatch {
+          width: 48px;
+          height: 48px;
+          border-radius: 8px;
+          border: 2px solid var(--divider-color);
+          cursor: pointer;
+          flex-shrink: 0;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .color-value {
+        .color-input-wrapper {
+          flex: 1;
+        }
+
+        .color-input-wrapper input {
+          width: 100%;
           font-family: monospace;
-          font-size: 12px;
-          color: var(--secondary-text-color);
+          text-transform: uppercase;
         }
       </style>
       
@@ -618,27 +682,33 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           <div class="section-title">Kleur Instellingen</div>
           <div class="config-row">
             <label>Kleur Koud (Links)</label>
-            <div class="color-preview">
-              <input type="color" id="color-cold" value="${this._config.color_cold}">
-              <span class="color-value" id="color-cold-value">${this._config.color_cold}</span>
+            <div class="color-row">
+              <div class="color-swatch" id="color-cold-swatch" style="background-color: ${this._config.color_cold};"></div>
+              <div class="color-input-wrapper">
+                <input type="text" id="color-cold" value="${this._config.color_cold}" placeholder="#3498db" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
+              </div>
             </div>
             <div class="description">Kleur aan de linkerkant van de balk (koude temperaturen)</div>
           </div>
           
           <div class="config-row">
             <label>Kleur Middel (Midden)</label>
-            <div class="color-preview">
-              <input type="color" id="color-medium" value="${this._config.color_medium}">
-              <span class="color-value" id="color-medium-value">${this._config.color_medium}</span>
+            <div class="color-row">
+              <div class="color-swatch" id="color-medium-swatch" style="background-color: ${this._config.color_medium};"></div>
+              <div class="color-input-wrapper">
+                <input type="text" id="color-medium" value="${this._config.color_medium}" placeholder="#2ecc71" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
+              </div>
             </div>
             <div class="description">Kleur in het midden van de balk</div>
           </div>
           
           <div class="config-row">
             <label>Kleur Warm (Rechts)</label>
-            <div class="color-preview">
-              <input type="color" id="color-hot" value="${this._config.color_hot}">
-              <span class="color-value" id="color-hot-value">${this._config.color_hot}</span>
+            <div class="color-row">
+              <div class="color-swatch" id="color-hot-swatch" style="background-color: ${this._config.color_hot};"></div>
+              <div class="color-input-wrapper">
+                <input type="text" id="color-hot" value="${this._config.color_hot}" placeholder="#e74c3c" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
+              </div>
             </div>
             <div class="description">Kleur aan de rechterkant van de balk (warme temperaturen)</div>
           </div>
@@ -657,9 +727,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     const colorCold = this.shadowRoot.querySelector('#color-cold');
     const colorMedium = this.shadowRoot.querySelector('#color-medium');
     const colorHot = this.shadowRoot.querySelector('#color-hot');
-    const colorColdValue = this.shadowRoot.querySelector('#color-cold-value');
-    const colorMediumValue = this.shadowRoot.querySelector('#color-medium-value');
-    const colorHotValue = this.shadowRoot.querySelector('#color-hot-value');
+    const colorColdSwatch = this.shadowRoot.querySelector('#color-cold-swatch');
+    const colorMediumSwatch = this.shadowRoot.querySelector('#color-medium-swatch');
+    const colorHotSwatch = this.shadowRoot.querySelector('#color-hot-swatch');
 
     if (entitySelect) {
       entitySelect.addEventListener('change', (e) => {
@@ -689,36 +759,69 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       });
     }
 
-    if (colorCold && colorColdValue) {
-      // Update preview on input, save on change
+    // Helper function to validate and format hex color
+    const validateColor = (color) => {
+      const hex = color.trim().toUpperCase();
+      return /^#[0-9A-F]{6}$/.test(hex) ? hex : null;
+    };
+
+    if (colorCold && colorColdSwatch) {
+      // Update swatch preview on input
       colorCold.addEventListener('input', (e) => {
-        colorColdValue.textContent = e.target.value;
+        const color = validateColor(e.target.value);
+        if (color) {
+          colorColdSwatch.style.backgroundColor = color;
+        }
       });
+      // Save on change (blur or enter)
       colorCold.addEventListener('change', (e) => {
-        this._config.color_cold = e.target.value;
-        this.configChanged(this._config);
+        const color = validateColor(e.target.value);
+        if (color) {
+          e.target.value = color;
+          colorColdSwatch.style.backgroundColor = color;
+          this._config.color_cold = color;
+          this.configChanged(this._config);
+        }
       });
     }
 
-    if (colorMedium && colorMediumValue) {
-      // Update preview on input, save on change
+    if (colorMedium && colorMediumSwatch) {
+      // Update swatch preview on input
       colorMedium.addEventListener('input', (e) => {
-        colorMediumValue.textContent = e.target.value;
+        const color = validateColor(e.target.value);
+        if (color) {
+          colorMediumSwatch.style.backgroundColor = color;
+        }
       });
+      // Save on change (blur or enter)
       colorMedium.addEventListener('change', (e) => {
-        this._config.color_medium = e.target.value;
-        this.configChanged(this._config);
+        const color = validateColor(e.target.value);
+        if (color) {
+          e.target.value = color;
+          colorMediumSwatch.style.backgroundColor = color;
+          this._config.color_medium = color;
+          this.configChanged(this._config);
+        }
       });
     }
 
-    if (colorHot && colorHotValue) {
-      // Update preview on input, save on change
+    if (colorHot && colorHotSwatch) {
+      // Update swatch preview on input
       colorHot.addEventListener('input', (e) => {
-        colorHotValue.textContent = e.target.value;
+        const color = validateColor(e.target.value);
+        if (color) {
+          colorHotSwatch.style.backgroundColor = color;
+        }
       });
+      // Save on change (blur or enter)
       colorHot.addEventListener('change', (e) => {
-        this._config.color_hot = e.target.value;
-        this.configChanged(this._config);
+        const color = validateColor(e.target.value);
+        if (color) {
+          e.target.value = color;
+          colorHotSwatch.style.backgroundColor = color;
+          this._config.color_hot = color;
+          this.configChanged(this._config);
+        }
       });
     }
   }
@@ -738,7 +841,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.3 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.4 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
