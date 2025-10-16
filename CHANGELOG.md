@@ -5,6 +5,78 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.5.0] - 2025-10-16
+
+### 🚀 MAJEURE ARCHITECTUUR WIJZIGING - Pure Lokale State
+
+#### Het Probleem
+Slider en knoppen gebruikten nog steeds direct entity.attributes.temperature, waardoor:
+- Entity updates tijdens interactie de UI konden overschrijven
+- Lokale wijzigingen werden "teruggedraaid" door entity updates
+- Geen echte lokale state - alles hing af van entity
+
+#### De Oplossing: Volledig Onafhankelijke Lokale State
+
+**Nieuwe Architectuur:**
+```javascript
+_localTargetTemp  // Persistent lokale temperatuur
+                  // Geïnitialiseerd van entity
+                  // Daarna volledig onafhankelijk tijdens interactie
+                  
+_getCurrentTargetTemp() {
+  if (dragging) return _dragValue;     // Tijdens slepen
+  return _localTargetTemp;             // Anders: ALTIJD lokaal
+  // NOOIT meer direct entity.temperature!
+}
+```
+
+**Flow:**
+1. **Initialisatie**: `_localTargetTemp` = entity temp
+2. **Interactie**: Werk ALLEEN met `_localTargetTemp`
+3. **Tijdens interactie**: Entity updates worden GENEGEERD
+4. **Na interactie + sync**: `_localTargetTemp` = entity temp (sync)
+5. **Idle**: `_localTargetTemp` volgt entity updates
+
+#### Wat is Nieuw
+
+**Persistent Lokale State:**
+- `_localTargetTemp` wordt geïnitialiseerd bij eerste hass set
+- Blijft persistent, wordt niet gereset naar null
+- Volledig onafhankelijk tijdens interactie
+
+**Smart Sync:**
+- Tijdens interactie: entity updates negeren
+- Na interactie: sync lokaal naar entity (via debounce)
+- Idle: sync entity naar lokaal
+
+**Update Strategie:**
+```javascript
+set hass() {
+  if (!interacting && !dragging) {
+    // Sync entity -> local
+    _localTargetTemp = entity.temperature;
+  } else if (dragging) {
+    // Update UI during drag
+    updateValues();  // Uses _dragValue
+  }
+  // During button interaction: no entity updates
+}
+```
+
+#### Voordelen
+- ✅ Slider volgt ALTIJD je vinger/muis
+- ✅ Knoppen werken INSTANT zonder vertraging
+- ✅ Geen entity updates tijdens interactie
+- ✅ Pure lokale state = voorspelbaar gedrag
+- ✅ Entity kan niet meer interfereren
+
+#### Technische Details
+- Lokale temp persist tussen interactions
+- Entity temp alleen gelezen when idle
+- Dragging heeft hoogste prioriteit
+- Lokaal heeft tweede prioriteit  
+- Entity temp alleen fallback
+
 ## [1.4.2] - 2025-10-16
 
 ### Opgelost (KRITIEKE FIX)

@@ -15,13 +15,34 @@ class InnodigiThermostatCard extends HTMLElement {
     this._hass = hass;
     if (!this._config) return;
     
+    // Initialize local temp from entity if not set
+    if (this._localTargetTemp === null && !this._interacting && !this._dragging) {
+      const entity = hass.states[this._config.entity];
+      if (entity) {
+        this._localTargetTemp = parseFloat(entity.attributes.temperature) || 20;
+      }
+    }
+    
     // Only re-render if entity state actually changed or first render
     if (!oldHass || !this._cardInitialized) {
       this.updateCard();
       this._cardInitialized = true;
-    } else if (!this._interacting) {
-      // Only update values if we're not currently interacting with controls
-      this.updateValues();
+    } else {
+      // When not interacting, sync local temp from entity
+      if (!this._interacting && !this._dragging) {
+        const entity = hass.states[this._config.entity];
+        if (entity) {
+          const entityTemp = parseFloat(entity.attributes.temperature) || 20;
+          if (this._localTargetTemp !== entityTemp) {
+            this._localTargetTemp = entityTemp;
+            this.updateValues();
+          }
+        }
+      }
+      // When dragging, still update UI (will use _dragValue via _getCurrentTargetTemp)
+      else if (this._dragging) {
+        this.updateValues();
+      }
     }
   }
 
@@ -80,18 +101,14 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   _getCurrentTargetTemp() {
-    // Priority: dragging > local temp > entity temp
-    // Check dragging first so slider always follows during drag
+    // ALWAYS use local state - never entity directly
+    // Priority: dragging > local temp
     if (this._dragging && this._dragValue !== null) {
       return this._dragValue;
     }
     
-    if (this._localTargetTemp !== null && this._interacting) {
-      return this._localTargetTemp;
-    }
-    
-    const entity = this._hass.states[this._config.entity];
-    return entity ? (parseFloat(entity.attributes.temperature) || 20) : 20;
+    // Always return local temp (initialized from entity, but independent)
+    return this._localTargetTemp !== null ? this._localTargetTemp : 20;
   }
 
   getCardSize() {
@@ -951,7 +968,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.4.2 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.5.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
