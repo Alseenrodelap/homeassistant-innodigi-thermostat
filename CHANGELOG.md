@@ -5,6 +5,29 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.2.7] - 2025-10-16
+
+### Opgelost (KRITIEKE FIXES)
+- **Plus/Min knoppen werken nu consistent**: Altijd 0.5°C per klik, geen inconsistent gedrag meer
+- **Knoppen doen altijd iets**: Werken elke keer, niet alleen na pagina reload
+- **Geen minimum temperatuur blokkering**: Kan nu wel onder 18 graden (was bug door verloren event listeners)
+- Event listeners blijven nu behouden en worden niet meer verloren
+
+### Technisch (Fundamentele Verbeteringen)
+- Nieuwe `_startInteraction()` en `_endInteraction()` helper methodes
+- Oude timeouts worden nu automatisch gecanceld bij nieuwe interactie
+- `_interactionTimeout` wordt opgeslagen zodat we oude timeouts kunnen opruimen
+- `setConfig` rendert NIET meer bij elke config update (alleen bij entity change)
+- Event listeners worden NOOIT meer vervangen na initialisatie
+- `preventDefault()` en `stopPropagation()` toegevoegd aan knop clicks
+- Betere state management voorkomt race conditions
+
+### Wat was het probleem?
+- Bij elke config update werden event listeners vervangen (verloren)
+- Oude timeouts bleven actief en blokkeerden nieuwe interacties
+- `_interacting` flag kon blijven hangen op `true`
+- Dit veroorzaakte inconsistent gedrag en geblokkeerde knoppen
+
 ## [1.2.6] - 2025-10-16
 
 ### Verbeterd

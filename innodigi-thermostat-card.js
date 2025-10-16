@@ -4,6 +4,8 @@ class InnodigiThermostatCard extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this._dragging = false;
     this._dragValue = null;
+    this._interacting = false;
+    this._interactionTimeout = null;
   }
 
   set hass(hass) {
@@ -25,12 +27,42 @@ class InnodigiThermostatCard extends HTMLElement {
     if (!config.entity) {
       throw new Error('Please define an entity');
     }
+    const oldEntity = this._config ? this._config.entity : null;
+    const configChanged = JSON.stringify(this._config) !== JSON.stringify(config);
     this._config = config;
-    this._cardInitialized = false; // Force re-render on config change
-    if (this._hass) {
-      this.updateCard();
-      this._cardInitialized = true;
+    
+    // Only re-render if this is first time or entity changed
+    if (!this._cardInitialized || oldEntity !== config.entity) {
+      this._cardInitialized = false;
+      if (this._hass) {
+        this.updateCard();
+        this._cardInitialized = true;
+      }
+    } else if (this._hass && configChanged) {
+      // Just update values for other config changes
+      this.updateValues();
     }
+  }
+
+  _startInteraction() {
+    // Clear any existing timeout
+    if (this._interactionTimeout) {
+      clearTimeout(this._interactionTimeout);
+    }
+    this._interacting = true;
+  }
+
+  _endInteraction() {
+    // Clear any existing timeout
+    if (this._interactionTimeout) {
+      clearTimeout(this._interactionTimeout);
+    }
+    // Set timeout to end interaction
+    this._interactionTimeout = setTimeout(() => {
+      this._interacting = false;
+      this._interactionTimeout = null;
+      this.updateValues();
+    }, 300);
   }
 
   getCardSize() {
@@ -397,7 +429,11 @@ class InnodigiThermostatCard extends HTMLElement {
     // Plus/minus buttons
     this.shadowRoot.querySelectorAll('.control-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        this._interacting = true;
+        e.preventDefault();
+        e.stopPropagation();
+        
+        this._startInteraction();
+        
         const action = e.target.dataset.action;
         const currentTarget = parseFloat(entity.attributes.temperature) || 20;
         
@@ -408,12 +444,11 @@ class InnodigiThermostatCard extends HTMLElement {
           newTemp = Math.max(minTemp, currentTarget - step);
         }
         
-        if (newTemp !== undefined) {
+        if (newTemp !== undefined && newTemp !== currentTarget) {
           this._setTemperature(newTemp);
-          // Allow state updates after a short delay (300ms for responsive feel)
-          setTimeout(() => {
-            this._interacting = false;
-          }, 300);
+          this._endInteraction();
+        } else {
+          this._endInteraction();
         }
       });
     });
@@ -432,7 +467,7 @@ class InnodigiThermostatCard extends HTMLElement {
       
       this._dragValue = temp;
       this._dragging = true;
-      this._interacting = true;
+      this._startInteraction();
       this.updateValues();
     };
 
@@ -442,12 +477,7 @@ class InnodigiThermostatCard extends HTMLElement {
       }
       this._dragging = false;
       this._dragValue = null;
-      
-      // Allow state updates after a short delay (300ms for responsive feel)
-      setTimeout(() => {
-        this._interacting = false;
-        this.updateValues();
-      }, 300);
+      this._endInteraction();
     };
 
     sliderTrack.addEventListener('mousedown', (e) => {
@@ -479,7 +509,7 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   _setPresetMode(mode) {
-    this._interacting = true;
+    this._startInteraction();
     
     // Gebruik altijd de geconfigureerde temperaturen
     let targetTemp = null;
@@ -497,11 +527,7 @@ class InnodigiThermostatCard extends HTMLElement {
         entity_id: this._config.entity,
         temperature: targetTemp
       });
-      
-      // Allow state updates after a short delay (300ms for responsive feel)
-      setTimeout(() => {
-        this._interacting = false;
-      }, 300);
+      this._endInteraction();
     } else {
       // Geen custom temperatuur ingesteld, probeer preset mode
       this._hass.callService('climate', 'set_preset_mode', {
@@ -510,9 +536,7 @@ class InnodigiThermostatCard extends HTMLElement {
       }).catch(() => {
         // Thermostaat ondersteunt geen preset modes
       }).finally(() => {
-        setTimeout(() => {
-          this._interacting = false;
-        }, 300);
+        this._endInteraction();
       });
     }
   }
@@ -523,6 +547,9 @@ class InnodigiThermostatCard extends HTMLElement {
     }
     if (this._endHandler) {
       document.removeEventListener('mouseup', this._endHandler);
+    }
+    if (this._interactionTimeout) {
+      clearTimeout(this._interactionTimeout);
     }
   }
 }
@@ -868,7 +895,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.6 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.7 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
