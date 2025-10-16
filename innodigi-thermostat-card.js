@@ -136,6 +136,9 @@ class InnodigiThermostatCard extends HTMLElement {
       color_current_temp: '#3498db',
       color_target_temp: '#2ecc71',
       color_outdoor_temp: '#95a5a6',
+      // Temperature cards
+      show_temperature_cards: false,
+      temperature_card_background: '#1a1a1a',
       eco_temperature: 18,
       home_temperature: 21
     };
@@ -181,6 +184,10 @@ class InnodigiThermostatCard extends HTMLElement {
     const colorCurrentTemp = this._config.color_current_temp || '#3498db';
     const colorTargetTemp = this._config.color_target_temp || '#2ecc71';
     const colorOutdoorTemp = this._config.color_outdoor_temp || '#95a5a6';
+    
+    // Temperature cards
+    const showTempCards = this._config.show_temperature_cards || false;
+    const tempCardBg = this._config.temperature_card_background || '#1a1a1a';
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -241,10 +248,17 @@ class InnodigiThermostatCard extends HTMLElement {
           justify-content: space-around;
           align-items: center;
           margin: ${isCompact ? '4px 0' : '10px 0'};
+          ${showTempCards ? `gap: ${isCompact ? '8px' : '12px'};` : ''}
         }
 
         .temp-item {
           text-align: center;
+          ${showTempCards ? `
+            background: ${tempCardBg};
+            padding: ${isCompact ? '8px' : '12px'};
+            border-radius: ${isCompact ? '8px' : '12px'};
+            min-width: ${isCompact ? '70px' : '90px'};
+          ` : ''}
         }
 
         .temp-label {
@@ -696,6 +710,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       color_current_temp: '#3498db',
       color_target_temp: '#2ecc71',
       color_outdoor_temp: '#95a5a6',
+      // Temperature cards
+      show_temperature_cards: false,
+      temperature_card_background: '#1a1a1a',
       eco_temperature: 18,
       home_temperature: 21,
       ...config
@@ -921,6 +938,23 @@ class InnodigiThermostatCardEditor extends HTMLElement {
             <div class="description">Kleur van de buiten temperatuur weergave</div>
           </div>
         </div>
+
+        <div class="config-section">
+          <div class="section-title">Temperatuur Kaartjes</div>
+          <div class="config-row">
+            <label>
+              <input type="checkbox" id="show-temperature-cards" ${this._config.show_temperature_cards ? 'checked' : ''}>
+              Toon temperaturen in kaartjes
+            </label>
+            <div class="description">Geeft elke temperatuur een eigen achtergrondkleur met afgeronde hoeken</div>
+          </div>
+          
+          <div class="config-row" id="card-background-row" style="display: ${this._config.show_temperature_cards ? 'block' : 'none'};">
+            <label>Achtergrondkleur Kaartjes</label>
+            <input type="color" id="temperature-card-background" value="${this._config.temperature_card_background}">
+            <div class="description">Achtergrondkleur van de temperatuur kaartjes</div>
+          </div>
+        </div>
       </div>
     `;
 
@@ -948,6 +982,11 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     const colorCurrentTemp = this.shadowRoot.querySelector('#color-current-temp');
     const colorTargetTemp = this.shadowRoot.querySelector('#color-target-temp');
     const colorOutdoorTemp = this.shadowRoot.querySelector('#color-outdoor-temp');
+    
+    // Temperature cards
+    const showTempCards = this.shadowRoot.querySelector('#show-temperature-cards');
+    const tempCardBg = this.shadowRoot.querySelector('#temperature-card-background');
+    const cardBgRow = this.shadowRoot.querySelector('#card-background-row');
 
     if (entitySelect) {
       entitySelect.addEventListener('change', (e) => {
@@ -1044,6 +1083,24 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     if (colorOutdoorTemp) {
       colorOutdoorTemp.addEventListener('change', (e) => {
         this._config.color_outdoor_temp = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (showTempCards) {
+      showTempCards.addEventListener('change', (e) => {
+        this._config.show_temperature_cards = e.target.checked;
+        // Show/hide background color picker based on checkbox
+        if (cardBgRow) {
+          cardBgRow.style.display = e.target.checked ? 'block' : 'none';
+        }
+        this.configChanged(this._config);
+      });
+    }
+
+    if (tempCardBg) {
+      tempCardBg.addEventListener('change', (e) => {
+        this._config.temperature_card_background = e.target.value;
         this.configChanged(this._config);
       });
     }

@@ -5,6 +5,65 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.7.0] - 2025-10-16
+
+### 🎨 NIEUWE FEATURE - Temperatuur Kaartjes
+
+#### Optionele Temperatuur Kaartjes
+- **Vinkje in instellingen**: Schakel temperatuur kaartjes aan/uit
+- **Achtergrondkleur kaartjes**: Instelbare achtergrondkleur via colorpicker
+- **Afgeronde hoeken**: Moderne uitstraling met border-radius
+- **Automatische layout**: Werkt met 2 of 3 kolommen (met/zonder outdoor temp)
+
+#### Features
+- **Toggle functionaliteit**: Vinkje toont/verbergt de kaartjes styling
+- **Conditionele colorpicker**: Achtergrondkleur picker verschijnt alleen bij aangevinkt
+- **Responsive padding**: Compact mode krijgt kleinere padding (8px vs 12px)
+- **Responsive radius**: Compact mode krijgt kleinere border-radius (8px vs 12px)
+- **Min-width**: Kaartjes hebben minimum breedte voor consistente uitstraling
+
+#### Config Opties (nieuw)
+```javascript
+show_temperature_cards: false           // Vinkje: toon kaartjes
+temperature_card_background: '#1a1a1a'  // Achtergrondkleur kaartjes
+```
+
+#### Styling Details
+**Normal mode** (show_temperature_cards: true):
+- Background: instelbare kleur
+- Padding: 12px
+- Border-radius: 12px
+- Min-width: 90px
+- Gap tussen kaartjes: 12px
+
+**Compact mode** (show_temperature_cards: true + layout: compact):
+- Background: instelbare kleur
+- Padding: 8px
+- Border-radius: 8px
+- Min-width: 70px
+- Gap tussen kaartjes: 8px
+
+#### Editor Verbeteringen
+- **Nieuwe sectie**: "Temperatuur Kaartjes"
+- **Checkbox**: Simpele aan/uit toggle
+- **Dynamische UI**: Colorpicker verschijnt/verdwijnt bij (on)checken
+- **Live preview**: Wijzigingen direct zichtbaar
+
+### Technische Details
+- Conditionele CSS via template literals
+- Dynamic display van colorpicker row
+- Event listener voor checkbox toggle
+- Backwards compatible (default: false)
+
+### Voordelen
+- ✅ Visuele groepering van temperaturen
+- ✅ Betere leesbaarheid op drukke dashboards
+- ✅ Moderne uitstraling met kaartjes
+- ✅ Flexibele styling - aan/uit schakelbaar
+- ✅ Eigen achtergrondkleur per gebruik
+- ✅ Werkt met alle layouts (normal/compact)
+- ✅ Backwards compatible
+
 ## [1.6.0] - 2025-10-16
 
 ### 🎨 NIEUWE FEATURES - Uitgebreide Kleur Controle & Buitentemperatuur
