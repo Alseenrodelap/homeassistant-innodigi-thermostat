@@ -5,6 +5,40 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.3.0] - 2025-10-16
+
+### 🚀 MAJEURE ARCHITECTUUR VERBETERING
+
+#### Probleem Opgelost
+Knoppen reageerden inconsistent, soms halve graad, soms hele graad, vaak helemaal niet. 
+Dit kwam doordat we wachtten op state updates van Home Assistant na elke wijziging.
+
+#### Oplossing: Lokale State Management
+- **Instant UI feedback**: Knoppen updaten DIRECT zonder wachten op thermostaat
+- **Debounced sync**: Wijzigingen worden gebundeld en na 1 seconde naar thermostaat gestuurd
+- **Geen race conditions meer**: Lokale state heeft altijd voorrang tijdens interactie
+
+### Wat is Nieuw
+- `_localTargetTemp`: Lokale temperatuur state voor instant feedback
+- `_setLocalTemperature()`: Update UI direct en schedule sync
+- `_syncToThermostat()`: Debounced sync naar Home Assistant
+- `_getCurrentTargetTemp()`: Intelligente temperatuur getter (lokaal > drag > entity)
+
+### Technische Details
+- Plus/Min knoppen werken met lokale state (instant +0.5°C of -0.5°C)
+- Slider gebruikt lokale state tijdens drag
+- 1 seconde debounce voordat sync naar thermostaat
+- UI toont ALTIJD de lokale waarde tijdens interactie
+- Na sync: 500ms wachten voordat externe updates weer worden toegestaan
+
+### Voordelen
+- ✅ Instant respons - geen vertraging meer
+- ✅ Consistent gedrag - altijd 0.5°C stappen
+- ✅ Sneller gebruik - meerdere clicks worden gebundeld
+- ✅ Minder API calls - 10 clicks = 1 API call
+- ✅ Geen blokkering meer - kan altijd klikken
+- ✅ Robuuster - niet afhankelijk van state update timing
+
 ## [1.2.7] - 2025-10-16
 
 ### Opgelost (KRITIEKE FIXES)

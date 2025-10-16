@@ -6,6 +6,8 @@ class InnodigiThermostatCard extends HTMLElement {
     this._dragValue = null;
     this._interacting = false;
     this._interactionTimeout = null;
+    this._localTargetTemp = null; // Local target temperature for instant UI updates
+    this._syncTimeout = null; // Debounce timer for syncing to thermostat
   }
 
   set hass(hass) {
@@ -44,25 +46,51 @@ class InnodigiThermostatCard extends HTMLElement {
     }
   }
 
-  _startInteraction() {
-    // Clear any existing timeout
-    if (this._interactionTimeout) {
-      clearTimeout(this._interactionTimeout);
-    }
+  _setLocalTemperature(temp) {
+    // Update local state immediately for instant UI feedback
+    this._localTargetTemp = temp;
     this._interacting = true;
+    
+    // Update UI immediately
+    this.updateValues();
+    
+    // Clear existing sync timeout
+    if (this._syncTimeout) {
+      clearTimeout(this._syncTimeout);
+    }
+    
+    // Debounced sync to thermostat (1 second after last change)
+    this._syncTimeout = setTimeout(() => {
+      this._syncToThermostat(temp);
+      this._syncTimeout = null;
+      
+      // Allow external updates after sync
+      setTimeout(() => {
+        this._interacting = false;
+      }, 500);
+    }, 1000);
   }
 
-  _endInteraction() {
-    // Clear any existing timeout
-    if (this._interactionTimeout) {
-      clearTimeout(this._interactionTimeout);
+  _syncToThermostat(temperature) {
+    // Actually send the temperature to Home Assistant
+    this._hass.callService('climate', 'set_temperature', {
+      entity_id: this._config.entity,
+      temperature: temperature
+    });
+  }
+
+  _getCurrentTargetTemp() {
+    // Return local temp if set, otherwise entity temp
+    if (this._localTargetTemp !== null && this._interacting) {
+      return this._localTargetTemp;
     }
-    // Set timeout to end interaction
-    this._interactionTimeout = setTimeout(() => {
-      this._interacting = false;
-      this._interactionTimeout = null;
-      this.updateValues();
-    }, 300);
+    
+    if (this._dragging && this._dragValue !== null) {
+      return this._dragValue;
+    }
+    
+    const entity = this._hass.states[this._config.entity];
+    return entity ? (parseFloat(entity.attributes.temperature) || 20) : 20;
   }
 
   getCardSize() {
@@ -103,7 +131,7 @@ class InnodigiThermostatCard extends HTMLElement {
     }
 
     const currentTemp = parseFloat(entity.attributes.current_temperature) || 0;
-    const targetTemp = this._dragging ? this._dragValue : (parseFloat(entity.attributes.temperature) || 20);
+    const targetTemp = this._getCurrentTargetTemp();
     const minTemp = parseFloat(entity.attributes.min_temp) || 5;
     const maxTemp = parseFloat(entity.attributes.max_temp) || 35;
     // Force step to 0.5 for half-degree increments
@@ -364,7 +392,7 @@ class InnodigiThermostatCard extends HTMLElement {
     if (!entity) return;
 
     const currentTemp = parseFloat(entity.attributes.current_temperature) || 0;
-    const targetTemp = this._dragging ? this._dragValue : (parseFloat(entity.attributes.temperature) || 20);
+    const targetTemp = this._getCurrentTargetTemp();
     const minTemp = parseFloat(entity.attributes.min_temp) || 5;
     const maxTemp = parseFloat(entity.attributes.max_temp) || 35;
     const unit = this._hass.config.unit_system.temperature;
@@ -432,23 +460,20 @@ class InnodigiThermostatCard extends HTMLElement {
         e.preventDefault();
         e.stopPropagation();
         
-        this._startInteraction();
-        
         const action = e.target.dataset.action;
-        const currentTarget = parseFloat(entity.attributes.temperature) || 20;
+        const currentTarget = this._getCurrentTargetTemp();
         
         let newTemp;
         if (action === 'increase') {
-          newTemp = Math.min(maxTemp, currentTarget + step);
+          newTemp = Math.round((currentTarget + step) * 2) / 2; // Round to nearest 0.5
+          newTemp = Math.min(maxTemp, newTemp);
         } else if (action === 'decrease') {
-          newTemp = Math.max(minTemp, currentTarget - step);
+          newTemp = Math.round((currentTarget - step) * 2) / 2; // Round to nearest 0.5
+          newTemp = Math.max(minTemp, newTemp);
         }
         
         if (newTemp !== undefined && newTemp !== currentTarget) {
-          this._setTemperature(newTemp);
-          this._endInteraction();
-        } else {
-          this._endInteraction();
+          this._setLocalTemperature(newTemp);
         }
       });
     });
@@ -467,17 +492,16 @@ class InnodigiThermostatCard extends HTMLElement {
       
       this._dragValue = temp;
       this._dragging = true;
-      this._startInteraction();
+      this._interacting = true;
       this.updateValues();
     };
 
     const handleEnd = () => {
       if (this._dragging && this._dragValue !== null) {
-        this._setTemperature(this._dragValue);
+        this._setLocalTemperature(this._dragValue);
       }
       this._dragging = false;
       this._dragValue = null;
-      this._endInteraction();
     };
 
     sliderTrack.addEventListener('mousedown', (e) => {
@@ -501,16 +525,7 @@ class InnodigiThermostatCard extends HTMLElement {
     this._endHandler = handleEnd;
   }
 
-  _setTemperature(temperature) {
-    this._hass.callService('climate', 'set_temperature', {
-      entity_id: this._config.entity,
-      temperature: temperature
-    });
-  }
-
   _setPresetMode(mode) {
-    this._startInteraction();
-    
     // Gebruik altijd de geconfigureerde temperaturen
     let targetTemp = null;
     
@@ -521,22 +536,15 @@ class InnodigiThermostatCard extends HTMLElement {
     }
 
     if (targetTemp !== null) {
-      // Zet alleen de temperatuur, GEEN preset mode
-      // (preset mode kan eigen temperaturen hebben die we niet willen)
-      this._hass.callService('climate', 'set_temperature', {
-        entity_id: this._config.entity,
-        temperature: targetTemp
-      });
-      this._endInteraction();
+      // Use local temperature setting for instant feedback
+      this._setLocalTemperature(targetTemp);
     } else {
-      // Geen custom temperatuur ingesteld, probeer preset mode
+      // Geen custom temperatuur ingesteld, probeer preset mode direct
       this._hass.callService('climate', 'set_preset_mode', {
         entity_id: this._config.entity,
         preset_mode: mode
       }).catch(() => {
         // Thermostaat ondersteunt geen preset modes
-      }).finally(() => {
-        this._endInteraction();
       });
     }
   }
@@ -550,6 +558,9 @@ class InnodigiThermostatCard extends HTMLElement {
     }
     if (this._interactionTimeout) {
       clearTimeout(this._interactionTimeout);
+    }
+    if (this._syncTimeout) {
+      clearTimeout(this._syncTimeout);
     }
   }
 }
@@ -895,7 +906,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.7 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.3.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
