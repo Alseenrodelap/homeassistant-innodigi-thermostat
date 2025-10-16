@@ -5,6 +5,25 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.2.0] - 2025-10-16
+
+### Toegevoegd
+- **Kleur configuratie**: Aanpasbare kleuren voor de temperatuurbalk (koud/middel/warm)
+- **Temperatuur presets**: Instelbare doeltemperaturen voor Eco en Thuis modes
+- Werkende entity selectie dropdown met alle climate entiteiten
+- Live preview van geselecteerde kleuren in de editor
+- Drie configuratie secties: Basis, Temperatuur, en Kleuren
+
+### Verbeterd
+- Volledig werkende visuele editor met echte form elementen
+- Entity selector toont nu alle beschikbare thermostaten
+- Eco en Thuis knoppen zetten nu automatisch de geconfigureerde temperaturen
+- Betere structuur en styling van de configuratie interface
+
+### Opgelost
+- Entity picker werd niet correct getoond (nu vervangen door dropdown)
+- Configuratie werd niet correct opgeslagen
+
 ## [1.1.0] - 2025-10-16
 
 ### Toegevoegd

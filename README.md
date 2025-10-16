@@ -50,11 +50,20 @@ lovelace:
 2. Klik rechtsboven op het menu (⋮) en selecteer "Bewerken dashboard"
 3. Klik op "+ VOEG KAART TOE"
 4. Scroll naar beneden en selecteer **"Custom: Innodigi Thermostaat Kaart"**
-5. Selecteer je thermostaat entity via de dropdown
-6. Voeg optioneel een aangepaste naam toe
-7. Klik op "OPSLAAN"
+5. Configureer de kaart:
+   - **Basis Instellingen**:
+     - Selecteer je thermostaat entity via de dropdown
+     - Voeg optioneel een aangepaste naam toe
+   - **Temperatuur Instellingen**:
+     - Stel de Eco doeltemperatuur in (standaard 18°C)
+     - Stel de Thuis doeltemperatuur in (standaard 21°C)
+   - **Kleur Instellingen**:
+     - Kies de kleur voor koude temperaturen (links)
+     - Kies de kleur voor middel temperaturen (midden)
+     - Kies de kleur voor warme temperaturen (rechts)
+6. Klik op "OPSLAAN"
 
-De kaart heeft een visuele editor, dus je hoeft geen YAML te schrijven! 🎉
+De kaart heeft een visuele editor met live preview, dus je hoeft geen YAML te schrijven! 🎉
 
 ### Via YAML (Alternatief)
 
@@ -73,6 +82,11 @@ entity: climate.woonkamer
 type: custom:innodigi-thermostat-card
 entity: climate.woonkamer
 name: Woonkamer Thermostaat
+color_cold: '#3498db'
+color_medium: '#2ecc71'
+color_hot: '#e74c3c'
+eco_temperature: 18
+home_temperature: 21
 ```
 
 ## Configuratie opties
@@ -82,6 +96,11 @@ name: Woonkamer Thermostaat
 | `type` | string | Ja | - | `custom:innodigi-thermostat-card` |
 | `entity` | string | Ja | - | De climate entity ID |
 | `name` | string | Nee | Entiteitsnaam | Naam van de thermostaat |
+| `color_cold` | string | Nee | `#3498db` | Kleur linkerkant balk (koud) |
+| `color_medium` | string | Nee | `#2ecc71` | Kleur midden balk |
+| `color_hot` | string | Nee | `#e74c3c` | Kleur rechterkant balk (warm) |
+| `eco_temperature` | number | Nee | `18` | Doeltemperatuur voor Eco mode |
+| `home_temperature` | number | Nee | `21` | Doeltemperatuur voor Thuis mode |
 
 ## Gebruik
 
@@ -95,10 +114,10 @@ Er zijn drie manieren om de doeltemperatuur in te stellen:
 
 ### Preset modes
 
-- **Eco**: Energiebesparende modus
-- **Thuis**: Comfort modus voor thuisgebruik
+- **Eco**: Zet de thermostaat op je geconfigureerde Eco temperatuur (standaard 18°C)
+- **Thuis**: Zet de thermostaat op je geconfigureerde Thuis temperatuur (standaard 21°C)
 
-Klik op de knoppen bovenaan de kaart om tussen modes te schakelen.
+Klik op de knoppen bovenaan de kaart om snel naar deze vooringestelde temperaturen te schakelen. Je kunt deze temperaturen aanpassen in de visuele editor!
 
 ### Visuele indicatoren
 

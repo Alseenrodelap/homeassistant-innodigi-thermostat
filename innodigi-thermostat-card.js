@@ -31,7 +31,12 @@ class InnodigiThermostatCard extends HTMLElement {
   static getStubConfig() {
     return {
       entity: '',
-      name: ''
+      name: '',
+      color_cold: '#3498db',
+      color_medium: '#2ecc71',
+      color_hot: '#e74c3c',
+      eco_temperature: 18,
+      home_temperature: 21
     };
   }
 
@@ -152,9 +157,9 @@ class InnodigiThermostatCard extends HTMLElement {
           position: relative;
           height: 60px;
           background: linear-gradient(to right, 
-            #3498db 0%, 
-            #2ecc71 50%, 
-            #e74c3c 100%);
+            ${this._config.color_cold || '#3498db'} 0%, 
+            ${this._config.color_medium || '#2ecc71'} 50%, 
+            ${this._config.color_hot || '#e74c3c'} 100%);
           border-radius: 30px;
           cursor: pointer;
           overflow: visible;
@@ -397,10 +402,32 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   _setPresetMode(mode) {
-    this._hass.callService('climate', 'set_preset_mode', {
-      entity_id: this._config.entity,
-      preset_mode: mode
-    });
+    // Als er custom temperaturen zijn ingesteld, zet die in plaats van preset mode
+    let targetTemp = null;
+    
+    if (mode === 'eco' && this._config.eco_temperature) {
+      targetTemp = this._config.eco_temperature;
+    } else if (mode === 'home' && this._config.home_temperature) {
+      targetTemp = this._config.home_temperature;
+    }
+
+    if (targetTemp !== null) {
+      // Zet de temperatuur
+      this._hass.callService('climate', 'set_temperature', {
+        entity_id: this._config.entity,
+        temperature: targetTemp
+      });
+    }
+    
+    // Probeer ook de preset mode in te stellen (als de thermostaat dit ondersteunt)
+    try {
+      this._hass.callService('climate', 'set_preset_mode', {
+        entity_id: this._config.entity,
+        preset_mode: mode
+      });
+    } catch (e) {
+      // Sommige thermostaten ondersteunen geen preset modes, dat is OK
+    }
   }
 
   disconnectedCallback() {
@@ -422,11 +449,25 @@ class InnodigiThermostatCardEditor extends HTMLElement {
 
   set hass(hass) {
     this._hass = hass;
+    if (this._config) {
+      this.render();
+    }
   }
 
   setConfig(config) {
-    this._config = config;
-    this.render();
+    this._config = {
+      entity: '',
+      name: '',
+      color_cold: '#3498db',
+      color_medium: '#2ecc71',
+      color_hot: '#e74c3c',
+      eco_temperature: 18,
+      home_temperature: 21,
+      ...config
+    };
+    if (this._hass) {
+      this.render();
+    }
   }
 
   configChanged(newConfig) {
@@ -441,95 +482,250 @@ class InnodigiThermostatCardEditor extends HTMLElement {
   render() {
     if (!this._hass || !this._config) return;
 
-    this.shadowRoot.innerHTML = `
-      <style>
-        .card-config {
-          padding: 16px;
-        }
-        
-        .config-row {
-          margin-bottom: 16px;
-        }
-        
-        .config-row label {
-          display: block;
-          margin-bottom: 8px;
-          font-weight: 500;
-          color: var(--primary-text-color);
-        }
-        
-        ha-entity-picker,
-        ha-textfield {
-          width: 100%;
-        }
-
-        .description {
-          font-size: 12px;
-          color: var(--secondary-text-color);
-          margin-top: 4px;
-        }
-      </style>
+    const style = document.createElement('style');
+    style.textContent = `
+      .card-config {
+        padding: 16px;
+      }
       
-      <div class="card-config">
-        <div class="config-row">
-          <label>Thermostaat Entity (Verplicht)</label>
-          <ha-entity-picker
-            .hass="${this._hass}"
-            .value="${this._config.entity || ''}"
-            .configValue="${'entity'}"
-            .includeDomains="${['climate']}"
-            allow-custom-entity
-          ></ha-entity-picker>
-          <div class="description">Selecteer een climate entiteit (thermostaat)</div>
-        </div>
-        
-        <div class="config-row">
-          <label>Naam (Optioneel)</label>
-          <ha-textfield
-            .label="${'Naam'}"
-            .value="${this._config.name || ''}"
-            .configValue="${'name'}"
-            placeholder="Laat leeg voor standaard naam"
-          ></ha-textfield>
-          <div class="description">Aangepaste naam voor de kaart</div>
-        </div>
+      .config-section {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--divider-color);
+      }
+      
+      .config-section:last-child {
+        border-bottom: none;
+      }
+      
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary-text-color);
+        margin-bottom: 16px;
+      }
+      
+      .config-row {
+        margin-bottom: 16px;
+      }
+      
+      .config-row label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--primary-text-color);
+      }
+      
+      .config-row input,
+      .config-row select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--divider-color);
+        border-radius: 4px;
+        background: var(--card-background-color);
+        color: var(--primary-text-color);
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+
+      .config-row input[type="color"] {
+        height: 40px;
+        cursor: pointer;
+      }
+
+      .config-row input[type="number"] {
+        width: 100px;
+      }
+
+      .description {
+        font-size: 12px;
+        color: var(--secondary-text-color);
+        margin-top: 4px;
+      }
+
+      .color-preview {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .color-preview input {
+        width: 80px;
+      }
+
+      .color-value {
+        font-family: monospace;
+        font-size: 12px;
+        color: var(--secondary-text-color);
+      }
+    `;
+
+    const container = document.createElement('div');
+    container.className = 'card-config';
+    
+    // Basic Settings Section
+    const basicSection = document.createElement('div');
+    basicSection.className = 'config-section';
+    basicSection.innerHTML = `
+      <div class="section-title">Basis Instellingen</div>
+      <div class="config-row">
+        <label>Thermostaat Entity (Verplicht)</label>
+        <select id="entity-select">
+          <option value="">-- Selecteer een thermostaat --</option>
+        </select>
+        <div class="description">Selecteer een climate entiteit (thermostaat)</div>
+      </div>
+      
+      <div class="config-row">
+        <label>Naam (Optioneel)</label>
+        <input type="text" id="name-input" placeholder="Laat leeg voor standaard naam" value="${this._config.name || ''}">
+        <div class="description">Aangepaste naam voor de kaart</div>
       </div>
     `;
+
+    // Populate entity select
+    const entitySelect = basicSection.querySelector('#entity-select');
+    Object.keys(this._hass.states).forEach(entityId => {
+      if (entityId.startsWith('climate.')) {
+        const option = document.createElement('option');
+        option.value = entityId;
+        option.textContent = this._hass.states[entityId].attributes.friendly_name || entityId;
+        if (entityId === this._config.entity) {
+          option.selected = true;
+        }
+        entitySelect.appendChild(option);
+      }
+    });
+
+    // Temperature Settings Section
+    const tempSection = document.createElement('div');
+    tempSection.className = 'config-section';
+    tempSection.innerHTML = `
+      <div class="section-title">Temperatuur Instellingen</div>
+      <div class="config-row">
+        <label>Eco Doeltemperatuur (°C)</label>
+        <input type="number" id="eco-temp" min="5" max="35" step="0.5" value="${this._config.eco_temperature}">
+        <div class="description">Temperatuur wanneer Eco mode wordt ingeschakeld</div>
+      </div>
+      
+      <div class="config-row">
+        <label>Thuis Doeltemperatuur (°C)</label>
+        <input type="number" id="home-temp" min="5" max="35" step="0.5" value="${this._config.home_temperature}">
+        <div class="description">Temperatuur wanneer Thuis mode wordt ingeschakeld</div>
+      </div>
+    `;
+
+    // Color Settings Section
+    const colorSection = document.createElement('div');
+    colorSection.className = 'config-section';
+    colorSection.innerHTML = `
+      <div class="section-title">Kleur Instellingen</div>
+      <div class="config-row">
+        <label>Kleur Koud (Links)</label>
+        <div class="color-preview">
+          <input type="color" id="color-cold" value="${this._config.color_cold}">
+          <span class="color-value">${this._config.color_cold}</span>
+        </div>
+        <div class="description">Kleur aan de linkerkant van de balk (koude temperaturen)</div>
+      </div>
+      
+      <div class="config-row">
+        <label>Kleur Middel (Midden)</label>
+        <div class="color-preview">
+          <input type="color" id="color-medium" value="${this._config.color_medium}">
+          <span class="color-value">${this._config.color_medium}</span>
+        </div>
+        <div class="description">Kleur in het midden van de balk</div>
+      </div>
+      
+      <div class="config-row">
+        <label>Kleur Warm (Rechts)</label>
+        <div class="color-preview">
+          <input type="color" id="color-hot" value="${this._config.color_hot}">
+          <span class="color-value">${this._config.color_hot}</span>
+        </div>
+        <div class="description">Kleur aan de rechterkant van de balk (warme temperaturen)</div>
+      </div>
+    `;
+
+    container.appendChild(basicSection);
+    container.appendChild(tempSection);
+    container.appendChild(colorSection);
+
+    this.shadowRoot.innerHTML = '';
+    this.shadowRoot.appendChild(style);
+    this.shadowRoot.appendChild(container);
 
     this.attachEventListeners();
   }
 
   attachEventListeners() {
-    const entityPicker = this.shadowRoot.querySelector('ha-entity-picker');
-    const nameField = this.shadowRoot.querySelector('ha-textfield');
+    const entitySelect = this.shadowRoot.querySelector('#entity-select');
+    const nameInput = this.shadowRoot.querySelector('#name-input');
+    const ecoTemp = this.shadowRoot.querySelector('#eco-temp');
+    const homeTemp = this.shadowRoot.querySelector('#home-temp');
+    const colorCold = this.shadowRoot.querySelector('#color-cold');
+    const colorMedium = this.shadowRoot.querySelector('#color-medium');
+    const colorHot = this.shadowRoot.querySelector('#color-hot');
 
-    if (entityPicker) {
-      entityPicker.addEventListener('value-changed', (ev) => {
-        if (!this._config || !this._hass) return;
-        const newConfig = { ...this._config };
-        
-        if (ev.detail.value) {
-          newConfig.entity = ev.detail.value;
-        } else {
-          delete newConfig.entity;
-        }
-        
-        this.configChanged(newConfig);
+    if (entitySelect) {
+      entitySelect.addEventListener('change', (e) => {
+        this._config.entity = e.target.value;
+        this.configChanged(this._config);
       });
     }
 
-    if (nameField) {
-      nameField.addEventListener('input', (ev) => {
-        if (!this._config || !this._hass) return;
-        const newConfig = { ...this._config };
-        
-        if (ev.target.value) {
-          newConfig.name = ev.target.value;
-        } else {
-          delete newConfig.name;
-        }
-        
-        this.configChanged(newConfig);
+    if (nameInput) {
+      nameInput.addEventListener('input', (e) => {
+        this._config.name = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (ecoTemp) {
+      ecoTemp.addEventListener('change', (e) => {
+        this._config.eco_temperature = parseFloat(e.target.value);
+        this.configChanged(this._config);
+      });
+    }
+
+    if (homeTemp) {
+      homeTemp.addEventListener('change', (e) => {
+        this._config.home_temperature = parseFloat(e.target.value);
+        this.configChanged(this._config);
+      });
+    }
+
+    const updateColorValue = (input, valueSpan) => {
+      if (valueSpan) {
+        valueSpan.textContent = input.value;
+      }
+    };
+
+    if (colorCold) {
+      const valueSpan = colorCold.nextElementSibling;
+      colorCold.addEventListener('input', (e) => {
+        this._config.color_cold = e.target.value;
+        updateColorValue(e.target, valueSpan);
+        this.configChanged(this._config);
+      });
+    }
+
+    if (colorMedium) {
+      const valueSpan = colorMedium.nextElementSibling;
+      colorMedium.addEventListener('input', (e) => {
+        this._config.color_medium = e.target.value;
+        updateColorValue(e.target, valueSpan);
+        this.configChanged(this._config);
+      });
+    }
+
+    if (colorHot) {
+      const valueSpan = colorHot.nextElementSibling;
+      colorHot.addEventListener('input', (e) => {
+        this._config.color_hot = e.target.value;
+        updateColorValue(e.target, valueSpan);
+        this.configChanged(this._config);
       });
     }
   }
@@ -549,7 +745,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.1.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.2.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
