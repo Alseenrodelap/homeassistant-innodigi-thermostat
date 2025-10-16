@@ -5,6 +5,38 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.4.2] - 2025-10-16
+
+### Opgelost (KRITIEKE FIX)
+- **Slider volgt nu altijd je vinger/muis**: Ook na eerste drag blijft slider vloeiend volgen
+- Sleepbol springt niet meer naar waarde bij loslaten, maar volgt tijdens slepen
+
+### Wat was het probleem?
+Na eerste interactie (knop click of slider drag) bleef `_interacting` flag op `true` staan.
+Door verkeerde volgorde in `_getCurrentTargetTemp()` werd `_localTargetTemp` (van vorige actie) 
+gebruikt in plaats van `_dragValue` (actuele sleeppositie).
+
+### De Fix
+1. **Priority check order**: `_dragging` check VOOR `_localTargetTemp` check
+   - Tijdens slepen: gebruik altijd `_dragValue`
+   - Na actie: gebruik `_localTargetTemp` tot sync compleet
+   - Anders: gebruik entity temperatuur
+   
+2. **Removed blocking**: `_interacting` wordt niet meer gezet tijdens `handleMove`
+   - Voorkomt dat flag blijft hangen tussen acties
+   - Wordt alleen gezet bij `_setLocalTemperature()` (einde drag)
+
+### Technisch
+```javascript
+// VOOR (verkeerd):
+if (_localTargetTemp && _interacting) return local;  // ← altijd true na actie!
+if (_dragging && _dragValue) return drag;
+
+// NU (correct):
+if (_dragging && _dragValue) return drag;            // ← eerst checken!
+if (_localTargetTemp && _interacting) return local;
+```
+
 ## [1.4.1] - 2025-10-16
 
 ### Opgelost

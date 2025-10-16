@@ -80,13 +80,14 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   _getCurrentTargetTemp() {
-    // Return local temp if set, otherwise entity temp
-    if (this._localTargetTemp !== null && this._interacting) {
-      return this._localTargetTemp;
-    }
-    
+    // Priority: dragging > local temp > entity temp
+    // Check dragging first so slider always follows during drag
     if (this._dragging && this._dragValue !== null) {
       return this._dragValue;
+    }
+    
+    if (this._localTargetTemp !== null && this._interacting) {
+      return this._localTargetTemp;
     }
     
     const entity = this._hass.states[this._config.entity];
@@ -512,7 +513,8 @@ class InnodigiThermostatCard extends HTMLElement {
       
       if (this._dragValue !== temp) {
         this._dragValue = temp;
-        this._interacting = true;
+        // Don't set _interacting here - it blocks updates
+        // It will be set by _setLocalTemperature on handleEnd
         this.updateValues();
       }
     };
@@ -949,7 +951,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.4.1 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.4.2 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
