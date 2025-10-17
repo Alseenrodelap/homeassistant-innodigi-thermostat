@@ -175,7 +175,7 @@ MIT License - See LICENSE file for details
 
 ## Credits
 
-Developed by Elco for use with Innodigi thermostats and compatible systems.
+Developed by Elco, InnoDIGI.nl.
 
 ## Support
 
