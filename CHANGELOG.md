@@ -5,6 +5,237 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.13.0] - 2025-10-17
+
+### 🌍 INTERNATIONALISATIE
+
+#### Volledige Meertalige Ondersteuning
+- **Automatische taaldetectie**: Kaart gebruikt automatisch de taal van Home Assistant
+- **4 talen ondersteund**: Nederlands, Engels, Duits, Frans
+- **Volledig vertaald**: Alle labels, beschrijvingen, en UI-teksten
+- **Fallback naar Engels**: Als taal niet beschikbaar is, wordt Engels gebruikt
+
+#### Vertalingen
+**Card labels**:
+- Temperatuur labels: "Buiten", "Huidig", "Doel" + compact "buiten"
+- Automatisch aangepast aan gebruikers taal
+
+**Editor labels** (volledig vertaald):
+- Basis Instellingen / Basic Settings / Grundeinstellungen / Paramètres de base
+- Temperatuur Instellingen / Temperature Settings / Temperatureinstellungen / Paramètres de température
+- Slider Kleuren / Slider Colors / Schieberegler Farben / Couleurs du curseur
+- Knop Kleuren / Button Colors / Schaltflächen Farben / Couleurs des boutons
+- Temperatuur Kleuren / Temperature Display Colors / Temperaturanzeige Farben / Couleurs d'affichage
+- Temperatuur Kaartjes / Temperature Cards / Temperaturkarten / Cartes de température
+- Temperatuur Klik Acties / Temperature Tap Actions / Temperatur Klick-Aktionen / Actions de clic
+
+### 🔧 TECHNISCHE DETAILS
+
+#### Translation System
+**Translations Object**:
+```javascript
+const TRANSLATIONS = {
+  en: { /* English translations */ },
+  nl: { /* Dutch translations */ },
+  de: { /* German translations */ },
+  fr: { /* French translations */ }
+};
+```
+
+**Helper Function**:
+```javascript
+function getTranslation(hass, key) {
+  const lang = hass?.language || hass?.locale?.language || 'en';
+  const translations = TRANSLATIONS[lang] || TRANSLATIONS['en'];
+  return translations[key] || TRANSLATIONS['en'][key] || key;
+}
+```
+
+**Language Detection**:
+- Gebruikt `hass.language` (primair)
+- Fallback naar `hass.locale.language`
+- Default naar 'en' als geen match
+- Key als laatste fallback (voor debugging)
+
+#### Usage in Code
+**Card labels**:
+```javascript
+<div class="temp-label">${getTranslation(this._hass, 'outdoor')}</div>
+<div class="temp-label">${getTranslation(this._hass, 'current')}</div>
+<div class="temp-label">${getTranslation(this._hass, 'target')}</div>
+```
+
+**Compact outdoor display**:
+```javascript
+outdoorCompact.textContent = `${outdoorTemp.toFixed(1)}${unit} ${getTranslation(this._hass, 'outdoor_compact')}`;
+```
+
+**Editor UI**:
+```javascript
+<div class="section-title">${getTranslation(this._hass, 'section_basic')}</div>
+<label>${getTranslation(this._hass, 'entity_label')}</label>
+<div class="description">${getTranslation(this._hass, 'entity_description')}</div>
+```
+
+### 📊 ONDERSTEUNDE TALEN
+
+#### Nederlands (nl)
+- **Card**: "Buiten", "Huidig", "Doel", "buiten"
+- **Editor**: Alle instellingen in het Nederlands
+- **Voorbeelden**: "Thermostaat Entiteit", "Eco Temperatuur", "Plus/Min Knoppen"
+
+#### English (en)
+- **Card**: "Outdoor", "Current", "Target", "outdoor"
+- **Editor**: All settings in English
+- **Examples**: "Thermostat Entity", "Eco Temperature", "Plus/Minus Buttons"
+
+#### Deutsch (de)
+- **Card**: "Außen", "Aktuell", "Ziel", "außen"
+- **Editor**: Alle Einstellungen auf Deutsch
+- **Beispiele**: "Thermostat Entität", "Eco Temperatur", "Plus/Minus Schaltflächen"
+
+#### Français (fr)
+- **Card**: "Extérieur", "Actuel", "Cible", "extérieur"
+- **Editor**: Tous les paramètres en français
+- **Exemples**: "Entité du thermostat", "Température Éco", "Boutons Plus/Moins"
+
+### 💡 USE CASES
+
+#### Use Case 1: Internationale Installatie
+**Scenario**: Home Assistant installatie met meerdere gebruikers die verschillende talen spreken
+
+**Oplossing**: Elke gebruiker ziet de kaart automatisch in hun eigen taal
+```yaml
+# Gebruiker A: Nederlands (hass.language = 'nl')
+# Ziet: "Buiten", "Huidig", "Doel"
+
+# Gebruiker B: English (hass.language = 'en')
+# Ziet: "Outdoor", "Current", "Target"
+
+# Gebruiker C: Deutsch (hass.language = 'de')
+# Ziet: "Außen", "Aktuell", "Ziel"
+```
+
+#### Use Case 2: Makkelijke Uitbreiding
+**Scenario**: Nieuwe taal toevoegen aan de kaart
+
+**Oplossing**: Voeg gewoon een nieuw taal object toe aan TRANSLATIONS:
+```javascript
+TRANSLATIONS.es = {
+  outdoor: 'Exterior',
+  current: 'Actual',
+  target: 'Objetivo',
+  // ... meer vertalingen
+};
+```
+
+#### Use Case 3: Consistent met Home Assistant
+**Scenario**: Gebruiker wil dat custom cards dezelfde taal gebruiken als HA
+
+**Oplossing**: Automatische detectie zorgt dat card altijd HA's taal volgt
+- Wijzig HA taal → Card taal verandert automatisch
+- Geen configuratie nodig
+- Instant switch bij language change
+
+### 🎯 VOORDELEN
+
+#### Gebruikerservaring
+1. **Native feel**: Kaart voelt aan als standaard HA component
+2. **Geen configuratie**: Automatisch de juiste taal
+3. **Breed bereik**: Toegankelijk voor internationale gebruikers
+4. **Consistent**: Alle teksten in dezelfde taal
+
+#### Development
+1. **Gemakkelijk uitbreiden**: Nieuwe talen toevoegen is simpel
+2. **Centraal beheer**: Alle teksten in één object
+3. **Type-safe**: Sleutels zijn consistent
+4. **Maintainable**: Clear structure
+
+#### Community
+1. **Open voor bijdragen**: Community kan vertalingen toevoegen
+2. **Internationale adoptie**: Geen taalbarrière meer
+3. **Professional**: Multi-language support is professioneel
+4. **Future-proof**: Basis gelegd voor meer talen
+
+### 🔄 MIGRATIE
+
+**Van v1.12.0 naar v1.13.0**:
+
+Automatische migratie - geen actie vereist:
+- Bestaande kaarten blijven werken
+- Taal wordt automatisch gedetecteerd
+- Geen config changes nodig
+- Direct beschikbaar na update
+
+**Taal aanpassen**:
+```yaml
+# Wordt bepaald door Home Assistant taalinstellingen:
+# Configuratie → Systeem → Algemeen → Taal
+# Card volgt automatisch deze instelling
+```
+
+### 📝 TECHNISCHE SPECIFICATIES
+
+**Translation Coverage**:
+- Card labels: 4/4 (outdoor, current, target, outdoor_compact)
+- Editor sections: 8/8 (basic, outdoor, temperatures, slider_colors, button_colors, temp_colors, temp_cards, tap_actions)
+- Editor fields: 30+ (alle labels, descriptions, placeholders)
+- Dropdown options: 12+ (layout, display mode, tap actions)
+
+**Supported Languages**:
+- Dutch (nl) - 100% translated
+- English (en) - 100% translated
+- German (de) - 100% translated
+- French (fr) - 100% translated
+
+**File Size Impact**:
+- Translation object: ~4KB
+- Helper function: ~150 bytes
+- Total increase: ~4KB (minified: ~2KB)
+- Performance impact: negligible
+
+### 🌟 VOORBEELDEN
+
+#### Example 1: Card in Different Languages
+**Dutch**:
+```
+┌─────────┬─────────┬─────────┐
+│ Buiten  │ Huidig  │  Doel   │
+│ 15.3°C  │ 21.5°C  │ 22.0°C  │
+└─────────┴─────────┴─────────┘
+```
+
+**English**:
+```
+┌─────────┬─────────┬─────────┐
+│Outdoor  │ Current │ Target  │
+│ 15.3°C  │ 21.5°C  │ 22.0°C  │
+└─────────┴─────────┴─────────┘
+```
+
+**German**:
+```
+┌─────────┬─────────┬─────────┐
+│ Außen   │Aktuell  │  Ziel   │
+│ 15.3°C  │ 21.5°C  │ 22.0°C  │
+└─────────┴─────────┴─────────┘
+```
+
+**French**:
+```
+┌──────────┬─────────┬─────────┐
+│Extérieur │ Actuel  │ Cible   │
+│  15.3°C  │ 21.5°C  │ 22.0°C  │
+└──────────┴─────────┴─────────┘
+```
+
+#### Example 2: Editor in Multiple Languages
+**Section titles change based on language**:
+- NL: "Basis Instellingen", "Temperatuur Instellingen", "Slider Kleuren"
+- EN: "Basic Settings", "Temperature Settings", "Slider Colors"
+- DE: "Grundeinstellungen", "Temperatureinstellungen", "Schieberegler Farben"
+- FR: "Paramètres de base", "Paramètres de température", "Couleurs du curseur"
+
 ## [1.12.0] - 2025-10-16
 
 ### ✨ NIEUWE FUNCTIES

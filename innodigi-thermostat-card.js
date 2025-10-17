@@ -1,3 +1,334 @@
+// Translations for internationalization
+const TRANSLATIONS = {
+  en: {
+    // Temperature labels
+    outdoor: 'Outdoor',
+    current: 'Current',
+    target: 'Target',
+    outdoor_compact: 'outdoor',
+    // Editor - Basic settings
+    section_basic: 'Basic Settings',
+    entity_label: 'Thermostat Entity',
+    entity_placeholder: '-- Select a thermostat --',
+    name_label: 'Name (optional)',
+    name_description: 'Override the default entity name',
+    layout_label: 'Layout',
+    layout_normal: 'Normal',
+    layout_compact: 'Compact',
+    layout_description: 'Normal: full card with title and mode buttons. Compact: smaller card without title.',
+    // Editor - Outdoor temperature
+    section_outdoor: 'Outdoor Temperature',
+    outdoor_entity_label: 'Outdoor Temperature Entity',
+    outdoor_entity_placeholder: '-- No outdoor temperature --',
+    outdoor_entity_description: 'Optional: sensor or weather entity for outdoor temperature',
+    outdoor_display_mode_label: 'Display Mode',
+    outdoor_display_auto: 'Auto (responsive)',
+    outdoor_display_inline: 'Always inline',
+    outdoor_display_compact: 'Always compact',
+    outdoor_display_description: 'Auto: inline on wide screens, compact on narrow. Compact: always small top-left. Inline: always as third card.',
+    // Editor - Temperatures
+    section_temperatures: 'Temperature Settings',
+    eco_temp_label: 'Eco Temperature (°C)',
+    eco_temp_description: 'Target temperature for Eco mode',
+    home_temp_label: 'Home Temperature (°C)',
+    home_temp_description: 'Target temperature for Home mode',
+    // Editor - Slider colors
+    section_slider_colors: 'Slider Colors',
+    color_cold_label: 'Cold Color',
+    color_cold_description: 'Color at minimum temperature (left side)',
+    color_medium_label: 'Medium Color',
+    color_medium_description: 'Color at middle temperature',
+    color_hot_label: 'Hot Color',
+    color_hot_description: 'Color at maximum temperature (right side)',
+    // Editor - Button colors
+    section_button_colors: 'Button Colors',
+    color_buttons_label: 'Plus/Minus Buttons Color',
+    color_buttons_description: 'Color of the temperature adjustment buttons',
+    color_mode_buttons_label: 'Eco/Home Buttons Color',
+    color_mode_buttons_description: 'Color of the mode selection buttons',
+    // Editor - Temperature colors
+    section_temp_colors: 'Temperature Display Colors',
+    color_current_temp_label: 'Current Temperature Color',
+    color_current_temp_description: 'Color of the current temperature display',
+    color_target_temp_label: 'Target Temperature Color',
+    color_target_temp_description: 'Color of the target temperature display',
+    color_outdoor_temp_label: 'Outdoor Temperature Color',
+    color_outdoor_temp_description: 'Color of the outdoor temperature display',
+    // Editor - Temperature cards
+    section_temp_cards: 'Temperature Cards',
+    show_temp_cards_label: 'Show temperatures in cards',
+    show_temp_cards_description: 'Gives each temperature its own background color with rounded corners and border',
+    temp_card_bg_label: 'Background Color',
+    temp_card_bg_description: 'Base color of the background',
+    temp_card_bg_alpha_label: 'Background Transparency (%)',
+    temp_card_bg_alpha_description: '0% = fully transparent, 100% = fully opaque',
+    temp_card_border_color_label: 'Border Color',
+    temp_card_border_color_description: 'Color of the border around the cards',
+    temp_card_border_alpha_label: 'Border Transparency (%)',
+    temp_card_border_alpha_description: '0% = fully transparent, 100% = fully opaque',
+    temp_card_border_width_label: 'Border Width (pixels)',
+    temp_card_border_width_description: 'Thickness of the border (0 = no border, 1-5 pixels)',
+    // Editor - Tap actions
+    section_tap_actions: 'Temperature Tap Actions',
+    tap_action_none: 'No action',
+    tap_action_more_info: 'Show entity info',
+    tap_action_toggle: 'Toggle on/off',
+    temp_current_tap_label: 'Action on Current Temperature Click',
+    temp_current_tap_description: 'What happens when you click on the current temperature',
+    temp_target_tap_label: 'Action on Target Temperature Click',
+    temp_target_tap_description: 'What happens when you click on the target temperature',
+    temp_outdoor_tap_label: 'Action on Outdoor Temperature Click',
+    temp_outdoor_tap_description: 'What happens when you click on the outdoor temperature'
+  },
+  nl: {
+    // Temperature labels
+    outdoor: 'Buiten',
+    current: 'Huidig',
+    target: 'Doel',
+    outdoor_compact: 'buiten',
+    // Editor - Basic settings
+    section_basic: 'Basis Instellingen',
+    entity_label: 'Thermostaat Entiteit',
+    entity_placeholder: '-- Selecteer een thermostaat --',
+    name_label: 'Naam (optioneel)',
+    name_description: 'Overschrijf de standaard entiteitnaam',
+    layout_label: 'Layout',
+    layout_normal: 'Normaal',
+    layout_compact: 'Compact',
+    layout_description: 'Normaal: volledige kaart met titel en mode knoppen. Compact: kleinere kaart zonder titel.',
+    // Editor - Outdoor temperature
+    section_outdoor: 'Buitentemperatuur',
+    outdoor_entity_label: 'Buitentemperatuur Entiteit',
+    outdoor_entity_placeholder: '-- Geen buitentemperatuur --',
+    outdoor_entity_description: 'Optioneel: sensor of weer entiteit voor buitentemperatuur',
+    outdoor_display_mode_label: 'Weergave Modus',
+    outdoor_display_auto: 'Auto (responsive)',
+    outdoor_display_inline: 'Altijd inline',
+    outdoor_display_compact: 'Altijd compact',
+    outdoor_display_description: 'Auto: inline op brede schermen, compact op smalle. Compact: altijd klein linksboven. Inline: altijd als derde kaartje.',
+    // Editor - Temperatures
+    section_temperatures: 'Temperatuur Instellingen',
+    eco_temp_label: 'Eco Temperatuur (°C)',
+    eco_temp_description: 'Doeltemperatuur voor Eco modus',
+    home_temp_label: 'Thuis Temperatuur (°C)',
+    home_temp_description: 'Doeltemperatuur voor Thuis modus',
+    // Editor - Slider colors
+    section_slider_colors: 'Slider Kleuren',
+    color_cold_label: 'Koude Kleur',
+    color_cold_description: 'Kleur bij minimum temperatuur (linker kant)',
+    color_medium_label: 'Middel Kleur',
+    color_medium_description: 'Kleur bij midden temperatuur',
+    color_hot_label: 'Warme Kleur',
+    color_hot_description: 'Kleur bij maximum temperatuur (rechter kant)',
+    // Editor - Button colors
+    section_button_colors: 'Knop Kleuren',
+    color_buttons_label: 'Plus/Min Knoppen Kleur',
+    color_buttons_description: 'Kleur van de temperatuur aanpas knoppen',
+    color_mode_buttons_label: 'Eco/Thuis Knoppen Kleur',
+    color_mode_buttons_description: 'Kleur van de modus selectie knoppen',
+    // Editor - Temperature colors
+    section_temp_colors: 'Temperatuur Weergave Kleuren',
+    color_current_temp_label: 'Huidige Temperatuur Kleur',
+    color_current_temp_description: 'Kleur van de huidige temperatuur weergave',
+    color_target_temp_label: 'Doel Temperatuur Kleur',
+    color_target_temp_description: 'Kleur van de doel temperatuur weergave',
+    color_outdoor_temp_label: 'Buiten Temperatuur Kleur',
+    color_outdoor_temp_description: 'Kleur van de buiten temperatuur weergave',
+    // Editor - Temperature cards
+    section_temp_cards: 'Temperatuur Kaartjes',
+    show_temp_cards_label: 'Toon temperaturen in kaartjes',
+    show_temp_cards_description: 'Geeft elke temperatuur een eigen achtergrondkleur met afgeronde hoeken en border',
+    temp_card_bg_label: 'Achtergrondkleur',
+    temp_card_bg_description: 'Basiskleur van de achtergrond',
+    temp_card_bg_alpha_label: 'Achtergrond Transparantie (%)',
+    temp_card_bg_alpha_description: '0% = volledig transparant, 100% = volledig ondoorzichtig',
+    temp_card_border_color_label: 'Border Kleur',
+    temp_card_border_color_description: 'Kleur van de rand rond de kaartjes',
+    temp_card_border_alpha_label: 'Border Transparantie (%)',
+    temp_card_border_alpha_description: '0% = volledig transparant, 100% = volledig ondoorzichtig',
+    temp_card_border_width_label: 'Border Breedte (pixels)',
+    temp_card_border_width_description: 'Dikte van de border (0 = geen border, 1-5 pixels)',
+    // Editor - Tap actions
+    section_tap_actions: 'Temperatuur Klik Acties',
+    tap_action_none: 'Geen actie',
+    tap_action_more_info: 'Toon entiteit info',
+    tap_action_toggle: 'Schakel aan/uit',
+    temp_current_tap_label: 'Actie bij klik op Huidige Temperatuur',
+    temp_current_tap_description: 'Wat gebeurt er als je op de huidige temperatuur klikt',
+    temp_target_tap_label: 'Actie bij klik op Doel Temperatuur',
+    temp_target_tap_description: 'Wat gebeurt er als je op de doel temperatuur klikt',
+    temp_outdoor_tap_label: 'Actie bij klik op Buiten Temperatuur',
+    temp_outdoor_tap_description: 'Wat gebeurt er als je op de buiten temperatuur klikt'
+  },
+  de: {
+    // Temperature labels
+    outdoor: 'Außen',
+    current: 'Aktuell',
+    target: 'Ziel',
+    outdoor_compact: 'außen',
+    // Editor - Basic settings
+    section_basic: 'Grundeinstellungen',
+    entity_label: 'Thermostat Entität',
+    entity_placeholder: '-- Thermostat auswählen --',
+    name_label: 'Name (optional)',
+    name_description: 'Standard Entitätsname überschreiben',
+    layout_label: 'Layout',
+    layout_normal: 'Normal',
+    layout_compact: 'Kompakt',
+    layout_description: 'Normal: vollständige Karte mit Titel und Modus-Schaltflächen. Kompakt: kleinere Karte ohne Titel.',
+    // Editor - Outdoor temperature
+    section_outdoor: 'Außentemperatur',
+    outdoor_entity_label: 'Außentemperatur Entität',
+    outdoor_entity_placeholder: '-- Keine Außentemperatur --',
+    outdoor_entity_description: 'Optional: Sensor oder Wetter-Entität für Außentemperatur',
+    outdoor_display_mode_label: 'Anzeigemodus',
+    outdoor_display_auto: 'Auto (responsiv)',
+    outdoor_display_inline: 'Immer inline',
+    outdoor_display_compact: 'Immer kompakt',
+    outdoor_display_description: 'Auto: inline auf breiten Bildschirmen, kompakt auf schmalen. Kompakt: immer klein oben links. Inline: immer als dritte Karte.',
+    // Editor - Temperatures
+    section_temperatures: 'Temperatureinstellungen',
+    eco_temp_label: 'Eco Temperatur (°C)',
+    eco_temp_description: 'Zieltemperatur für Eco-Modus',
+    home_temp_label: 'Heimtemperatur (°C)',
+    home_temp_description: 'Zieltemperatur für Heim-Modus',
+    // Editor - Slider colors
+    section_slider_colors: 'Schieberegler Farben',
+    color_cold_label: 'Kalte Farbe',
+    color_cold_description: 'Farbe bei Mindesttemperatur (linke Seite)',
+    color_medium_label: 'Mittlere Farbe',
+    color_medium_description: 'Farbe bei mittlerer Temperatur',
+    color_hot_label: 'Heiße Farbe',
+    color_hot_description: 'Farbe bei Maximaltemperatur (rechte Seite)',
+    // Editor - Button colors
+    section_button_colors: 'Schaltflächen Farben',
+    color_buttons_label: 'Plus/Minus Schaltflächen Farbe',
+    color_buttons_description: 'Farbe der Temperaturanpassungsschaltflächen',
+    color_mode_buttons_label: 'Eco/Heim Schaltflächen Farbe',
+    color_mode_buttons_description: 'Farbe der Modusauswahlschaltflächen',
+    // Editor - Temperature colors
+    section_temp_colors: 'Temperaturanzeige Farben',
+    color_current_temp_label: 'Aktuelle Temperatur Farbe',
+    color_current_temp_description: 'Farbe der aktuellen Temperaturanzeige',
+    color_target_temp_label: 'Zieltemperatur Farbe',
+    color_target_temp_description: 'Farbe der Zieltemperaturanzeige',
+    color_outdoor_temp_label: 'Außentemperatur Farbe',
+    color_outdoor_temp_description: 'Farbe der Außentemperaturanzeige',
+    // Editor - Temperature cards
+    section_temp_cards: 'Temperaturkarten',
+    show_temp_cards_label: 'Temperaturen in Karten anzeigen',
+    show_temp_cards_description: 'Gibt jeder Temperatur eine eigene Hintergrundfarbe mit abgerundeten Ecken und Rand',
+    temp_card_bg_label: 'Hintergrundfarbe',
+    temp_card_bg_description: 'Basisfarbe des Hintergrunds',
+    temp_card_bg_alpha_label: 'Hintergrund Transparenz (%)',
+    temp_card_bg_alpha_description: '0% = vollständig transparent, 100% = vollständig undurchsichtig',
+    temp_card_border_color_label: 'Randfarbe',
+    temp_card_border_color_description: 'Farbe des Randes um die Karten',
+    temp_card_border_alpha_label: 'Rand Transparenz (%)',
+    temp_card_border_alpha_description: '0% = vollständig transparent, 100% = vollständig undurchsichtig',
+    temp_card_border_width_label: 'Randbreite (Pixel)',
+    temp_card_border_width_description: 'Dicke des Randes (0 = kein Rand, 1-5 Pixel)',
+    // Editor - Tap actions
+    section_tap_actions: 'Temperatur Klick-Aktionen',
+    tap_action_none: 'Keine Aktion',
+    tap_action_more_info: 'Entitätsinformationen anzeigen',
+    tap_action_toggle: 'Ein-/Ausschalten',
+    temp_current_tap_label: 'Aktion bei Klick auf aktuelle Temperatur',
+    temp_current_tap_description: 'Was passiert beim Klicken auf die aktuelle Temperatur',
+    temp_target_tap_label: 'Aktion bei Klick auf Zieltemperatur',
+    temp_target_tap_description: 'Was passiert beim Klicken auf die Zieltemperatur',
+    temp_outdoor_tap_label: 'Aktion bei Klick auf Außentemperatur',
+    temp_outdoor_tap_description: 'Was passiert beim Klicken auf die Außentemperatur'
+  },
+  fr: {
+    // Temperature labels
+    outdoor: 'Extérieur',
+    current: 'Actuel',
+    target: 'Cible',
+    outdoor_compact: 'extérieur',
+    // Editor - Basic settings
+    section_basic: 'Paramètres de base',
+    entity_label: 'Entité du thermostat',
+    entity_placeholder: '-- Sélectionner un thermostat --',
+    name_label: 'Nom (optionnel)',
+    name_description: "Remplacer le nom d'entité par défaut",
+    layout_label: 'Disposition',
+    layout_normal: 'Normal',
+    layout_compact: 'Compact',
+    layout_description: 'Normal: carte complète avec titre et boutons de mode. Compact: carte plus petite sans titre.',
+    // Editor - Outdoor temperature
+    section_outdoor: 'Température extérieure',
+    outdoor_entity_label: 'Entité de température extérieure',
+    outdoor_entity_placeholder: '-- Pas de température extérieure --',
+    outdoor_entity_description: 'Optionnel: capteur ou entité météo pour la température extérieure',
+    outdoor_display_mode_label: "Mode d'affichage",
+    outdoor_display_auto: 'Auto (responsive)',
+    outdoor_display_inline: 'Toujours en ligne',
+    outdoor_display_compact: 'Toujours compact',
+    outdoor_display_description: 'Auto: en ligne sur grands écrans, compact sur petits. Compact: toujours petit en haut à gauche. En ligne: toujours comme troisième carte.',
+    // Editor - Temperatures
+    section_temperatures: 'Paramètres de température',
+    eco_temp_label: 'Température Éco (°C)',
+    eco_temp_description: 'Température cible pour le mode Éco',
+    home_temp_label: 'Température Maison (°C)',
+    home_temp_description: 'Température cible pour le mode Maison',
+    // Editor - Slider colors
+    section_slider_colors: 'Couleurs du curseur',
+    color_cold_label: 'Couleur froide',
+    color_cold_description: 'Couleur à température minimale (côté gauche)',
+    color_medium_label: 'Couleur moyenne',
+    color_medium_description: 'Couleur à température moyenne',
+    color_hot_label: 'Couleur chaude',
+    color_hot_description: 'Couleur à température maximale (côté droit)',
+    // Editor - Button colors
+    section_button_colors: 'Couleurs des boutons',
+    color_buttons_label: 'Couleur des boutons Plus/Moins',
+    color_buttons_description: "Couleur des boutons d'ajustement de température",
+    color_mode_buttons_label: 'Couleur des boutons Éco/Maison',
+    color_mode_buttons_description: 'Couleur des boutons de sélection du mode',
+    // Editor - Temperature colors
+    section_temp_colors: "Couleurs d'affichage de la température",
+    color_current_temp_label: 'Couleur température actuelle',
+    color_current_temp_description: "Couleur de l'affichage de la température actuelle",
+    color_target_temp_label: 'Couleur température cible',
+    color_target_temp_description: "Couleur de l'affichage de la température cible",
+    color_outdoor_temp_label: 'Couleur température extérieure',
+    color_outdoor_temp_description: "Couleur de l'affichage de la température extérieure",
+    // Editor - Temperature cards
+    section_temp_cards: 'Cartes de température',
+    show_temp_cards_label: 'Afficher les températures dans des cartes',
+    show_temp_cards_description: 'Donne à chaque température sa propre couleur de fond avec des coins arrondis et une bordure',
+    temp_card_bg_label: 'Couleur de fond',
+    temp_card_bg_description: 'Couleur de base du fond',
+    temp_card_bg_alpha_label: 'Transparence du fond (%)',
+    temp_card_bg_alpha_description: '0% = entièrement transparent, 100% = entièrement opaque',
+    temp_card_border_color_label: 'Couleur de la bordure',
+    temp_card_border_color_description: 'Couleur de la bordure autour des cartes',
+    temp_card_border_alpha_label: 'Transparence de la bordure (%)',
+    temp_card_border_alpha_description: '0% = entièrement transparent, 100% = entièrement opaque',
+    temp_card_border_width_label: 'Largeur de la bordure (pixels)',
+    temp_card_border_width_description: '0 = pas de bordure, 1-5 pixels',
+    // Editor - Tap actions
+    section_tap_actions: 'Actions de clic sur température',
+    tap_action_none: 'Aucune action',
+    tap_action_more_info: "Afficher les infos de l'entité",
+    tap_action_toggle: 'Activer/Désactiver',
+    temp_current_tap_label: 'Action au clic sur température actuelle',
+    temp_current_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température actuelle',
+    temp_target_tap_label: 'Action au clic sur température cible',
+    temp_target_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température cible',
+    temp_outdoor_tap_label: 'Action au clic sur température extérieure',
+    temp_outdoor_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température extérieure'
+  }
+};
+
+// Helper function to get translated text
+function getTranslation(hass, key) {
+  const lang = hass?.language || hass?.locale?.language || 'en';
+  const translations = TRANSLATIONS[lang] || TRANSLATIONS['en'];
+  return translations[key] || TRANSLATIONS['en'][key] || key;
+}
+
 class InnodigiThermostatCard extends HTMLElement {
   constructor() {
     super();
@@ -520,7 +851,7 @@ class InnodigiThermostatCard extends HTMLElement {
       <ha-card>
         <div class="card-content">
           ${hasOutdoor ? `
-          <div class="outdoor-compact">${outdoorTemp.toFixed(1)}${unit} buiten</div>
+          <div class="outdoor-compact">${outdoorTemp.toFixed(1)}${unit} ${getTranslation(this._hass, 'outdoor_compact')}</div>
           ` : ''}
           ${!isCompact ? `
           <div class="header">
@@ -539,20 +870,20 @@ class InnodigiThermostatCard extends HTMLElement {
           <div class="temperature-display">
             ${hasOutdoor && outdoorDisplayMode !== 'compact' ? `
             <div class="temp-item ${this._config.temp_outdoor_tap_action !== 'none' ? 'clickable' : ''}" data-temp-type="outdoor">
-              <div class="temp-label">Buiten</div>
+              <div class="temp-label">${getTranslation(this._hass, 'outdoor')}</div>
               <div class="temp-value outdoor">
                 ${outdoorTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
               </div>
             </div>
             ` : ''}
             <div class="temp-item ${this._config.temp_current_tap_action !== 'none' ? 'clickable' : ''}" data-temp-type="current">
-              <div class="temp-label">Huidig</div>
+              <div class="temp-label">${getTranslation(this._hass, 'current')}</div>
               <div class="temp-value current">
                 ${currentTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
               </div>
             </div>
             <div class="temp-item ${this._config.temp_target_tap_action !== 'none' ? 'clickable' : ''}" data-temp-type="target">
-              <div class="temp-label">Doel</div>
+              <div class="temp-label">${getTranslation(this._hass, 'target')}</div>
               <div class="temp-value target">
                 ${targetTemp.toFixed(1)}<span class="temp-unit">${unit}</span>
               </div>
@@ -616,7 +947,7 @@ class InnodigiThermostatCard extends HTMLElement {
         
         // Update compact outdoor display
         const outdoorCompact = this.shadowRoot.querySelector('.outdoor-compact');
-        if (outdoorCompact) outdoorCompact.textContent = `${outdoorTemp.toFixed(1)}${unit} buiten`;
+        if (outdoorCompact) outdoorCompact.textContent = `${outdoorTemp.toFixed(1)}${unit} ${getTranslation(this._hass, 'outdoor_compact')}`;
       }
     }
 
@@ -915,7 +1246,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       }));
 
     // Build entity options
-    let entityOptions = '<option value="">-- Selecteer een thermostaat --</option>';
+    let entityOptions = `<option value="">${getTranslation(this._hass, 'entity_placeholder')}</option>`;
     climateEntities.forEach(entity => {
       const selected = entity.id === this._config.entity ? 'selected' : '';
       entityOptions += `<option value="${entity.id}" ${selected}>${entity.name}</option>`;
@@ -930,7 +1261,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       }));
 
     // Build outdoor entity options
-    let outdoorEntityOptions = '<option value="">-- Geen buitentemperatuur --</option>';
+    let outdoorEntityOptions = `<option value="">${getTranslation(this._hass, 'outdoor_entity_placeholder')}</option>`;
     sensorEntities.forEach(entity => {
       const selected = entity.id === this._config.outdoor_entity ? 'selected' : '';
       outdoorEntityOptions += `<option value="${entity.id}" ${selected}>${entity.name}</option>`;
@@ -1003,196 +1334,196 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       
       <div class="card-config">
         <div class="config-section">
-          <div class="section-title">Basis Instellingen</div>
+          <div class="section-title">${getTranslation(this._hass, 'section_basic')}</div>
           <div class="config-row">
-            <label>Thermostaat Entity (Verplicht)</label>
+            <label>${getTranslation(this._hass, 'entity_label')}</label>
             <select id="entity-select">
               ${entityOptions}
             </select>
-            <div class="description">Selecteer een climate entiteit (thermostaat)</div>
+            <div class="description">${getTranslation(this._hass, 'name_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Naam (Optioneel)</label>
-            <input type="text" id="name-input" placeholder="Laat leeg voor standaard naam" value="${this._config.name || ''}">
-            <div class="description">Aangepaste naam voor de kaart</div>
+            <label>${getTranslation(this._hass, 'name_label')}</label>
+            <input type="text" id="name-input" placeholder="${getTranslation(this._hass, 'name_description')}" value="${this._config.name || ''}">
+            <div class="description">${getTranslation(this._hass, 'name_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Layout</label>
+            <label>${getTranslation(this._hass, 'layout_label')}</label>
             <select id="layout-select">
-              <option value="normal" ${this._config.layout === 'normal' ? 'selected' : ''}>Normal - Volledige weergave met titel</option>
-              <option value="compact" ${this._config.layout === 'compact' ? 'selected' : ''}>Compact - Minder ruimte, knoppen naast elkaar</option>
+              <option value="normal" ${this._config.layout === 'normal' ? 'selected' : ''}>${getTranslation(this._hass, 'layout_normal')}</option>
+              <option value="compact" ${this._config.layout === 'compact' ? 'selected' : ''}>${getTranslation(this._hass, 'layout_compact')}</option>
             </select>
-            <div class="description">Normal toont titel en knoppen apart, Compact bespaart ruimte</div>
+            <div class="description">${getTranslation(this._hass, 'layout_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Buitentemperatuur Entity (Optioneel)</label>
+            <label>${getTranslation(this._hass, 'outdoor_entity_label')}</label>
             <select id="outdoor-entity-select">
               ${outdoorEntityOptions}
             </select>
-            <div class="description">Selecteer een sensor voor buitentemperatuur (optioneel)</div>
+            <div class="description">${getTranslation(this._hass, 'outdoor_entity_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Buitentemperatuur Weergave</label>
+            <label>${getTranslation(this._hass, 'outdoor_display_mode_label')}</label>
             <select id="outdoor-display-mode">
-              <option value="auto" ${this._config.outdoor_display_mode === 'auto' ? 'selected' : ''}>Auto - Responsive (compact op smalle schermen)</option>
-              <option value="compact" ${this._config.outdoor_display_mode === 'compact' ? 'selected' : ''}>Altijd Compact (klein links bovenaan)</option>
-              <option value="inline" ${this._config.outdoor_display_mode === 'inline' ? 'selected' : ''}>Altijd Inline (in temperatuur display)</option>
+              <option value="auto" ${this._config.outdoor_display_mode === 'auto' ? 'selected' : ''}>${getTranslation(this._hass, 'outdoor_display_auto')}</option>
+              <option value="compact" ${this._config.outdoor_display_mode === 'compact' ? 'selected' : ''}>${getTranslation(this._hass, 'outdoor_display_compact')}</option>
+              <option value="inline" ${this._config.outdoor_display_mode === 'inline' ? 'selected' : ''}>${getTranslation(this._hass, 'outdoor_display_inline')}</option>
             </select>
-            <div class="description">Auto past zich aan schermgrootte aan, Compact toont altijd klein bovenaan, Inline toont altijd als kolom</div>
+            <div class="description">${getTranslation(this._hass, 'outdoor_display_description')}</div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="section-title">Temperatuur Instellingen</div>
+          <div class="section-title">${getTranslation(this._hass, 'section_temperatures')}</div>
           <div class="config-row">
-            <label>Eco Doeltemperatuur (°C)</label>
+            <label>${getTranslation(this._hass, 'eco_temp_label')}</label>
             <input type="number" id="eco-temp" min="5" max="35" step="0.5" value="${this._config.eco_temperature}">
-            <div class="description">Temperatuur wanneer Eco mode wordt ingeschakeld</div>
+            <div class="description">${getTranslation(this._hass, 'eco_temp_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Thuis Doeltemperatuur (°C)</label>
+            <label>${getTranslation(this._hass, 'home_temp_label')}</label>
             <input type="number" id="home-temp" min="5" max="35" step="0.5" value="${this._config.home_temperature}">
-            <div class="description">Temperatuur wanneer Thuis mode wordt ingeschakeld</div>
+            <div class="description">${getTranslation(this._hass, 'home_temp_description')}</div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="section-title">Slider Kleuren</div>
+          <div class="section-title">${getTranslation(this._hass, 'section_slider_colors')}</div>
           <div class="config-row">
-            <label>Kleur Koud (Links)</label>
+            <label>${getTranslation(this._hass, 'color_cold_label')}</label>
             <input type="color" id="color-cold" value="${this._config.color_cold}">
-            <div class="description">Kleur aan de linkerkant van de slider (koude temperaturen)</div>
+            <div class="description">${getTranslation(this._hass, 'color_cold_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Kleur Middel (Midden)</label>
+            <label>${getTranslation(this._hass, 'color_medium_label')}</label>
             <input type="color" id="color-medium" value="${this._config.color_medium}">
-            <div class="description">Kleur in het midden van de slider</div>
+            <div class="description">${getTranslation(this._hass, 'color_medium_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Kleur Warm (Rechts)</label>
+            <label>${getTranslation(this._hass, 'color_hot_label')}</label>
             <input type="color" id="color-hot" value="${this._config.color_hot}">
-            <div class="description">Kleur aan de rechterkant van de slider (warme temperaturen)</div>
+            <div class="description">${getTranslation(this._hass, 'color_hot_description')}</div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="section-title">Knop Kleuren</div>
+          <div class="section-title">${getTranslation(this._hass, 'section_button_colors')}</div>
           <div class="config-row">
-            <label>Plus/Min Knoppen</label>
+            <label>${getTranslation(this._hass, 'color_buttons_label')}</label>
             <input type="color" id="color-buttons" value="${this._config.color_buttons}">
-            <div class="description">Kleur van de + en - knoppen</div>
+            <div class="description">${getTranslation(this._hass, 'color_buttons_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Eco/Thuis Knoppen</label>
+            <label>${getTranslation(this._hass, 'color_mode_buttons_label')}</label>
             <input type="color" id="color-mode-buttons" value="${this._config.color_mode_buttons}">
-            <div class="description">Kleur van de Eco en Thuis knoppen wanneer actief</div>
+            <div class="description">${getTranslation(this._hass, 'color_mode_buttons_description')}</div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="section-title">Temperatuur Kleuren</div>
+          <div class="section-title">${getTranslation(this._hass, 'section_temp_colors')}</div>
           <div class="config-row">
-            <label>Huidige Temperatuur</label>
+            <label>${getTranslation(this._hass, 'color_current_temp_label')}</label>
             <input type="color" id="color-current-temp" value="${this._config.color_current_temp}">
-            <div class="description">Kleur van de huidige temperatuur weergave</div>
+            <div class="description">${getTranslation(this._hass, 'color_current_temp_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Doel Temperatuur</label>
+            <label>${getTranslation(this._hass, 'color_target_temp_label')}</label>
             <input type="color" id="color-target-temp" value="${this._config.color_target_temp}">
-            <div class="description">Kleur van de doel temperatuur weergave</div>
+            <div class="description">${getTranslation(this._hass, 'color_target_temp_description')}</div>
           </div>
           
           <div class="config-row">
-            <label>Buiten Temperatuur</label>
+            <label>${getTranslation(this._hass, 'color_outdoor_temp_label')}</label>
             <input type="color" id="color-outdoor-temp" value="${this._config.color_outdoor_temp}">
-            <div class="description">Kleur van de buiten temperatuur weergave</div>
+            <div class="description">${getTranslation(this._hass, 'color_outdoor_temp_description')}</div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="section-title">Temperatuur Kaartjes</div>
+          <div class="section-title">${getTranslation(this._hass, 'section_temp_cards')}</div>
           <div class="config-row">
             <label>
               <input type="checkbox" id="show-temperature-cards" ${this._config.show_temperature_cards ? 'checked' : ''}>
-              Toon temperaturen in kaartjes
+              ${getTranslation(this._hass, 'show_temp_cards_label')}
             </label>
-            <div class="description">Geeft elke temperatuur een eigen achtergrondkleur met afgeronde hoeken en border</div>
+            <div class="description">${getTranslation(this._hass, 'show_temp_cards_description')}</div>
           </div>
           
           <div id="card-settings" style="display: ${this._config.show_temperature_cards ? 'block' : 'none'};">
             <div class="config-row">
-              <label>Achtergrondkleur</label>
+              <label>${getTranslation(this._hass, 'temp_card_bg_label')}</label>
               <input type="color" id="temperature-card-background" value="${this._config.temperature_card_background}">
-              <div class="description">Basiskleur van de achtergrond</div>
+              <div class="description">${getTranslation(this._hass, 'temp_card_bg_description')}</div>
             </div>
             
             <div class="config-row">
-              <label>Achtergrond Transparantie (%)</label>
+              <label>${getTranslation(this._hass, 'temp_card_bg_alpha_label')}</label>
               <input type="range" id="temperature-card-background-alpha" min="0" max="100" value="${this._config.temperature_card_background_alpha}" style="width: 200px;">
               <span id="bg-alpha-value">${this._config.temperature_card_background_alpha}%</span>
-              <div class="description">0% = volledig transparant, 100% = volledig ondoorzichtig</div>
+              <div class="description">${getTranslation(this._hass, 'temp_card_bg_alpha_description')}</div>
             </div>
             
             <div class="config-row">
-              <label>Border Kleur</label>
+              <label>${getTranslation(this._hass, 'temp_card_border_color_label')}</label>
               <input type="color" id="temperature-card-border-color" value="${this._config.temperature_card_border_color}">
-              <div class="description">Kleur van de rand rond de kaartjes</div>
+              <div class="description">${getTranslation(this._hass, 'temp_card_border_color_description')}</div>
             </div>
             
             <div class="config-row">
-              <label>Border Transparantie (%)</label>
+              <label>${getTranslation(this._hass, 'temp_card_border_alpha_label')}</label>
               <input type="range" id="temperature-card-border-alpha" min="0" max="100" value="${this._config.temperature_card_border_alpha}" style="width: 200px;">
               <span id="border-alpha-value">${this._config.temperature_card_border_alpha}%</span>
-              <div class="description">0% = volledig transparant, 100% = volledig ondoorzichtig</div>
+              <div class="description">${getTranslation(this._hass, 'temp_card_border_alpha_description')}</div>
             </div>
             
             <div class="config-row">
-              <label>Border Breedte (pixels)</label>
+              <label>${getTranslation(this._hass, 'temp_card_border_width_label')}</label>
               <input type="number" id="temperature-card-border-width" min="0" max="5" value="${this._config.temperature_card_border_width}">
-              <div class="description">Dikte van de border (0 = geen border, 1-5 pixels)</div>
+              <div class="description">${getTranslation(this._hass, 'temp_card_border_width_description')}</div>
             </div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="section-title">Temperatuur Klik Acties</div>
+          <div class="section-title">${getTranslation(this._hass, 'section_tap_actions')}</div>
           <div class="config-row">
-            <label>Actie bij klik op Huidige Temperatuur</label>
+            <label>${getTranslation(this._hass, 'temp_current_tap_label')}</label>
             <select id="temp-current-tap-action">
-              <option value="none" ${this._config.temp_current_tap_action === 'none' ? 'selected' : ''}>Geen actie</option>
-              <option value="more-info" ${this._config.temp_current_tap_action === 'more-info' ? 'selected' : ''}>Toon entiteit info</option>
-              <option value="toggle" ${this._config.temp_current_tap_action === 'toggle' ? 'selected' : ''}>Schakel aan/uit</option>
+              <option value="none" ${this._config.temp_current_tap_action === 'none' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_none')}</option>
+              <option value="more-info" ${this._config.temp_current_tap_action === 'more-info' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_more_info')}</option>
+              <option value="toggle" ${this._config.temp_current_tap_action === 'toggle' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_toggle')}</option>
             </select>
-            <div class="description">Wat gebeurt er als je op de huidige temperatuur klikt</div>
+            <div class="description">${getTranslation(this._hass, 'temp_current_tap_description')}</div>
           </div>
 
           <div class="config-row">
-            <label>Actie bij klik op Doel Temperatuur</label>
+            <label>${getTranslation(this._hass, 'temp_target_tap_label')}</label>
             <select id="temp-target-tap-action">
-              <option value="none" ${this._config.temp_target_tap_action === 'none' ? 'selected' : ''}>Geen actie</option>
-              <option value="more-info" ${this._config.temp_target_tap_action === 'more-info' ? 'selected' : ''}>Toon entiteit info</option>
-              <option value="toggle" ${this._config.temp_target_tap_action === 'toggle' ? 'selected' : ''}>Schakel aan/uit</option>
+              <option value="none" ${this._config.temp_target_tap_action === 'none' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_none')}</option>
+              <option value="more-info" ${this._config.temp_target_tap_action === 'more-info' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_more_info')}</option>
+              <option value="toggle" ${this._config.temp_target_tap_action === 'toggle' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_toggle')}</option>
             </select>
-            <div class="description">Wat gebeurt er als je op de doel temperatuur klikt</div>
+            <div class="description">${getTranslation(this._hass, 'temp_target_tap_description')}</div>
           </div>
 
           <div class="config-row">
-            <label>Actie bij klik op Buiten Temperatuur</label>
+            <label>${getTranslation(this._hass, 'temp_outdoor_tap_label')}</label>
             <select id="temp-outdoor-tap-action">
-              <option value="none" ${this._config.temp_outdoor_tap_action === 'none' ? 'selected' : ''}>Geen actie</option>
-              <option value="more-info" ${this._config.temp_outdoor_tap_action === 'more-info' ? 'selected' : ''}>Toon entiteit info</option>
-              <option value="toggle" ${this._config.temp_outdoor_tap_action === 'toggle' ? 'selected' : ''}>Schakel aan/uit</option>
+              <option value="none" ${this._config.temp_outdoor_tap_action === 'none' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_none')}</option>
+              <option value="more-info" ${this._config.temp_outdoor_tap_action === 'more-info' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_more_info')}</option>
+              <option value="toggle" ${this._config.temp_outdoor_tap_action === 'toggle' ? 'selected' : ''}>${getTranslation(this._hass, 'tap_action_toggle')}</option>
             </select>
-            <div class="description">Wat gebeurt er als je op de buiten temperatuur klikt</div>
+            <div class="description">${getTranslation(this._hass, 'temp_outdoor_tap_description')}</div>
           </div>
         </div>
       </div>
@@ -1440,7 +1771,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.12.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.13.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
