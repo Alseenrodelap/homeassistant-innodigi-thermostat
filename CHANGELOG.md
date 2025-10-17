@@ -5,6 +5,133 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.16.0] - 2025-10-17
+
+### ✨ NIEUWE FEATURES
+
+#### 1. Knoppen Verbergen
+**Feature**: Opties toegevoegd om Plus/Min en Eco/Home knoppen te verbergen
+
+**Nieuwe Configuratieopties**:
+- `hide_control_buttons`: Verberg de Plus/Min temperatuur aanpas knoppen
+- `hide_mode_buttons`: Verberg de Eco/Home modus selectie knoppen
+
+**Technische Details**:
+- Conditionele HTML rendering op basis van configuratie
+- Werkt in zowel normale als compacte layout
+- Checkboxes in de editor onder "Basis Instellingen"
+
+#### 2. Zoekbare Buitentemperatuur Entiteit
+**Feature**: Buitentemperatuur entiteit lijst is nu zoekbaar
+
+**Verbetering**:
+```html
+<!-- Voor: Lange dropdown lijst -->
+<select id="outdoor-entity-select">
+  <option>...</option>
+</select>
+
+<!-- Na: Zoekbaar input veld met autocomplete -->
+<input type="text" list="outdoor-entity-list">
+<datalist id="outdoor-entity-list">
+  <option>...</option>
+</datalist>
+```
+
+**Voordelen**:
+- Sneller zoeken in lange lijsten van sensor entiteiten
+- Autocomplete suggesties terwijl je typt
+- Browser-native implementatie (geen extra libraries)
+
+#### 3. Punten achter Omschrijvingen
+**Feature**: Alle omschrijvingsteksten in de editor eindigen nu met een punt
+
+**Details**:
+- Toegepast op alle 7 talen (en, nl, de, fr, it, es, uk)
+- Professionelere presentatie
+- Consistente interpunctie
+
+#### 4. Mode Button Kleur Fix
+**Fix**: Eco/Home button kleuren worden nu correct toegepast
+
+**Probleem**: Kleurwijzigingen werden niet direct toegepast door incomplete CSS regeneratie
+
+**Oplossing**:
+```javascript
+// Voor: Alleen updateValues() bij config wijziging
+else if (this._hass && configChanged) {
+  this.updateValues(); // ❌ CSS wordt niet opnieuw gegenereerd
+}
+
+// Na: Volledige updateCard() bij config wijziging
+else if (this._hass && configChanged) {
+  this.updateCard(); // ✅ Hele card inclusief CSS opnieuw renderen
+}
+```
+
+**Resultaat**: Alle kleurwijzigingen worden direct zichtbaar
+
+### 🌐 VERTALINGEN
+
+Nieuwe translation keys toegevoegd voor alle 7 talen:
+- `hide_control_buttons_label`
+- `hide_control_buttons_description`
+- `hide_mode_buttons_label`
+- `hide_mode_buttons_description`
+
+### 🔧 TECHNISCHE DETAILS
+
+**Config Schema Update**:
+```javascript
+{
+  // ... bestaande config
+  hide_control_buttons: false,  // NEW
+  hide_mode_buttons: false       // NEW
+}
+```
+
+**HTML Conditionele Rendering**:
+```javascript
+// Compact layout
+${!hideModeButtons ? `<button class="mode-btn compact">Eco</button>` : ''}
+${!hideControlButtons ? `<button class="control-btn">−</button>` : ''}
+${!hideControlButtons ? `<button class="control-btn">+</button>` : ''}
+${!hideModeButtons ? `<button class="mode-btn compact">Home</button>` : ''}
+
+// Normale layout
+${!hideModeButtons ? `<div class="mode-buttons">...</div>` : ''}
+${!hideControlButtons ? `<button class="control-btn">−</button>` : ''}
+${!hideControlButtons ? `<button class="control-btn">+</button>` : ''}
+```
+
+**Event Listeners**:
+```javascript
+const hideControlButtons = this.shadowRoot.querySelector('#hide-control-buttons');
+if (hideControlButtons) {
+  hideControlButtons.addEventListener('change', (e) => {
+    this._config.hide_control_buttons = e.target.checked;
+    this.configChanged(this._config);
+  });
+}
+```
+
+### 📊 IMPACT
+
+**Gebruikerservaring**:
+- Meer controle over UI elementen
+- Sneller zoeken van entiteiten
+- Professionelere tekstpresentatie
+- Directe feedback bij kleurwijzigingen
+
+**Code Kwaliteit**:
+- Betere scheiding van concerns
+- Consistente naming conventions
+- Verbeterde state management
+
+**Performance**:
+- Datalist is efficiënter dan grote select dropdowns
+- updateCard() optimaliseert CSS regeneratie
+
 ## [1.15.2] - 2025-10-17
 
 ### 🐛 CSS FIXES

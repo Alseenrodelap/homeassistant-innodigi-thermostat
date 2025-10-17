@@ -11,16 +11,20 @@ const TRANSLATIONS = {
     entity_label: 'Thermostat Entity',
     entity_placeholder: '-- Select a thermostat --',
     name_label: 'Name (optional)',
-    name_description: 'Override the default entity name',
+    name_description: 'Override the default entity name.',
     layout_label: 'Layout',
     layout_normal: 'Normal',
     layout_compact: 'Compact',
     layout_description: 'Normal: full card with title and mode buttons. Compact: smaller card without title.',
+    hide_control_buttons_label: 'Hide Plus/Minus buttons',
+    hide_control_buttons_description: 'Hide the temperature adjustment buttons.',
+    hide_mode_buttons_label: 'Hide Eco/Home buttons',
+    hide_mode_buttons_description: 'Hide the mode selection buttons.',
     // Editor - Outdoor temperature
     section_outdoor: 'Outdoor Temperature',
     outdoor_entity_label: 'Outdoor Temperature Entity',
     outdoor_entity_placeholder: '-- No outdoor temperature --',
-    outdoor_entity_description: 'Optional: sensor or weather entity for outdoor temperature',
+    outdoor_entity_description: 'Optional: sensor or weather entity for outdoor temperature.',
     outdoor_display_mode_label: 'Display Mode',
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Always inline',
@@ -29,60 +33,60 @@ const TRANSLATIONS = {
     // Editor - Temperatures
     section_temperatures: 'Temperature Settings',
     eco_temp_label: 'Eco Temperature (°C)',
-    eco_temp_description: 'Target temperature for Eco mode',
+    eco_temp_description: 'Target temperature for Eco mode.',
     home_temp_label: 'Home Temperature (°C)',
-    home_temp_description: 'Target temperature for Home mode',
+    home_temp_description: 'Target temperature for Home mode.',
     eco_label: 'Eco Button Label (optional)',
-    eco_label_description: 'Custom name for the Eco button (default: "Eco")',
+    eco_label_description: 'Custom name for the Eco button (default: "Eco").',
     home_label: 'Home Button Label (optional)',
-    home_label_description: 'Custom name for the Home button (default: "Home")',
+    home_label_description: 'Custom name for the Home button (default: "Home").',
     // Editor - Slider colors
     section_slider_colors: 'Slider Colors',
     color_cold_label: 'Cold Color',
-    color_cold_description: 'Color at minimum temperature (left side)',
+    color_cold_description: 'Color at minimum temperature (left side).',
     color_medium_label: 'Medium Color',
-    color_medium_description: 'Color at middle temperature',
+    color_medium_description: 'Color at middle temperature.',
     color_hot_label: 'Hot Color',
-    color_hot_description: 'Color at maximum temperature (right side)',
+    color_hot_description: 'Color at maximum temperature (right side).',
     // Editor - Button colors
     section_button_colors: 'Button Colors',
     color_buttons_label: 'Plus/Minus Buttons Color',
-    color_buttons_description: 'Color of the temperature adjustment buttons',
+    color_buttons_description: 'Color of the temperature adjustment buttons.',
     color_mode_buttons_label: 'Eco/Home Buttons Color',
-    color_mode_buttons_description: 'Color of the mode selection buttons',
+    color_mode_buttons_description: 'Color of the mode selection buttons.',
     // Editor - Temperature colors
     section_temp_colors: 'Temperature Display Colors',
     color_current_temp_label: 'Current Temperature Color',
-    color_current_temp_description: 'Color of the current temperature display',
+    color_current_temp_description: 'Color of the current temperature display.',
     color_target_temp_label: 'Target Temperature Color',
-    color_target_temp_description: 'Color of the target temperature display',
+    color_target_temp_description: 'Color of the target temperature display.',
     color_outdoor_temp_label: 'Outdoor Temperature Color',
-    color_outdoor_temp_description: 'Color of the outdoor temperature display',
+    color_outdoor_temp_description: 'Color of the outdoor temperature display.',
     // Editor - Temperature cards
     section_temp_cards: 'Temperature Cards',
     show_temp_cards_label: 'Show temperatures in cards',
-    show_temp_cards_description: 'Gives each temperature its own background color with rounded corners and border',
+    show_temp_cards_description: 'Gives each temperature its own background color with rounded corners and border.',
     temp_card_bg_label: 'Background Color',
-    temp_card_bg_description: 'Base color of the background',
+    temp_card_bg_description: 'Base color of the background.',
     temp_card_bg_alpha_label: 'Background Transparency (%)',
-    temp_card_bg_alpha_description: '0% = fully transparent, 100% = fully opaque',
+    temp_card_bg_alpha_description: '0% = fully transparent, 100% = fully opaque.',
     temp_card_border_color_label: 'Border Color',
-    temp_card_border_color_description: 'Color of the border around the cards',
+    temp_card_border_color_description: 'Color of the border around the cards.',
     temp_card_border_alpha_label: 'Border Transparency (%)',
-    temp_card_border_alpha_description: '0% = fully transparent, 100% = fully opaque',
+    temp_card_border_alpha_description: '0% = fully transparent, 100% = fully opaque.',
     temp_card_border_width_label: 'Border Width (pixels)',
-    temp_card_border_width_description: 'Thickness of the border (0 = no border, 1-5 pixels)',
+    temp_card_border_width_description: 'Thickness of the border (0 = no border, 1-5 pixels).',
     // Editor - Tap actions
     section_tap_actions: 'Temperature Tap Actions',
     tap_action_none: 'No action',
     tap_action_more_info: 'Show entity info',
     tap_action_toggle: 'Toggle on/off',
     temp_current_tap_label: 'Action on Current Temperature Click',
-    temp_current_tap_description: 'What happens when you click on the current temperature',
+    temp_current_tap_description: 'What happens when you click on the current temperature.',
     temp_target_tap_label: 'Action on Target Temperature Click',
-    temp_target_tap_description: 'What happens when you click on the target temperature',
+    temp_target_tap_description: 'What happens when you click on the target temperature.',
     temp_outdoor_tap_label: 'Action on Outdoor Temperature Click',
-    temp_outdoor_tap_description: 'What happens when you click on the outdoor temperature'
+    temp_outdoor_tap_description: 'What happens when you click on the outdoor temperature.'
   },
   nl: {
     // Temperature labels
@@ -95,16 +99,20 @@ const TRANSLATIONS = {
     entity_label: 'Thermostaat Entiteit',
     entity_placeholder: '-- Selecteer een thermostaat --',
     name_label: 'Naam (optioneel)',
-    name_description: 'Overschrijf de standaard entiteitnaam',
+    name_description: 'Overschrijf de standaard entiteitnaam.',
     layout_label: 'Layout',
     layout_normal: 'Normaal',
     layout_compact: 'Compact',
     layout_description: 'Normaal: volledige kaart met titel en mode knoppen. Compact: kleinere kaart zonder titel.',
+    hide_control_buttons_label: 'Verberg Plus/Min knoppen',
+    hide_control_buttons_description: 'Verberg de temperatuur aanpas knoppen.',
+    hide_mode_buttons_label: 'Verberg Eco/Thuis knoppen',
+    hide_mode_buttons_description: 'Verberg de modus selectie knoppen.',
     // Editor - Outdoor temperature
     section_outdoor: 'Buitentemperatuur',
     outdoor_entity_label: 'Buitentemperatuur Entiteit',
     outdoor_entity_placeholder: '-- Geen buitentemperatuur --',
-    outdoor_entity_description: 'Optioneel: sensor of weer entiteit voor buitentemperatuur',
+    outdoor_entity_description: 'Optioneel: sensor of weer entiteit voor buitentemperatuur.',
     outdoor_display_mode_label: 'Weergave Modus',
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Altijd inline',
@@ -113,60 +121,60 @@ const TRANSLATIONS = {
     // Editor - Temperatures
     section_temperatures: 'Temperatuur Instellingen',
     eco_temp_label: 'Eco Temperatuur (°C)',
-    eco_temp_description: 'Doeltemperatuur voor Eco modus',
+    eco_temp_description: 'Doeltemperatuur voor Eco modus.',
     home_temp_label: 'Thuis Temperatuur (°C)',
-    home_temp_description: 'Doeltemperatuur voor Thuis modus',
+    home_temp_description: 'Doeltemperatuur voor Thuis modus.',
     eco_label: 'Eco Knop Label (optioneel)',
-    eco_label_description: 'Aangepaste naam voor de Eco knop (standaard: "Eco")',
+    eco_label_description: 'Aangepaste naam voor de Eco knop (standaard: "Eco").',
     home_label: 'Thuis Knop Label (optioneel)',
-    home_label_description: 'Aangepaste naam voor de Thuis knop (standaard: "Thuis")',
+    home_label_description: 'Aangepaste naam voor de Thuis knop (standaard: "Thuis").',
     // Editor - Slider colors
     section_slider_colors: 'Slider Kleuren',
     color_cold_label: 'Koude Kleur',
-    color_cold_description: 'Kleur bij minimum temperatuur (linker kant)',
+    color_cold_description: 'Kleur bij minimum temperatuur (linker kant).',
     color_medium_label: 'Middel Kleur',
-    color_medium_description: 'Kleur bij midden temperatuur',
+    color_medium_description: 'Kleur bij midden temperatuur.',
     color_hot_label: 'Warme Kleur',
-    color_hot_description: 'Kleur bij maximum temperatuur (rechter kant)',
+    color_hot_description: 'Kleur bij maximum temperatuur (rechter kant).',
     // Editor - Button colors
     section_button_colors: 'Knop Kleuren',
     color_buttons_label: 'Plus/Min Knoppen Kleur',
-    color_buttons_description: 'Kleur van de temperatuur aanpas knoppen',
+    color_buttons_description: 'Kleur van de temperatuur aanpas knoppen.',
     color_mode_buttons_label: 'Eco/Thuis Knoppen Kleur',
-    color_mode_buttons_description: 'Kleur van de modus selectie knoppen',
+    color_mode_buttons_description: 'Kleur van de modus selectie knoppen.',
     // Editor - Temperature colors
     section_temp_colors: 'Temperatuur Weergave Kleuren',
     color_current_temp_label: 'Huidige Temperatuur Kleur',
-    color_current_temp_description: 'Kleur van de huidige temperatuur weergave',
+    color_current_temp_description: 'Kleur van de huidige temperatuur weergave.',
     color_target_temp_label: 'Doel Temperatuur Kleur',
-    color_target_temp_description: 'Kleur van de doel temperatuur weergave',
+    color_target_temp_description: 'Kleur van de doel temperatuur weergave.',
     color_outdoor_temp_label: 'Buiten Temperatuur Kleur',
-    color_outdoor_temp_description: 'Kleur van de buiten temperatuur weergave',
+    color_outdoor_temp_description: 'Kleur van de buiten temperatuur weergave.',
     // Editor - Temperature cards
     section_temp_cards: 'Temperatuur Kaartjes',
     show_temp_cards_label: 'Toon temperaturen in kaartjes',
-    show_temp_cards_description: 'Geeft elke temperatuur een eigen achtergrondkleur met afgeronde hoeken en border',
+    show_temp_cards_description: 'Geeft elke temperatuur een eigen achtergrondkleur met afgeronde hoeken en border.',
     temp_card_bg_label: 'Achtergrondkleur',
-    temp_card_bg_description: 'Basiskleur van de achtergrond',
+    temp_card_bg_description: 'Basiskleur van de achtergrond.',
     temp_card_bg_alpha_label: 'Achtergrond Transparantie (%)',
-    temp_card_bg_alpha_description: '0% = volledig transparant, 100% = volledig ondoorzichtig',
+    temp_card_bg_alpha_description: '0% = volledig transparant, 100% = volledig ondoorzichtig.',
     temp_card_border_color_label: 'Border Kleur',
-    temp_card_border_color_description: 'Kleur van de rand rond de kaartjes',
+    temp_card_border_color_description: 'Kleur van de rand rond de kaartjes.',
     temp_card_border_alpha_label: 'Border Transparantie (%)',
-    temp_card_border_alpha_description: '0% = volledig transparant, 100% = volledig ondoorzichtig',
+    temp_card_border_alpha_description: '0% = volledig transparant, 100% = volledig ondoorzichtig.',
     temp_card_border_width_label: 'Border Breedte (pixels)',
-    temp_card_border_width_description: 'Dikte van de border (0 = geen border, 1-5 pixels)',
+    temp_card_border_width_description: 'Dikte van de border (0 = geen border, 1-5 pixels).',
     // Editor - Tap actions
     section_tap_actions: 'Temperatuur Klik Acties',
     tap_action_none: 'Geen actie',
     tap_action_more_info: 'Toon entiteit info',
     tap_action_toggle: 'Schakel aan/uit',
     temp_current_tap_label: 'Actie bij klik op Huidige Temperatuur',
-    temp_current_tap_description: 'Wat gebeurt er als je op de huidige temperatuur klikt',
+    temp_current_tap_description: 'Wat gebeurt er als je op de huidige temperatuur klikt.',
     temp_target_tap_label: 'Actie bij klik op Doel Temperatuur',
-    temp_target_tap_description: 'Wat gebeurt er als je op de doel temperatuur klikt',
+    temp_target_tap_description: 'Wat gebeurt er als je op de doel temperatuur klikt.',
     temp_outdoor_tap_label: 'Actie bij klik op Buiten Temperatuur',
-    temp_outdoor_tap_description: 'Wat gebeurt er als je op de buiten temperatuur klikt'
+    temp_outdoor_tap_description: 'Wat gebeurt er als je op de buiten temperatuur klikt.'
   },
   de: {
     // Temperature labels
@@ -179,16 +187,20 @@ const TRANSLATIONS = {
     entity_label: 'Thermostat Entität',
     entity_placeholder: '-- Thermostat auswählen --',
     name_label: 'Name (optional)',
-    name_description: 'Standard Entitätsname überschreiben',
+    name_description: 'Standard Entitätsname überschreiben.',
     layout_label: 'Layout',
     layout_normal: 'Normal',
     layout_compact: 'Kompakt',
     layout_description: 'Normal: vollständige Karte mit Titel und Modus-Schaltflächen. Kompakt: kleinere Karte ohne Titel.',
+    hide_control_buttons_label: 'Plus/Minus Schaltflächen ausblenden',
+    hide_control_buttons_description: 'Temperaturanpassungsschaltflächen ausblenden.',
+    hide_mode_buttons_label: 'Eco/Heim Schaltflächen ausblenden',
+    hide_mode_buttons_description: 'Modusauswahlschaltflächen ausblenden.',
     // Editor - Outdoor temperature
     section_outdoor: 'Außentemperatur',
     outdoor_entity_label: 'Außentemperatur Entität',
     outdoor_entity_placeholder: '-- Keine Außentemperatur --',
-    outdoor_entity_description: 'Optional: Sensor oder Wetter-Entität für Außentemperatur',
+    outdoor_entity_description: 'Optional: Sensor oder Wetter-Entität für Außentemperatur.',
     outdoor_display_mode_label: 'Anzeigemodus',
     outdoor_display_auto: 'Auto (responsiv)',
     outdoor_display_inline: 'Immer inline',
@@ -197,60 +209,60 @@ const TRANSLATIONS = {
     // Editor - Temperatures
     section_temperatures: 'Temperatureinstellungen',
     eco_temp_label: 'Eco Temperatur (°C)',
-    eco_temp_description: 'Zieltemperatur für Eco-Modus',
+    eco_temp_description: 'Zieltemperatur für Eco-Modus.',
     home_temp_label: 'Heimtemperatur (°C)',
-    home_temp_description: 'Zieltemperatur für Heim-Modus',
+    home_temp_description: 'Zieltemperatur für Heim-Modus.',
     eco_label: 'Eco Taste Beschriftung (optional)',
-    eco_label_description: 'Benutzerdefinierter Name für die Eco-Taste (Standard: "Eco")',
+    eco_label_description: 'Benutzerdefinierter Name für die Eco-Taste (Standard: "Eco").',
     home_label: 'Heim Taste Beschriftung (optional)',
-    home_label_description: 'Benutzerdefinierter Name für die Heim-Taste (Standard: "Heim")',
+    home_label_description: 'Benutzerdefinierter Name für die Heim-Taste (Standard: "Heim").',
     // Editor - Slider colors
     section_slider_colors: 'Schieberegler Farben',
     color_cold_label: 'Kalte Farbe',
-    color_cold_description: 'Farbe bei Mindesttemperatur (linke Seite)',
+    color_cold_description: 'Farbe bei Mindesttemperatur (linke Seite).',
     color_medium_label: 'Mittlere Farbe',
-    color_medium_description: 'Farbe bei mittlerer Temperatur',
+    color_medium_description: 'Farbe bei mittlerer Temperatur.',
     color_hot_label: 'Heiße Farbe',
-    color_hot_description: 'Farbe bei Maximaltemperatur (rechte Seite)',
+    color_hot_description: 'Farbe bei Maximaltemperatur (rechte Seite).',
     // Editor - Button colors
     section_button_colors: 'Schaltflächen Farben',
     color_buttons_label: 'Plus/Minus Schaltflächen Farbe',
-    color_buttons_description: 'Farbe der Temperaturanpassungsschaltflächen',
+    color_buttons_description: 'Farbe der Temperaturanpassungsschaltflächen.',
     color_mode_buttons_label: 'Eco/Heim Schaltflächen Farbe',
-    color_mode_buttons_description: 'Farbe der Modusauswahlschaltflächen',
+    color_mode_buttons_description: 'Farbe der Modusauswahlschaltflächen.',
     // Editor - Temperature colors
     section_temp_colors: 'Temperaturanzeige Farben',
     color_current_temp_label: 'Aktuelle Temperatur Farbe',
-    color_current_temp_description: 'Farbe der aktuellen Temperaturanzeige',
+    color_current_temp_description: 'Farbe der aktuellen Temperaturanzeige.',
     color_target_temp_label: 'Zieltemperatur Farbe',
-    color_target_temp_description: 'Farbe der Zieltemperaturanzeige',
+    color_target_temp_description: 'Farbe der Zieltemperaturanzeige.',
     color_outdoor_temp_label: 'Außentemperatur Farbe',
-    color_outdoor_temp_description: 'Farbe der Außentemperaturanzeige',
+    color_outdoor_temp_description: 'Farbe der Außentemperaturanzeige.',
     // Editor - Temperature cards
     section_temp_cards: 'Temperaturkarten',
     show_temp_cards_label: 'Temperaturen in Karten anzeigen',
-    show_temp_cards_description: 'Gibt jeder Temperatur eine eigene Hintergrundfarbe mit abgerundeten Ecken und Rand',
+    show_temp_cards_description: 'Gibt jeder Temperatur eine eigene Hintergrundfarbe mit abgerundeten Ecken und Rand.',
     temp_card_bg_label: 'Hintergrundfarbe',
-    temp_card_bg_description: 'Basisfarbe des Hintergrunds',
+    temp_card_bg_description: 'Basisfarbe des Hintergrunds.',
     temp_card_bg_alpha_label: 'Hintergrund Transparenz (%)',
-    temp_card_bg_alpha_description: '0% = vollständig transparent, 100% = vollständig undurchsichtig',
+    temp_card_bg_alpha_description: '0% = vollständig transparent, 100% = vollständig undurchsichtig.',
     temp_card_border_color_label: 'Randfarbe',
-    temp_card_border_color_description: 'Farbe des Randes um die Karten',
+    temp_card_border_color_description: 'Farbe des Randes um die Karten.',
     temp_card_border_alpha_label: 'Rand Transparenz (%)',
-    temp_card_border_alpha_description: '0% = vollständig transparent, 100% = vollständig undurchsichtig',
+    temp_card_border_alpha_description: '0% = vollständig transparent, 100% = vollständig undurchsichtig.',
     temp_card_border_width_label: 'Randbreite (Pixel)',
-    temp_card_border_width_description: 'Dicke des Randes (0 = kein Rand, 1-5 Pixel)',
+    temp_card_border_width_description: 'Dicke des Randes (0 = kein Rand, 1-5 Pixel).',
     // Editor - Tap actions
     section_tap_actions: 'Temperatur Klick-Aktionen',
     tap_action_none: 'Keine Aktion',
     tap_action_more_info: 'Entitätsinformationen anzeigen',
     tap_action_toggle: 'Ein-/Ausschalten',
     temp_current_tap_label: 'Aktion bei Klick auf aktuelle Temperatur',
-    temp_current_tap_description: 'Was passiert beim Klicken auf die aktuelle Temperatur',
+    temp_current_tap_description: 'Was passiert beim Klicken auf die aktuelle Temperatur.',
     temp_target_tap_label: 'Aktion bei Klick auf Zieltemperatur',
-    temp_target_tap_description: 'Was passiert beim Klicken auf die Zieltemperatur',
+    temp_target_tap_description: 'Was passiert beim Klicken auf die Zieltemperatur.',
     temp_outdoor_tap_label: 'Aktion bei Klick auf Außentemperatur',
-    temp_outdoor_tap_description: 'Was passiert beim Klicken auf die Außentemperatur'
+    temp_outdoor_tap_description: 'Was passiert beim Klicken auf die Außentemperatur.'
   },
   fr: {
     // Temperature labels
@@ -263,16 +275,20 @@ const TRANSLATIONS = {
     entity_label: 'Entité du thermostat',
     entity_placeholder: '-- Sélectionner un thermostat --',
     name_label: 'Nom (optionnel)',
-    name_description: "Remplacer le nom d'entité par défaut",
+    name_description: "Remplacer le nom d'entité par défaut.",
     layout_label: 'Disposition',
     layout_normal: 'Normal',
     layout_compact: 'Compact',
     layout_description: 'Normal: carte complète avec titre et boutons de mode. Compact: carte plus petite sans titre.',
+    hide_control_buttons_label: 'Masquer les boutons Plus/Moins',
+    hide_control_buttons_description: "Masquer les boutons d'ajustement de température.",
+    hide_mode_buttons_label: 'Masquer les boutons Éco/Maison',
+    hide_mode_buttons_description: 'Masquer les boutons de sélection du mode.',
     // Editor - Outdoor temperature
     section_outdoor: 'Température extérieure',
     outdoor_entity_label: 'Entité de température extérieure',
     outdoor_entity_placeholder: '-- Pas de température extérieure --',
-    outdoor_entity_description: 'Optionnel: capteur ou entité météo pour la température extérieure',
+    outdoor_entity_description: 'Optionnel: capteur ou entité météo pour la température extérieure.',
     outdoor_display_mode_label: "Mode d'affichage",
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Toujours en ligne',
@@ -281,60 +297,60 @@ const TRANSLATIONS = {
     // Editor - Temperatures
     section_temperatures: 'Paramètres de température',
     eco_temp_label: 'Température Éco (°C)',
-    eco_temp_description: 'Température cible pour le mode Éco',
+    eco_temp_description: 'Température cible pour le mode Éco.',
     home_temp_label: 'Température Maison (°C)',
-    home_temp_description: 'Température cible pour le mode Maison',
+    home_temp_description: 'Température cible pour le mode Maison.',
     eco_label: 'Libellé bouton Éco (facultatif)',
-    eco_label_description: 'Nom personnalisé pour le bouton Éco (par défaut: "Éco")',
+    eco_label_description: 'Nom personnalisé pour le bouton Éco (par défaut: "Éco").',
     home_label: 'Libellé bouton Maison (facultatif)',
-    home_label_description: 'Nom personnalisé pour le bouton Maison (par défaut: "Maison")',
+    home_label_description: 'Nom personnalisé pour le bouton Maison (par défaut: "Maison").',
     // Editor - Slider colors
     section_slider_colors: 'Couleurs du curseur',
     color_cold_label: 'Couleur froide',
-    color_cold_description: 'Couleur à température minimale (côté gauche)',
+    color_cold_description: 'Couleur à température minimale (côté gauche).',
     color_medium_label: 'Couleur moyenne',
-    color_medium_description: 'Couleur à température moyenne',
+    color_medium_description: 'Couleur à température moyenne.',
     color_hot_label: 'Couleur chaude',
-    color_hot_description: 'Couleur à température maximale (côté droit)',
+    color_hot_description: 'Couleur à température maximale (côté droit).',
     // Editor - Button colors
     section_button_colors: 'Couleurs des boutons',
     color_buttons_label: 'Couleur des boutons Plus/Moins',
-    color_buttons_description: "Couleur des boutons d'ajustement de température",
+    color_buttons_description: "Couleur des boutons d'ajustement de température.",
     color_mode_buttons_label: 'Couleur des boutons Éco/Maison',
-    color_mode_buttons_description: 'Couleur des boutons de sélection du mode',
+    color_mode_buttons_description: 'Couleur des boutons de sélection du mode.',
     // Editor - Temperature colors
     section_temp_colors: "Couleurs d'affichage de la température",
     color_current_temp_label: 'Couleur température actuelle',
-    color_current_temp_description: "Couleur de l'affichage de la température actuelle",
+    color_current_temp_description: "Couleur de l'affichage de la température actuelle.",
     color_target_temp_label: 'Couleur température cible',
-    color_target_temp_description: "Couleur de l'affichage de la température cible",
+    color_target_temp_description: "Couleur de l'affichage de la température cible.",
     color_outdoor_temp_label: 'Couleur température extérieure',
-    color_outdoor_temp_description: "Couleur de l'affichage de la température extérieure",
+    color_outdoor_temp_description: "Couleur de l'affichage de la température extérieure.",
     // Editor - Temperature cards
     section_temp_cards: 'Cartes de température',
     show_temp_cards_label: 'Afficher les températures dans des cartes',
-    show_temp_cards_description: 'Donne à chaque température sa propre couleur de fond avec des coins arrondis et une bordure',
+    show_temp_cards_description: 'Donne à chaque température sa propre couleur de fond avec des coins arrondis et une bordure.',
     temp_card_bg_label: 'Couleur de fond',
-    temp_card_bg_description: 'Couleur de base du fond',
+    temp_card_bg_description: 'Couleur de base du fond.',
     temp_card_bg_alpha_label: 'Transparence du fond (%)',
-    temp_card_bg_alpha_description: '0% = entièrement transparent, 100% = entièrement opaque',
+    temp_card_bg_alpha_description: '0% = entièrement transparent, 100% = entièrement opaque.',
     temp_card_border_color_label: 'Couleur de la bordure',
-    temp_card_border_color_description: 'Couleur de la bordure autour des cartes',
+    temp_card_border_color_description: 'Couleur de la bordure autour des cartes.',
     temp_card_border_alpha_label: 'Transparence de la bordure (%)',
-    temp_card_border_alpha_description: '0% = entièrement transparent, 100% = entièrement opaque',
+    temp_card_border_alpha_description: '0% = entièrement transparent, 100% = entièrement opaque.',
     temp_card_border_width_label: 'Largeur de la bordure (pixels)',
-    temp_card_border_width_description: '0 = pas de bordure, 1-5 pixels',
+    temp_card_border_width_description: '0 = pas de bordure, 1-5 pixels.',
     // Editor - Tap actions
     section_tap_actions: 'Actions de clic sur température',
     tap_action_none: 'Aucune action',
     tap_action_more_info: "Afficher les infos de l'entité",
     tap_action_toggle: 'Activer/Désactiver',
     temp_current_tap_label: 'Action au clic sur température actuelle',
-    temp_current_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température actuelle',
+    temp_current_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température actuelle.',
     temp_target_tap_label: 'Action au clic sur température cible',
-    temp_target_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température cible',
+    temp_target_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température cible.',
     temp_outdoor_tap_label: 'Action au clic sur température extérieure',
-    temp_outdoor_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température extérieure'
+    temp_outdoor_tap_description: 'Ce qui se passe lorsque vous cliquez sur la température extérieure.'
   },
   it: {
     // Temperature labels
@@ -347,16 +363,20 @@ const TRANSLATIONS = {
     entity_label: 'Entità termostato',
     entity_placeholder: '-- Seleziona un termostato --',
     name_label: 'Nome (opzionale)',
-    name_description: 'Sostituisci il nome predefinito dell\'entità',
+    name_description: 'Sostituisci il nome predefinito dell\'entità.',
     layout_label: 'Layout',
     layout_normal: 'Normale',
     layout_compact: 'Compatto',
     layout_description: 'Normale: scheda completa con titolo e pulsanti modalità. Compatto: scheda più piccola senza titolo.',
+    hide_control_buttons_label: 'Nascondi pulsanti Più/Meno',
+    hide_control_buttons_description: 'Nascondi i pulsanti di regolazione temperatura.',
+    hide_mode_buttons_label: 'Nascondi pulsanti Eco/Casa',
+    hide_mode_buttons_description: 'Nascondi i pulsanti di selezione modalità.',
     // Editor - Outdoor temperature
     section_outdoor: 'Temperatura esterna',
     outdoor_entity_label: 'Entità temperatura esterna',
     outdoor_entity_placeholder: '-- Nessuna temperatura esterna --',
-    outdoor_entity_description: 'Opzionale: sensore o entità meteo per la temperatura esterna',
+    outdoor_entity_description: 'Opzionale: sensore o entità meteo per la temperatura esterna.',
     outdoor_display_mode_label: 'Modalità di visualizzazione',
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Sempre in linea',
@@ -365,60 +385,60 @@ const TRANSLATIONS = {
     // Editor - Temperatures
     section_temperatures: 'Impostazioni temperatura',
     eco_temp_label: 'Temperatura Eco (°C)',
-    eco_temp_description: 'Temperatura target per la modalità Eco',
+    eco_temp_description: 'Temperatura target per la modalità Eco.',
     home_temp_label: 'Temperatura Casa (°C)',
-    home_temp_description: 'Temperatura target per la modalità Casa',
+    home_temp_description: 'Temperatura target per la modalità Casa.',
     eco_label: 'Etichetta pulsante Eco (opzionale)',
-    eco_label_description: 'Nome personalizzato per il pulsante Eco (predefinito: "Eco")',
+    eco_label_description: 'Nome personalizzato per il pulsante Eco (predefinito: "Eco").',
     home_label: 'Etichetta pulsante Casa (opzionale)',
-    home_label_description: 'Nome personalizzato per il pulsante Casa (predefinito: "Casa")',
+    home_label_description: 'Nome personalizzato per il pulsante Casa (predefinito: "Casa").',
     // Editor - Slider colors
     section_slider_colors: 'Colori cursore',
     color_cold_label: 'Colore freddo',
-    color_cold_description: 'Colore alla temperatura minima (lato sinistro)',
+    color_cold_description: 'Colore alla temperatura minima (lato sinistro).',
     color_medium_label: 'Colore medio',
-    color_medium_description: 'Colore alla temperatura media',
+    color_medium_description: 'Colore alla temperatura media.',
     color_hot_label: 'Colore caldo',
-    color_hot_description: 'Colore alla temperatura massima (lato destro)',
+    color_hot_description: 'Colore alla temperatura massima (lato destro).',
     // Editor - Button colors
     section_button_colors: 'Colori pulsanti',
     color_buttons_label: 'Colore pulsanti Più/Meno',
-    color_buttons_description: 'Colore dei pulsanti di regolazione temperatura',
+    color_buttons_description: 'Colore dei pulsanti di regolazione temperatura.',
     color_mode_buttons_label: 'Colore pulsanti Eco/Casa',
-    color_mode_buttons_description: 'Colore dei pulsanti di selezione modalità',
+    color_mode_buttons_description: 'Colore dei pulsanti di selezione modalità.',
     // Editor - Temperature colors
     section_temp_colors: 'Colori display temperatura',
     color_current_temp_label: 'Colore temperatura attuale',
-    color_current_temp_description: 'Colore del display della temperatura attuale',
+    color_current_temp_description: 'Colore del display della temperatura attuale.',
     color_target_temp_label: 'Colore temperatura obiettivo',
-    color_target_temp_description: 'Colore del display della temperatura obiettivo',
+    color_target_temp_description: 'Colore del display della temperatura obiettivo.',
     color_outdoor_temp_label: 'Colore temperatura esterna',
-    color_outdoor_temp_description: 'Colore del display della temperatura esterna',
+    color_outdoor_temp_description: 'Colore del display della temperatura esterna.',
     // Editor - Temperature cards
     section_temp_cards: 'Schede temperatura',
     show_temp_cards_label: 'Mostra temperature nelle schede',
-    show_temp_cards_description: 'Assegna a ogni temperatura il proprio colore di sfondo con angoli arrotondati e bordo',
+    show_temp_cards_description: 'Assegna a ogni temperatura il proprio colore di sfondo con angoli arrotondati e bordo.',
     temp_card_bg_label: 'Colore di sfondo',
-    temp_card_bg_description: 'Colore base dello sfondo',
+    temp_card_bg_description: 'Colore base dello sfondo.',
     temp_card_bg_alpha_label: 'Trasparenza sfondo (%)',
-    temp_card_bg_alpha_description: '0% = completamente trasparente, 100% = completamente opaco',
+    temp_card_bg_alpha_description: '0% = completamente trasparente, 100% = completamente opaco.',
     temp_card_border_color_label: 'Colore bordo',
-    temp_card_border_color_description: 'Colore del bordo intorno alle schede',
+    temp_card_border_color_description: 'Colore del bordo intorno alle schede.',
     temp_card_border_alpha_label: 'Trasparenza bordo (%)',
-    temp_card_border_alpha_description: '0% = completamente trasparente, 100% = completamente opaco',
+    temp_card_border_alpha_description: '0% = completamente trasparente, 100% = completamente opaco.',
     temp_card_border_width_label: 'Larghezza bordo (pixel)',
-    temp_card_border_width_description: 'Spessore del bordo (0 = nessun bordo, 1-5 pixel)',
+    temp_card_border_width_description: 'Spessore del bordo (0 = nessun bordo, 1-5 pixel).',
     // Editor - Tap actions
     section_tap_actions: 'Azioni tocco temperatura',
     tap_action_none: 'Nessuna azione',
     tap_action_more_info: 'Mostra informazioni entità',
     tap_action_toggle: 'Attiva/Disattiva',
     temp_current_tap_label: 'Azione al tocco su temperatura attuale',
-    temp_current_tap_description: 'Cosa succede quando tocchi la temperatura attuale',
+    temp_current_tap_description: 'Cosa succede quando tocchi la temperatura attuale.',
     temp_target_tap_label: 'Azione al tocco su temperatura obiettivo',
-    temp_target_tap_description: 'Cosa succede quando tocchi la temperatura obiettivo',
+    temp_target_tap_description: 'Cosa succede quando tocchi la temperatura obiettivo.',
     temp_outdoor_tap_label: 'Azione al tocco su temperatura esterna',
-    temp_outdoor_tap_description: 'Cosa succede quando tocchi la temperatura esterna'
+    temp_outdoor_tap_description: 'Cosa succede quando tocchi la temperatura esterna.'
   },
   es: {
     // Temperature labels
@@ -431,16 +451,20 @@ const TRANSLATIONS = {
     entity_label: 'Entidad del termostato',
     entity_placeholder: '-- Seleccionar un termostato --',
     name_label: 'Nombre (opcional)',
-    name_description: 'Reemplazar el nombre predeterminado de la entidad',
+    name_description: 'Reemplazar el nombre predeterminado de la entidad.',
     layout_label: 'Diseño',
     layout_normal: 'Normal',
     layout_compact: 'Compacto',
     layout_description: 'Normal: tarjeta completa con título y botones de modo. Compacto: tarjeta más pequeña sin título.',
+    hide_control_buttons_label: 'Ocultar botones Más/Menos',
+    hide_control_buttons_description: 'Ocultar los botones de ajuste de temperatura.',
+    hide_mode_buttons_label: 'Ocultar botones Eco/Casa',
+    hide_mode_buttons_description: 'Ocultar los botones de selección de modo.',
     // Editor - Outdoor temperature
     section_outdoor: 'Temperatura exterior',
     outdoor_entity_label: 'Entidad de temperatura exterior',
     outdoor_entity_placeholder: '-- Sin temperatura exterior --',
-    outdoor_entity_description: 'Opcional: sensor o entidad meteorológica para la temperatura exterior',
+    outdoor_entity_description: 'Opcional: sensor o entidad meteorológica para la temperatura exterior.',
     outdoor_display_mode_label: 'Modo de visualización',
     outdoor_display_auto: 'Auto (adaptable)',
     outdoor_display_inline: 'Siempre en línea',
@@ -449,60 +473,60 @@ const TRANSLATIONS = {
     // Editor - Temperatures
     section_temperatures: 'Configuración de temperatura',
     eco_temp_label: 'Temperatura Eco (°C)',
-    eco_temp_description: 'Temperatura objetivo para el modo Eco',
+    eco_temp_description: 'Temperatura objetivo para el modo Eco.',
     home_temp_label: 'Temperatura Casa (°C)',
-    home_temp_description: 'Temperatura objetivo para el modo Casa',
+    home_temp_description: 'Temperatura objetivo para el modo Casa.',
     eco_label: 'Etiqueta botón Eco (opcional)',
-    eco_label_description: 'Nombre personalizado para el botón Eco (predeterminado: "Eco")',
+    eco_label_description: 'Nombre personalizado para el botón Eco (predeterminado: "Eco").',
     home_label: 'Etiqueta botón Casa (opcional)',
-    home_label_description: 'Nombre personalizado para el botón Casa (predeterminado: "Casa")',
+    home_label_description: 'Nombre personalizado para el botón Casa (predeterminado: "Casa").',
     // Editor - Slider colors
     section_slider_colors: 'Colores del deslizador',
     color_cold_label: 'Color frío',
-    color_cold_description: 'Color a temperatura mínima (lado izquierdo)',
+    color_cold_description: 'Color a temperatura mínima (lado izquierdo).',
     color_medium_label: 'Color medio',
-    color_medium_description: 'Color a temperatura media',
+    color_medium_description: 'Color a temperatura media.',
     color_hot_label: 'Color caliente',
-    color_hot_description: 'Color a temperatura máxima (lado derecho)',
+    color_hot_description: 'Color a temperatura máxima (lado derecho).',
     // Editor - Button colors
     section_button_colors: 'Colores de botones',
     color_buttons_label: 'Color botones Más/Menos',
-    color_buttons_description: 'Color de los botones de ajuste de temperatura',
+    color_buttons_description: 'Color de los botones de ajuste de temperatura.',
     color_mode_buttons_label: 'Color botones Eco/Casa',
-    color_mode_buttons_description: 'Color de los botones de selección de modo',
+    color_mode_buttons_description: 'Color de los botones de selección de modo.',
     // Editor - Temperature colors
     section_temp_colors: 'Colores de visualización de temperatura',
     color_current_temp_label: 'Color temperatura actual',
-    color_current_temp_description: 'Color de la visualización de temperatura actual',
+    color_current_temp_description: 'Color de la visualización de temperatura actual.',
     color_target_temp_label: 'Color temperatura objetivo',
-    color_target_temp_description: 'Color de la visualización de temperatura objetivo',
+    color_target_temp_description: 'Color de la visualización de temperatura objetivo.',
     color_outdoor_temp_label: 'Color temperatura exterior',
-    color_outdoor_temp_description: 'Color de la visualización de temperatura exterior',
+    color_outdoor_temp_description: 'Color de la visualización de temperatura exterior.',
     // Editor - Temperature cards
     section_temp_cards: 'Tarjetas de temperatura',
     show_temp_cards_label: 'Mostrar temperaturas en tarjetas',
-    show_temp_cards_description: 'Asigna a cada temperatura su propio color de fondo con esquinas redondeadas y borde',
+    show_temp_cards_description: 'Asigna a cada temperatura su propio color de fondo con esquinas redondeadas y borde.',
     temp_card_bg_label: 'Color de fondo',
-    temp_card_bg_description: 'Color base del fondo',
+    temp_card_bg_description: 'Color base del fondo.',
     temp_card_bg_alpha_label: 'Transparencia del fondo (%)',
-    temp_card_bg_alpha_description: '0% = completamente transparente, 100% = completamente opaco',
+    temp_card_bg_alpha_description: '0% = completamente transparente, 100% = completamente opaco.',
     temp_card_border_color_label: 'Color del borde',
-    temp_card_border_color_description: 'Color del borde alrededor de las tarjetas',
+    temp_card_border_color_description: 'Color del borde alrededor de las tarjetas.',
     temp_card_border_alpha_label: 'Transparencia del borde (%)',
-    temp_card_border_alpha_description: '0% = completamente transparente, 100% = completamente opaco',
+    temp_card_border_alpha_description: '0% = completamente transparente, 100% = completamente opaco.',
     temp_card_border_width_label: 'Ancho del borde (píxeles)',
-    temp_card_border_width_description: 'Grosor del borde (0 = sin borde, 1-5 píxeles)',
+    temp_card_border_width_description: 'Grosor del borde (0 = sin borde, 1-5 píxeles).',
     // Editor - Tap actions
     section_tap_actions: 'Acciones de toque en temperatura',
     tap_action_none: 'Sin acción',
     tap_action_more_info: 'Mostrar información de entidad',
     tap_action_toggle: 'Activar/Desactivar',
     temp_current_tap_label: 'Acción al tocar temperatura actual',
-    temp_current_tap_description: 'Qué sucede cuando tocas la temperatura actual',
+    temp_current_tap_description: 'Qué sucede cuando tocas la temperatura actual.',
     temp_target_tap_label: 'Acción al tocar temperatura objetivo',
-    temp_target_tap_description: 'Qué sucede cuando tocas la temperatura objetivo',
+    temp_target_tap_description: 'Qué sucede cuando tocas la temperatura objetivo.',
     temp_outdoor_tap_label: 'Acción al tocar temperatura exterior',
-    temp_outdoor_tap_description: 'Qué sucede cuando tocas la temperatura exterior'
+    temp_outdoor_tap_description: 'Qué sucede cuando tocas la temperatura exterior.'
   },
   uk: {
     // Temperature labels
@@ -515,16 +539,20 @@ const TRANSLATIONS = {
     entity_label: 'Об\'єкт термостата',
     entity_placeholder: '-- Виберіть термостат --',
     name_label: 'Назва (необов\'язково)',
-    name_description: 'Замінити назву об\'єкта за замовчуванням',
+    name_description: 'Замінити назву об\'єкта за замовчуванням.',
     layout_label: 'Макет',
     layout_normal: 'Звичайний',
     layout_compact: 'Компактний',
     layout_description: 'Звичайний: повна картка з заголовком і кнопками режиму. Компактний: менша картка без заголовка.',
+    hide_control_buttons_label: 'Приховати кнопки Плюс/Мінус',
+    hide_control_buttons_description: 'Приховати кнопки регулювання температури.',
+    hide_mode_buttons_label: 'Приховати кнопки Еко/Дім',
+    hide_mode_buttons_description: 'Приховати кнопки вибору режиму.',
     // Editor - Outdoor temperature
     section_outdoor: 'Зовнішня температура',
     outdoor_entity_label: 'Об\'єкт зовнішньої температури',
     outdoor_entity_placeholder: '-- Без зовнішньої температури --',
-    outdoor_entity_description: 'Необов\'язково: датчик або об\'єкт погоди для зовнішньої температури',
+    outdoor_entity_description: 'Необов\'язково: датчик або об\'єкт погоди для зовнішньої температури.',
     outdoor_display_mode_label: 'Режим відображення',
     outdoor_display_auto: 'Авто (адаптивний)',
     outdoor_display_inline: 'Завжди в рядку',
@@ -533,60 +561,60 @@ const TRANSLATIONS = {
     // Editor - Temperatures
     section_temperatures: 'Налаштування температури',
     eco_temp_label: 'Температура Еко (°C)',
-    eco_temp_description: 'Цільова температура для режиму Еко',
+    eco_temp_description: 'Цільова температура для режиму Еко.',
     home_temp_label: 'Температура Дім (°C)',
-    home_temp_description: 'Цільова температура для режиму Дім',
+    home_temp_description: 'Цільова температура для режиму Дім.',
     eco_label: 'Назва кнопки Еко (необов\'язково)',
-    eco_label_description: 'Власна назва для кнопки Еко (за замовчуванням: "Еко")',
+    eco_label_description: 'Власна назва для кнопки Еко (за замовчуванням: "Еко").',
     home_label: 'Назва кнопки Дім (необов\'язково)',
-    home_label_description: 'Власна назва для кнопки Дім (за замовчуванням: "Дім")',
+    home_label_description: 'Власна назва для кнопки Дім (за замовчуванням: "Дім").',
     // Editor - Slider colors
     section_slider_colors: 'Кольори повзунка',
     color_cold_label: 'Холодний колір',
-    color_cold_description: 'Колір при мінімальній температурі (ліва сторона)',
+    color_cold_description: 'Колір при мінімальній температурі (ліва сторона).',
     color_medium_label: 'Середній колір',
-    color_medium_description: 'Колір при середній температурі',
+    color_medium_description: 'Колір при середній температурі.',
     color_hot_label: 'Гарячий колір',
-    color_hot_description: 'Колір при максимальній температурі (права сторона)',
+    color_hot_description: 'Колір при максимальній температурі (права сторона).',
     // Editor - Button colors
     section_button_colors: 'Кольори кнопок',
     color_buttons_label: 'Колір кнопок Плюс/Мінус',
-    color_buttons_description: 'Колір кнопок регулювання температури',
+    color_buttons_description: 'Колір кнопок регулювання температури.',
     color_mode_buttons_label: 'Колір кнопок Еко/Дім',
-    color_mode_buttons_description: 'Колір кнопок вибору режиму',
+    color_mode_buttons_description: 'Колір кнопок вибору режиму.',
     // Editor - Temperature colors
     section_temp_colors: 'Кольори відображення температури',
     color_current_temp_label: 'Колір поточної температури',
-    color_current_temp_description: 'Колір відображення поточної температури',
+    color_current_temp_description: 'Колір відображення поточної температури.',
     color_target_temp_label: 'Колір цільової температури',
-    color_target_temp_description: 'Колір відображення цільової температури',
+    color_target_temp_description: 'Колір відображення цільової температури.',
     color_outdoor_temp_label: 'Колір зовнішньої температури',
-    color_outdoor_temp_description: 'Колір відображення зовнішньої температури',
+    color_outdoor_temp_description: 'Колір відображення зовнішньої температури.',
     // Editor - Temperature cards
     section_temp_cards: 'Картки температури',
     show_temp_cards_label: 'Показати температури в картках',
-    show_temp_cards_description: 'Надає кожній температурі власний колір фону з закругленими кутами та рамкою',
+    show_temp_cards_description: 'Надає кожній температурі власний колір фону з закругленими кутами та рамкою.',
     temp_card_bg_label: 'Колір фону',
-    temp_card_bg_description: 'Базовий колір фону',
+    temp_card_bg_description: 'Базовий колір фону.',
     temp_card_bg_alpha_label: 'Прозорість фону (%)',
-    temp_card_bg_alpha_description: '0% = повністю прозорий, 100% = повністю непрозорий',
+    temp_card_bg_alpha_description: '0% = повністю прозорий, 100% = повністю непрозорий.',
     temp_card_border_color_label: 'Колір рамки',
-    temp_card_border_color_description: 'Колір рамки навколо карток',
+    temp_card_border_color_description: 'Колір рамки навколо карток.',
     temp_card_border_alpha_label: 'Прозорість рамки (%)',
-    temp_card_border_alpha_description: '0% = повністю прозорий, 100% = повністю непрозорий',
+    temp_card_border_alpha_description: '0% = повністю прозорий, 100% = повністю непрозорий.',
     temp_card_border_width_label: 'Ширина рамки (пікселі)',
-    temp_card_border_width_description: 'Товщина рамки (0 = без рамки, 1-5 пікселів)',
+    temp_card_border_width_description: 'Товщина рамки (0 = без рамки, 1-5 пікселів).',
     // Editor - Tap actions
     section_tap_actions: 'Дії натискання на температуру',
     tap_action_none: 'Без дії',
     tap_action_more_info: 'Показати інформацію об\'єкта',
     tap_action_toggle: 'Увімкнути/Вимкнути',
     temp_current_tap_label: 'Дія при натисканні на поточну температуру',
-    temp_current_tap_description: 'Що відбувається при натисканні на поточну температуру',
+    temp_current_tap_description: 'Що відбувається при натисканні на поточну температуру.',
     temp_target_tap_label: 'Дія при натисканні на цільову температуру',
-    temp_target_tap_description: 'Що відбувається при натисканні на цільову температуру',
+    temp_target_tap_description: 'Що відбувається при натисканні на цільову температуру.',
     temp_outdoor_tap_label: 'Дія при натисканні на зовнішню температуру',
-    temp_outdoor_tap_description: 'Що відбувається при натисканні на зовнішню температуру'
+    temp_outdoor_tap_description: 'Що відбувається при натисканні на зовнішню температуру.'
   }
 };
 
@@ -653,7 +681,7 @@ class InnodigiThermostatCard extends HTMLElement {
     const configChanged = JSON.stringify(this._config) !== JSON.stringify(config);
     this._config = config;
     
-    // Only re-render if this is first time or entity changed
+    // Re-render card when config changes to apply style/color changes
     if (!this._cardInitialized || oldEntity !== config.entity) {
       this._cardInitialized = false;
       if (this._hass) {
@@ -661,8 +689,8 @@ class InnodigiThermostatCard extends HTMLElement {
         this._cardInitialized = true;
       }
     } else if (this._hass && configChanged) {
-      // Just update values for other config changes
-      this.updateValues();
+      // For config changes, re-render the whole card to apply CSS changes
+      this.updateCard();
     }
   }
 
@@ -751,7 +779,10 @@ class InnodigiThermostatCard extends HTMLElement {
       home_temperature: 21,
       // Mode button labels
       eco_label: '',
-      home_label: ''
+      home_label: '',
+      // Button visibility
+      hide_control_buttons: false,
+      hide_mode_buttons: false
     };
   }
 
@@ -804,6 +835,10 @@ class InnodigiThermostatCard extends HTMLElement {
     const tempCardBorderColor = this._config.temperature_card_border_color || '#3498db';
     const tempCardBorderAlpha = this._config.temperature_card_border_alpha ?? 50;
     const tempCardBorderWidth = this._config.temperature_card_border_width ?? 1;
+    
+    // Button visibility
+    const hideControlButtons = this._config.hide_control_buttons || false;
+    const hideModeButtons = this._config.hide_mode_buttons || false;
     
     // Helper function to convert hex to rgba
     const hexToRgba = (hex, alpha) => {
@@ -1120,6 +1155,7 @@ class InnodigiThermostatCard extends HTMLElement {
           ${!isCompact ? `
           <div class="header">
             <div class="title">${this._config.name || entity.attributes.friendly_name || 'Thermostaat'}</div>
+            ${!hideModeButtons ? `
             <div class="mode-buttons">
               <button class="mode-btn ${presetMode === 'eco' ? 'active' : ''}" data-mode="eco">
                 ${this._config.eco_label || 'Eco'}
@@ -1128,6 +1164,7 @@ class InnodigiThermostatCard extends HTMLElement {
                 ${this._config.home_label || 'Home'}
               </button>
             </div>
+            ` : ''}
           </div>
           ` : ''}
 
@@ -1167,16 +1204,16 @@ class InnodigiThermostatCard extends HTMLElement {
 
           ${isCompact ? `
           <div class="controls">
-            <button class="mode-btn compact ${presetMode === 'eco' ? 'active' : ''}" data-mode="eco">${this._config.eco_label || 'Eco'}</button>
-            <button class="control-btn" data-action="decrease">−</button>
-            <button class="control-btn" data-action="increase">+</button>
-            <button class="mode-btn compact ${presetMode === 'home' || presetMode === 'comfort' ? 'active' : ''}" data-mode="home">${this._config.home_label || 'Home'}</button>
+            ${!hideModeButtons ? `<button class="mode-btn compact ${presetMode === 'eco' ? 'active' : ''}" data-mode="eco">${this._config.eco_label || 'Eco'}</button>` : ''}
+            ${!hideControlButtons ? `<button class="control-btn" data-action="decrease">−</button>` : ''}
+            ${!hideControlButtons ? `<button class="control-btn" data-action="increase">+</button>` : ''}
+            ${!hideModeButtons ? `<button class="mode-btn compact ${presetMode === 'home' || presetMode === 'comfort' ? 'active' : ''}" data-mode="home">${this._config.home_label || 'Home'}</button>` : ''}
           </div>
           ` : `
           <div class="controls">
-            <button class="control-btn" data-action="decrease">−</button>
+            ${!hideControlButtons ? `<button class="control-btn" data-action="decrease">−</button>` : ''}
             <div class="target-display">${targetTemp.toFixed(1)}${unit}</div>
-            <button class="control-btn" data-action="increase">+</button>
+            ${!hideControlButtons ? `<button class="control-btn" data-action="increase">+</button>` : ''}
           </div>
           `}
         </div>
@@ -1482,6 +1519,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       // Mode button labels
       eco_label: '',
       home_label: '',
+      // Button visibility
+      hide_control_buttons: false,
+      hide_mode_buttons: false,
       ...config
     };
     
@@ -1639,10 +1679,27 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           </div>
           
           <div class="config-row">
+            <label>
+              <input type="checkbox" id="hide-control-buttons" ${this._config.hide_control_buttons ? 'checked' : ''}>
+              ${getTranslation(this._hass, 'hide_control_buttons_label')}
+            </label>
+            <div class="description">${getTranslation(this._hass, 'hide_control_buttons_description')}</div>
+          </div>
+          
+          <div class="config-row">
+            <label>
+              <input type="checkbox" id="hide-mode-buttons" ${this._config.hide_mode_buttons ? 'checked' : ''}>
+              ${getTranslation(this._hass, 'hide_mode_buttons_label')}
+            </label>
+            <div class="description">${getTranslation(this._hass, 'hide_mode_buttons_description')}</div>
+          </div>
+          
+          <div class="config-row">
             <label>${getTranslation(this._hass, 'outdoor_entity_label')}</label>
-            <select id="outdoor-entity-select">
+            <input type="text" id="outdoor-entity-input" list="outdoor-entity-list" placeholder="${getTranslation(this._hass, 'outdoor_entity_placeholder')}" value="${this._config.outdoor_entity || ''}">
+            <datalist id="outdoor-entity-list">
               ${outdoorEntityOptions}
-            </select>
+            </datalist>
             <div class="description">${getTranslation(this._hass, 'outdoor_entity_description')}</div>
           </div>
           
@@ -1828,7 +1885,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     const entitySelect = this.shadowRoot.querySelector('#entity-select');
     const nameInput = this.shadowRoot.querySelector('#name-input');
     const layoutSelect = this.shadowRoot.querySelector('#layout-select');
-    const outdoorEntitySelect = this.shadowRoot.querySelector('#outdoor-entity-select');
+    const hideControlButtons = this.shadowRoot.querySelector('#hide-control-buttons');
+    const hideModeButtons = this.shadowRoot.querySelector('#hide-mode-buttons');
+    const outdoorEntityInput = this.shadowRoot.querySelector('#outdoor-entity-input');
     const ecoTemp = this.shadowRoot.querySelector('#eco-temp');
     const homeTemp = this.shadowRoot.querySelector('#home-temp');
     
@@ -1878,8 +1937,22 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       });
     }
 
-    if (outdoorEntitySelect) {
-      outdoorEntitySelect.addEventListener('change', (e) => {
+    if (hideControlButtons) {
+      hideControlButtons.addEventListener('change', (e) => {
+        this._config.hide_control_buttons = e.target.checked;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (hideModeButtons) {
+      hideModeButtons.addEventListener('change', (e) => {
+        this._config.hide_mode_buttons = e.target.checked;
+        this.configChanged(this._config);
+      });
+    }
+
+    if (outdoorEntityInput) {
+      outdoorEntityInput.addEventListener('change', (e) => {
         this._config.outdoor_entity = e.target.value;
         this.configChanged(this._config);
       });
