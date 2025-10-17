@@ -5,6 +5,96 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.15.2] - 2025-10-17
+
+### 🐛 CSS FIXES
+
+#### 1. Checkbox Width Fix
+**Probleem**: Checkboxes kregen `width: 100%` waardoor ze te breed werden
+
+**Oplossing**: CSS selector specifiek gemaakt
+```css
+/* Voor (te breed voor checkboxes) */
+.config-row input,
+.config-row select {
+  width: 100%;
+}
+
+/* Na (checkboxes en color inputs uitgesloten) */
+.config-row input:not([type="checkbox"]):not([type="color"]),
+.config-row select {
+  width: 100%;
+}
+```
+
+**Resultaat**: Checkboxes hebben nu hun normale grootte
+
+#### 2. Title Margin Removed
+**Probleem**: Titel had `margin-left: 55px` wat voor onnodige ruimte zorgde
+
+**Oplossing**: Alle `margin-left: 55px` regels voor `.title` verwijderd
+
+**Resultaat**: Titel staat nu netjes links uitgelijnd zonder extra marge
+
+### 🔧 TECHNISCHE DETAILS
+
+**CSS Selector Improvement**:
+- Gebruikt `:not([type="checkbox"])` om checkboxes uit te sluiten
+- Gebruikt `:not([type="color"])` om color pickers uit te sluiten
+- Behoudt `width: 100%` voor text inputs, number inputs en selects
+
+**Removed Rules**:
+```css
+/* Verwijderd: conditionals voor margin-left */
+.title {
+  margin-left: 55px; /* ❌ REMOVED */
+}
+```
+
+### 📊 VOOR/NA VERGELIJKING
+
+#### Checkbox Width
+**Voor**:
+```
+☐━━━━━━━━━━━━━━━━━━━━━━━━ (te breed)
+```
+
+**Na**:
+```
+☐ (normale grootte)
+```
+
+#### Title Position
+**Voor**:
+```
+┌──────────────────────────┐
+│        Woonkamer [Eco][Home] │  ← Extra ruimte links
+└──────────────────────────┘
+```
+
+**Na**:
+```
+┌──────────────────────────┐
+│ Woonkamer    [Eco][Home]│  ← Netjes links uitgelijnd
+└──────────────────────────┘
+```
+
+### 🎯 VOORDELEN
+
+1. **Betere checkbox weergave**: Normale grootte, niet uitgerekt
+2. **Cleaner layout**: Geen onnodige marges
+3. **Consistenter**: Titel positie is nu voorspelbaar
+4. **Professioneler**: Details kloppen perfect
+
+### 🔄 MIGRATIE
+
+**Van v1.15.1 naar v1.15.2**:
+
+Automatische fixes - geen actie vereist:
+- CSS verbeteringen zijn automatisch actief
+- Geen breaking changes
+- Bestaande configuraties blijven werken
+
 ## [1.15.1] - 2025-10-17
 
 ### 🐛 BUG FIXES

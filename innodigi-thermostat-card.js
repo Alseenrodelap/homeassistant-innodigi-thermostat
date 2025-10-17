@@ -874,12 +874,6 @@ class InnodigiThermostatCard extends HTMLElement {
           margin-top: 20px;
         }
         ` : ''}
-        /* Adjust title position when outdoor temp is shown in normal mode */
-        ${!isCompact ? `
-        .title {
-          margin-left: 55px;
-        }
-        ` : ''}
         ` : ''}
 
         ${outdoorDisplayMode === 'inline' && hasOutdoor ? `
@@ -905,12 +899,6 @@ class InnodigiThermostatCard extends HTMLElement {
           ${hasOutdoor && isCompact ? `
           .temperature-display {
             margin-top: 20px;
-          }
-          ` : ''}
-          /* Adjust title position when outdoor temp is shown in normal mode */
-          ${hasOutdoor && !isCompact ? `
-          .title {
-            margin-left: 55px;
           }
           ` : ''}
         }
@@ -1593,7 +1581,7 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           cursor: pointer;
         }
         
-        .config-row input,
+        .config-row input:not([type="checkbox"]):not([type="color"]),
         .config-row select {
           width: 100%;
           padding: 8px;
@@ -2092,7 +2080,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.15.1 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.15.2 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
