@@ -5,6 +5,108 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.17.1] - 2025-10-17
+
+### 🐛 BUGFIXES
+
+#### 1. Slider Werkt Niet Na Bewerkmodus
+**Probleem**: Na het sluiten van de editor werkte de slider niet meer
+
+**Root Cause**: 
+- Event listeners voor `mousemove` en `mouseup` werden toegevoegd aan `document`
+- Bij elke render (bijv. na sluiten editor) werden NIEUWE listeners toegevoegd
+- Oude listeners bleven bestaan en verwezen naar verwijderde DOM elementen
+- Dit veroorzaakte conflicten en blokkeerde de slider functionaliteit
+
+**Oplossing**:
+```javascript
+_attachEventListeners() {
+  // Clean up old event listeners first to prevent stacking
+  if (this._moveHandler) {
+    document.removeEventListener('mousemove', this._moveHandler);
+    this._moveHandler = null;
+  }
+  if (this._endHandler) {
+    document.removeEventListener('mouseup', this._endHandler);
+    this._endHandler = null;
+  }
+  
+  // ... rest of event listener setup
+}
+```
+
+**Resultaat**:
+- Oude listeners worden nu correct verwijderd vóór nieuwe worden toegevoegd
+- Slider werkt betrouwbaar na het verlaten van de editor
+- Geen listener stacking meer
+- Geen memory leaks door achtergebleven listeners
+
+#### 2. Eco/Home Button Kleuren Fix
+**Probleem**: Ingestelde achtergrondkleur voor Eco/Home buttons werd niet toegepast
+
+**Root Cause**:
+- CSS specificity conflict mogelijk
+- Theme variabelen konden de custom kleur overschrijven
+- Zonder `!important` werd de kleur soms genegeerd
+
+**Oplossing**:
+```css
+/* Voor */
+.mode-btn.active {
+  background: ${colorModeButtons};
+  color: white;
+}
+
+/* Na */
+.mode-btn.active {
+  background: ${colorModeButtons} !important;
+  color: white;
+}
+```
+
+**Resultaat**:
+- Custom button kleuren worden NU WEL correct toegepast
+- Werkt in alle themes en situaties
+- Geen overschrijving door theme CSS meer mogelijk
+
+### 🔧 TECHNISCHE DETAILS
+
+**Event Listener Lifecycle**:
+```
+1. Card render → _attachEventListeners() aangeroepen
+2. Check: Bestaan oude handlers?
+   - JA → Verwijder van document → Zet refs naar null
+   - NEE → Ga door
+3. Maak nieuwe handlers → Attach aan document
+4. Sla refs op in this._moveHandler en this._endHandler
+5. Bij volgende render of cleanup → Herhaal vanaf stap 1
+```
+
+**CSS !important Gebruik**:
+- Normaal: Vermijd `!important` waar mogelijk
+- Hier: Noodzakelijk omdat:
+  - Theme CSS kan custom kleuren overschrijven
+  - Geen andere manier om garantie te geven
+  - Specifieke use case voor user-configured colors
+
+### 📊 IMPACT
+
+**Gebruikerservaring**:
+- ✅ Slider werkt betrouwbaar na editor gebruik
+- ✅ Custom button kleuren worden correct weergegeven
+- ✅ Geen verwarrend gedrag meer na configuratie wijzigingen
+- ✅ Betere betrouwbaarheid overall
+
+**Code Kwaliteit**:
+- Proper cleanup van event listeners
+- Voorkomen van memory leaks
+- Betere CSS specificity handling
+
+**Backwards Compatibility**:
+- Geen breaking changes
+- Bestaande configuraties blijven werken
+- Alleen bugfixes, geen nieuwe features
+
 ## [1.17.0] - 2025-10-17
 
 ### ✨ NIEUWE FEATURES

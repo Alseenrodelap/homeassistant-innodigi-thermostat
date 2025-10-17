@@ -1012,7 +1012,7 @@ class InnodigiThermostatCard extends HTMLElement {
         }
 
         .mode-btn.active {
-          background: ${colorModeButtons};
+          background: ${colorModeButtons} !important;
           color: white;
         }
 
@@ -1363,6 +1363,16 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   _attachEventListeners() {
+    // Clean up old event listeners first to prevent stacking
+    if (this._moveHandler) {
+      document.removeEventListener('mousemove', this._moveHandler);
+      this._moveHandler = null;
+    }
+    if (this._endHandler) {
+      document.removeEventListener('mouseup', this._endHandler);
+      this._endHandler = null;
+    }
+
     const entity = this._hass.states[this._config.entity];
     const minTemp = parseFloat(entity.attributes.min_temp) || 5;
     const maxTemp = parseFloat(entity.attributes.max_temp) || 35;
