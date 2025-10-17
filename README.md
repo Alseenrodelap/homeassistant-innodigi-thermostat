@@ -1,4 +1,4 @@
-# Innodigi Thermostat Card for Home Assistant
+# InnoDIGI Thermostat Card for Home Assistant
 
 A modern, touch-friendly thermostat card for Home Assistant with an intuitive horizontal slider interface.
 
