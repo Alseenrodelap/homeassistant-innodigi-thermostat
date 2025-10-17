@@ -8,7 +8,7 @@ A modern, touch-friendly thermostat card for Home Assistant with an intuitive ho
 
 Do you find this custom card useful? Consider a donation to support development!
 
-[![Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
+[Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
 
 Every contribution is appreciated and helps keep the card improving and maintained. Thank you! 🙏
 
@@ -28,11 +28,28 @@ Every contribution is appreciated and helps keep the card improving and maintain
 
 ### HACS (Recommended)
 
+#### Option 1: Via HACS Custom Repository
+
+1. Open HACS in your Home Assistant
+2. Click on "Frontend" 
+3. Click the 3 dots menu (⋮) in the top right
+4. Select "Custom repositories"
+5. Add the repository:
+   - **Repository**: `https://github.com/Alseenrodelap/homeassistant-innodigi-thermostat`
+   - **Category**: `Lovelace`
+6. Click "Add"
+7. Search for "InnoDIGI Thermostat Card" in HACS
+8. Click "Download" 
+9. Restart Home Assistant
+
+#### Option 2: Default HACS Store (Coming soon)
+
+Once approved for the default HACS store:
 1. Open HACS in your Home Assistant
 2. Go to "Frontend"
 3. Click the "+" button
-4. Search for "Innodigi Thermostat Card"
-5. Click "Install"
+4. Search for "InnoDIGI Thermostat Card"
+5. Click "Download"
 6. Restart Home Assistant
 
 ### Manual Installation
@@ -169,6 +186,6 @@ https://github.com/elco/homeassistant-innodigi-thermostat/issues
 
 Do you find this custom card useful? Consider a donation to support development!
 
-[![Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
+[Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
 
 Every contribution is appreciated and helps keep the card improving and maintained. Thank you! 🙏
