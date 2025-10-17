@@ -62,3 +62,11 @@ Werkt met alle generieke thermostaat entiteiten in Home Assistant, waaronder:
 - Honeywell
 - En vele anderen
 
+## ☕ Doneren
+
+Vind je deze custom card nuttig? Overweeg een donatie om de ontwikkeling te ondersteunen!
+
+[![Donate with PayPal](https://www.paypalobjects.com/nl_NL/NL/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=KYWBUB3324S9G)
+
+Elke bijdrage wordt gewaardeerd en helpt om de kaart te blijven verbeteren en onderhouden. Dank je wel! 🙏
+

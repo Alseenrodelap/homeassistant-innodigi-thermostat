@@ -193,3 +193,11 @@ Ontwikkeld door Elco voor gebruik met Innodigi thermostaten en compatibele syste
 Voor vragen, bugs of feature requests, open een issue op GitHub:
 https://github.com/elco/homeassistant-innodigi-thermostat/issues
 
+## ☕ Doneren
+
+Vind je deze custom card nuttig? Overweeg een donatie om de ontwikkeling te ondersteunen!
+
+[![Donate with PayPal](https://www.paypalobjects.com/nl_NL/NL/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=KYWBUB3324S9G)
+
+Elke bijdrage wordt gewaardeerd en helpt om de kaart te blijven verbeteren en onderhouden. Dank je wel! 🙏
+
