@@ -5,6 +5,190 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.15.1] - 2025-10-17
+
+### 🐛 BUG FIXES
+
+#### 1. Checkbox Alignment Fix (Verbeterd)
+**Probleem**: Checkbox stond boven het label in plaats van ernaast
+
+**Oorzaak**: Labels hadden `display: block`, waardoor checkbox en tekst onder elkaar kwamen
+
+**Oplossing**:
+```css
+/* Special styling for labels with checkboxes */
+.config-row label:has(input[type="checkbox"]) {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.config-row label input[type="checkbox"] {
+  margin-right: 8px;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+```
+
+**Resultaat**: Checkbox staat nu netjes naast de tekst, zoals bedoeld
+
+#### 2. Header Layout Verbetering
+**Wijziging**: Titel staat nu naast de Eco/Home knoppen in plaats van erboven
+
+**Voor**:
+```
+┌──────────────────────────┐
+│ Woonkamer               │
+│              [Eco][Home]│
+└──────────────────────────┘
+```
+
+**Na**:
+```
+┌──────────────────────────┐
+│ Woonkamer    [Eco][Home]│  ← Op één lijn
+└──────────────────────────┘
+```
+
+**Voordelen**:
+- Compactere weergave
+- Betere ruimtebenutting
+- Duidelijker overzicht
+
+#### 3. Outdoor Temperature Positioning
+**Verbetering**: Buitentemperatuur wordt niet meer weggedrukt door titel
+
+**Oplossing**:
+- Outdoor-compact positie: `left: 0`, `top: 0`
+- Header krijgt `padding-top: 20px` wanneer outdoor compact getoond wordt
+- Titel heeft `flex-shrink: 0` en `margin-right: 12px`
+- Mode buttons hebben `flex-wrap: nowrap`
+
+**Resultaat**:
+```
+[15.3°C buiten]
+┌──────────────────────────┐
+│ Woonkamer    [Eco][Home]│  ← Titel blijft zichtbaar
+└──────────────────────────┘
+```
+
+### 🔧 TECHNISCHE DETAILS
+
+#### CSS Verbeteringen
+
+**Checkbox Label Styling**:
+```css
+/* Use :has() selector for modern browsers */
+.config-row label:has(input[type="checkbox"]) {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+```
+
+**Header Layout**:
+```css
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding-top: ${compact && outdoor ? '20px' : '0'};
+}
+
+.title {
+  flex-shrink: 0;        /* Prevent title from shrinking */
+  margin-right: 12px;    /* Space between title and buttons */
+}
+
+.mode-buttons {
+  flex-shrink: 0;        /* Prevent buttons from shrinking */
+  flex-wrap: nowrap;     /* Keep buttons on one line */
+}
+```
+
+**Outdoor Compact**:
+```css
+.outdoor-compact {
+  position: absolute;
+  left: 0;              /* Align left */
+  top: 0;               /* Top of container */
+  font-size: 11px;      /* Smaller font */
+  z-index: 1;
+}
+```
+
+### 📊 VOOR/NA VERGELIJKING
+
+#### Editor Checkbox
+**Voor**:
+```
+☐
+Toon temperaturen in kaartjes
+```
+
+**Na**:
+```
+☐ Toon temperaturen in kaartjes
+```
+
+#### Card Header
+**Voor (verticaal)**:
+```
+┌─────────────────────────┐
+│ Woonkamer              │
+│              [Eco][Home]│
+└─────────────────────────┘
+```
+
+**Na (horizontaal)**:
+```
+┌─────────────────────────┐
+│ Woonkamer    [Eco][Home]│
+└─────────────────────────┘
+```
+
+#### Met Outdoor Temperature
+**Voor**:
+```
+    [15.3°C buiten]  ← Kan overlap hebben
+┌─────────────────────────┐
+│ Woonkamer              │
+│              [Eco][Home]│
+└─────────────────────────┘
+```
+
+**Na**:
+```
+[15.3°C buiten]          ← Geen overlap
+┌─────────────────────────┐
+│ Woonkamer    [Eco][Home]│
+└─────────────────────────┘
+```
+
+### 🎯 VOORDELEN
+
+#### Gebruikerservaring
+1. **Duidelijkere UI**: Checkbox staat waar je verwacht
+2. **Compacter**: Header neemt minder ruimte in
+3. **Consistent**: Titel en knoppen op één lijn
+4. **Stabiel**: Geen overlap of verschuiving meer
+
+#### Visual Design
+1. **Professioneler**: Netjes uitgelijnd
+2. **Overzichtelijker**: Alles op zijn plek
+3. **Ruimtebesparend**: Betere layout
+4. **Modern**: Gebruikt moderne CSS features
+
+### 🔄 MIGRATIE
+
+**Van v1.15.0 naar v1.15.1**:
+
+Automatische fixes - geen actie vereist:
+- Bestaande configuraties blijven werken
+- UI verbeteringen zijn automatisch actief
+- Geen breaking changes
+
 ## [1.15.0] - 2025-10-17
 
 ### ✨ NIEUWE FUNCTIES

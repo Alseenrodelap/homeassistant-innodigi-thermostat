@@ -837,35 +837,31 @@ class InnodigiThermostatCard extends HTMLElement {
           justify-content: space-between;
           align-items: center;
           position: relative;
+          padding-top: ${outdoorDisplayMode === 'compact' && hasOutdoor && !isCompact ? '20px' : '0'};
         }
 
         .title {
           font-size: 18px;
           font-weight: 500;
           color: var(--primary-text-color);
+          flex-shrink: 0;
+          margin-right: 12px;
         }
 
         .outdoor-compact {
           position: absolute;
-          left: 8px;
-          top: 8px;
-          font-size: 12px;
+          left: 0;
+          top: 0;
+          font-size: 11px;
           font-weight: 300;
           color: ${colorOutdoorTemp};
           display: ${outdoorDisplayMode === 'compact' && hasOutdoor ? 'block' : 'none'};
           opacity: 0.8;
           z-index: 1;
-          padding: 2px 4px;
+          padding: 2px 6px;
           background: rgba(0, 0, 0, 0.1);
           border-radius: 4px;
         }
-        
-        /* Add padding to header when compact outdoor is shown */
-        ${outdoorDisplayMode === 'compact' && hasOutdoor && !isCompact ? `
-        .header {
-          padding-left: 90px;
-        }
-        ` : ''}
 
         ${outdoorDisplayMode === 'compact' && hasOutdoor ? `
         /* Hide inline outdoor when compact mode is forced */
@@ -923,6 +919,8 @@ class InnodigiThermostatCard extends HTMLElement {
         .mode-buttons {
           display: flex;
           gap: 8px;
+          flex-shrink: 0;
+          flex-wrap: nowrap;
         }
 
         .mode-btn {
@@ -1582,9 +1580,17 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           color: var(--primary-text-color);
         }
         
+        /* Special styling for labels with checkboxes */
+        .config-row label:has(input[type="checkbox"]) {
+          display: inline-flex;
+          align-items: center;
+          cursor: pointer;
+        }
+        
         .config-row label input[type="checkbox"] {
           margin-right: 8px;
-          vertical-align: middle;
+          margin-bottom: 0;
+          cursor: pointer;
         }
         
         .config-row input,
@@ -2086,7 +2092,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.15.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.15.1 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
