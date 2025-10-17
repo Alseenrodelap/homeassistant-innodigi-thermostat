@@ -20,12 +20,16 @@ const TRANSLATIONS = {
     hide_control_buttons_description: 'Hide the temperature adjustment buttons.',
     hide_mode_buttons_label: 'Hide Eco/Home buttons',
     hide_mode_buttons_description: 'Hide the mode selection buttons.',
+    show_temperature_ticks_label: 'Show temperature ticks',
+    show_temperature_ticks_description: 'Show tick marks at the bottom of the slider for whole and half degrees.',
+    temperature_ticks_color_label: 'Temperature ticks color',
+    temperature_ticks_color_description: 'Color of the temperature tick marks on the slider.',
     // Editor - Outdoor temperature
     section_outdoor: 'Outdoor Temperature',
     outdoor_entity_label: 'Outdoor Temperature Entity',
     outdoor_entity_placeholder: '-- No outdoor temperature --',
     outdoor_entity_description: 'Optional: sensor or weather entity for outdoor temperature.',
-    outdoor_display_mode_label: 'Display Mode',
+    outdoor_display_mode_label: 'Outdoor temperature display mode',
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Always inline',
     outdoor_display_compact: 'Always compact',
@@ -108,12 +112,16 @@ const TRANSLATIONS = {
     hide_control_buttons_description: 'Verberg de temperatuur aanpas knoppen.',
     hide_mode_buttons_label: 'Verberg Eco/Thuis knoppen',
     hide_mode_buttons_description: 'Verberg de modus selectie knoppen.',
+    show_temperature_ticks_label: 'Toon temperatuur streepjes',
+    show_temperature_ticks_description: 'Toon streepjes aan de onderzijde van de slider voor hele en halve graden.',
+    temperature_ticks_color_label: 'Kleur temperatuur streepjes',
+    temperature_ticks_color_description: 'Kleur van de temperatuur streepjes op de slider.',
     // Editor - Outdoor temperature
     section_outdoor: 'Buitentemperatuur',
     outdoor_entity_label: 'Buitentemperatuur Entiteit',
     outdoor_entity_placeholder: '-- Geen buitentemperatuur --',
     outdoor_entity_description: 'Optioneel: sensor of weer entiteit voor buitentemperatuur.',
-    outdoor_display_mode_label: 'Weergave Modus',
+    outdoor_display_mode_label: 'Weergave modus buitentemperatuur',
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Altijd inline',
     outdoor_display_compact: 'Altijd compact',
@@ -196,12 +204,16 @@ const TRANSLATIONS = {
     hide_control_buttons_description: 'Temperaturanpassungsschaltflächen ausblenden.',
     hide_mode_buttons_label: 'Eco/Heim Schaltflächen ausblenden',
     hide_mode_buttons_description: 'Modusauswahlschaltflächen ausblenden.',
+    show_temperature_ticks_label: 'Temperaturmarkierungen anzeigen',
+    show_temperature_ticks_description: 'Markierungen am unteren Rand des Schiebereglers für ganze und halbe Grade anzeigen.',
+    temperature_ticks_color_label: 'Farbe der Temperaturmarkierungen',
+    temperature_ticks_color_description: 'Farbe der Temperaturmarkierungen auf dem Schieberegler.',
     // Editor - Outdoor temperature
     section_outdoor: 'Außentemperatur',
     outdoor_entity_label: 'Außentemperatur Entität',
     outdoor_entity_placeholder: '-- Keine Außentemperatur --',
     outdoor_entity_description: 'Optional: Sensor oder Wetter-Entität für Außentemperatur.',
-    outdoor_display_mode_label: 'Anzeigemodus',
+    outdoor_display_mode_label: 'Anzeigemodus Außentemperatur',
     outdoor_display_auto: 'Auto (responsiv)',
     outdoor_display_inline: 'Immer inline',
     outdoor_display_compact: 'Immer kompakt',
@@ -284,12 +296,16 @@ const TRANSLATIONS = {
     hide_control_buttons_description: "Masquer les boutons d'ajustement de température.",
     hide_mode_buttons_label: 'Masquer les boutons Éco/Maison',
     hide_mode_buttons_description: 'Masquer les boutons de sélection du mode.',
+    show_temperature_ticks_label: 'Afficher les graduations de température',
+    show_temperature_ticks_description: 'Afficher les graduations en bas du curseur pour les degrés entiers et demi.',
+    temperature_ticks_color_label: 'Couleur des graduations de température',
+    temperature_ticks_color_description: 'Couleur des graduations de température sur le curseur.',
     // Editor - Outdoor temperature
     section_outdoor: 'Température extérieure',
     outdoor_entity_label: 'Entité de température extérieure',
     outdoor_entity_placeholder: '-- Pas de température extérieure --',
     outdoor_entity_description: 'Optionnel: capteur ou entité météo pour la température extérieure.',
-    outdoor_display_mode_label: "Mode d'affichage",
+    outdoor_display_mode_label: "Mode d'affichage température extérieure",
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Toujours en ligne',
     outdoor_display_compact: 'Toujours compact',
@@ -372,12 +388,16 @@ const TRANSLATIONS = {
     hide_control_buttons_description: 'Nascondi i pulsanti di regolazione temperatura.',
     hide_mode_buttons_label: 'Nascondi pulsanti Eco/Casa',
     hide_mode_buttons_description: 'Nascondi i pulsanti di selezione modalità.',
+    show_temperature_ticks_label: 'Mostra tacche temperatura',
+    show_temperature_ticks_description: 'Mostra tacche nella parte inferiore del cursore per gradi interi e mezzi.',
+    temperature_ticks_color_label: 'Colore tacche temperatura',
+    temperature_ticks_color_description: 'Colore delle tacche di temperatura sul cursore.',
     // Editor - Outdoor temperature
     section_outdoor: 'Temperatura esterna',
     outdoor_entity_label: 'Entità temperatura esterna',
     outdoor_entity_placeholder: '-- Nessuna temperatura esterna --',
     outdoor_entity_description: 'Opzionale: sensore o entità meteo per la temperatura esterna.',
-    outdoor_display_mode_label: 'Modalità di visualizzazione',
+    outdoor_display_mode_label: 'Modalità visualizzazione temperatura esterna',
     outdoor_display_auto: 'Auto (responsive)',
     outdoor_display_inline: 'Sempre in linea',
     outdoor_display_compact: 'Sempre compatto',
@@ -460,12 +480,16 @@ const TRANSLATIONS = {
     hide_control_buttons_description: 'Ocultar los botones de ajuste de temperatura.',
     hide_mode_buttons_label: 'Ocultar botones Eco/Casa',
     hide_mode_buttons_description: 'Ocultar los botones de selección de modo.',
+    show_temperature_ticks_label: 'Mostrar marcas de temperatura',
+    show_temperature_ticks_description: 'Mostrar marcas en la parte inferior del deslizador para grados enteros y medios.',
+    temperature_ticks_color_label: 'Color de marcas de temperatura',
+    temperature_ticks_color_description: 'Color de las marcas de temperatura en el deslizador.',
     // Editor - Outdoor temperature
     section_outdoor: 'Temperatura exterior',
     outdoor_entity_label: 'Entidad de temperatura exterior',
     outdoor_entity_placeholder: '-- Sin temperatura exterior --',
     outdoor_entity_description: 'Opcional: sensor o entidad meteorológica para la temperatura exterior.',
-    outdoor_display_mode_label: 'Modo de visualización',
+    outdoor_display_mode_label: 'Modo visualización temperatura exterior',
     outdoor_display_auto: 'Auto (adaptable)',
     outdoor_display_inline: 'Siempre en línea',
     outdoor_display_compact: 'Siempre compacto',
@@ -548,12 +572,16 @@ const TRANSLATIONS = {
     hide_control_buttons_description: 'Приховати кнопки регулювання температури.',
     hide_mode_buttons_label: 'Приховати кнопки Еко/Дім',
     hide_mode_buttons_description: 'Приховати кнопки вибору режиму.',
+    show_temperature_ticks_label: 'Показати позначки температури',
+    show_temperature_ticks_description: 'Показати позначки внизу повзунка для цілих і половинних градусів.',
+    temperature_ticks_color_label: 'Колір позначок температури',
+    temperature_ticks_color_description: 'Колір позначок температури на повзунку.',
     // Editor - Outdoor temperature
     section_outdoor: 'Зовнішня температура',
     outdoor_entity_label: 'Об\'єкт зовнішньої температури',
     outdoor_entity_placeholder: '-- Без зовнішньої температури --',
     outdoor_entity_description: 'Необов\'язково: датчик або об\'єкт погоди для зовнішньої температури.',
-    outdoor_display_mode_label: 'Режим відображення',
+    outdoor_display_mode_label: 'Режим відображення зовнішньої температури',
     outdoor_display_auto: 'Авто (адаптивний)',
     outdoor_display_inline: 'Завжди в рядку',
     outdoor_display_compact: 'Завжди компактний',
@@ -782,7 +810,10 @@ class InnodigiThermostatCard extends HTMLElement {
       home_label: '',
       // Button visibility
       hide_control_buttons: false,
-      hide_mode_buttons: false
+      hide_mode_buttons: false,
+      // Temperature ticks
+      show_temperature_ticks: false,
+      temperature_ticks_color: '#ffffff'
     };
   }
 
@@ -840,6 +871,10 @@ class InnodigiThermostatCard extends HTMLElement {
     const hideControlButtons = this._config.hide_control_buttons || false;
     const hideModeButtons = this._config.hide_mode_buttons || false;
     
+    // Temperature ticks
+    const showTemperatureTicks = this._config.show_temperature_ticks || false;
+    const temperatureTicksColor = this._config.temperature_ticks_color || '#ffffff';
+    
     // Helper function to convert hex to rgba
     const hexToRgba = (hex, alpha) => {
       const r = parseInt(hex.slice(1, 3), 16);
@@ -850,6 +885,19 @@ class InnodigiThermostatCard extends HTMLElement {
     
     const tempCardBg = hexToRgba(tempCardBgColor, tempCardBgAlpha);
     const tempCardBorder = hexToRgba(tempCardBorderColor, tempCardBorderAlpha);
+    
+    // Generate temperature ticks HTML
+    let ticksHTML = '';
+    if (showTemperatureTicks) {
+      const ticks = [];
+      // Generate ticks for every 0.5 degree
+      for (let temp = minTemp; temp <= maxTemp; temp += 0.5) {
+        const isWhole = temp % 1 === 0;
+        const percent = this._tempToPercent(temp, minTemp, maxTemp);
+        ticks.push(`<div class="temp-tick ${isWhole ? 'whole' : 'half'}" style="left: ${percent}%"></div>`);
+      }
+      ticksHTML = ticks.join('');
+    }
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -1048,6 +1096,25 @@ class InnodigiThermostatCard extends HTMLElement {
           overflow: visible;
         }
 
+        .temp-tick {
+          position: absolute;
+          bottom: -8px;
+          transform: translateX(-50%);
+          background: ${temperatureTicksColor};
+          width: 1px;
+          pointer-events: none;
+        }
+
+        .temp-tick.whole {
+          height: 6px;
+          bottom: -10px;
+        }
+
+        .temp-tick.half {
+          height: 3px;
+          bottom: -7px;
+        }
+
         .slider-marker {
           position: absolute;
           top: 50%;
@@ -1193,6 +1260,7 @@ class InnodigiThermostatCard extends HTMLElement {
 
           <div class="slider-container">
             <div class="slider-track" data-slider="true">
+              ${ticksHTML}
               <div class="slider-marker current" style="left: ${this._tempToPercent(currentTemp, minTemp, maxTemp)}%"></div>
               <div class="slider-marker target" style="left: ${this._tempToPercent(targetTemp, minTemp, maxTemp)}%">
                 <div class="drag-value ${this._dragging ? 'visible' : ''}">
@@ -1522,6 +1590,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       // Button visibility
       hide_control_buttons: false,
       hide_mode_buttons: false,
+      // Temperature ticks
+      show_temperature_ticks: false,
+      temperature_ticks_color: '#ffffff',
       ...config
     };
     
@@ -1692,6 +1763,20 @@ class InnodigiThermostatCardEditor extends HTMLElement {
               ${getTranslation(this._hass, 'hide_mode_buttons_label')}
             </label>
             <div class="description">${getTranslation(this._hass, 'hide_mode_buttons_description')}</div>
+          </div>
+          
+          <div class="config-row">
+            <label>
+              <input type="checkbox" id="show-temperature-ticks" ${this._config.show_temperature_ticks ? 'checked' : ''}>
+              ${getTranslation(this._hass, 'show_temperature_ticks_label')}
+            </label>
+            <div class="description">${getTranslation(this._hass, 'show_temperature_ticks_description')}</div>
+          </div>
+          
+          <div class="config-row" id="temperature-ticks-color-row" style="display: ${this._config.show_temperature_ticks ? 'block' : 'none'}">
+            <label>${getTranslation(this._hass, 'temperature_ticks_color_label')}</label>
+            <input type="color" id="temperature-ticks-color" value="${this._config.temperature_ticks_color || '#ffffff'}">
+            <div class="description">${getTranslation(this._hass, 'temperature_ticks_color_description')}</div>
           </div>
           
           <div class="config-row">
@@ -1947,6 +2032,27 @@ class InnodigiThermostatCardEditor extends HTMLElement {
     if (hideModeButtons) {
       hideModeButtons.addEventListener('change', (e) => {
         this._config.hide_mode_buttons = e.target.checked;
+        this.configChanged(this._config);
+      });
+    }
+
+    const showTemperatureTicks = this.shadowRoot.querySelector('#show-temperature-ticks');
+    if (showTemperatureTicks) {
+      showTemperatureTicks.addEventListener('change', (e) => {
+        this._config.show_temperature_ticks = e.target.checked;
+        // Show/hide color picker based on checkbox
+        const colorRow = this.shadowRoot.querySelector('#temperature-ticks-color-row');
+        if (colorRow) {
+          colorRow.style.display = e.target.checked ? 'block' : 'none';
+        }
+        this.configChanged(this._config);
+      });
+    }
+
+    const temperatureTicksColor = this.shadowRoot.querySelector('#temperature-ticks-color');
+    if (temperatureTicksColor) {
+      temperatureTicksColor.addEventListener('change', (e) => {
+        this._config.temperature_ticks_color = e.target.value;
         this.configChanged(this._config);
       });
     }

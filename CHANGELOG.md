@@ -5,6 +5,151 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.17.0] - 2025-10-17
+
+### ✨ NIEUWE FEATURES
+
+#### 1. Temperatuur Streepjes op Slider
+**Feature**: Optionele temperatuur markering streepjes op de slider
+
+**Nieuwe Configuratieopties**:
+- `show_temperature_ticks`: Toon streepjes aan de onderzijde van de slider
+- `temperature_ticks_color`: Instelbare kleur voor de streepjes (default: `#ffffff`)
+
+**Details**:
+- Streepjes voor hele graden: 6px hoog
+- Streepjes voor halve graden: 3px hoog (lager dan hele graden)
+- Automatische berekening gebaseerd op min/max temperatuur
+- Color picker wordt alleen getoond wanneer de feature is ingeschakeld
+
+**Visueel**:
+```
+Slider: ████████████████████████████
+Ticks:  |  |  |  |  |  |  |  |  |  |
+        ↑     ↑     ↑     ↑     ↑
+       hele  halve hele  halve hele
+```
+
+#### 2. Verbeterd Label: Weergave Modus
+**Wijziging**: Label "Weergave Modus" → "Weergave modus buitentemperatuur"
+
+**Reden**: Duidelijker welke modus wordt ingesteld
+- Was: "Weergave Modus" (te algemeen)
+- Nu: "Weergave modus buitentemperatuur" (specifiek)
+
+**Toegepast op alle 7 talen**:
+- 🇳🇱 Nederlands: "Weergave modus buitentemperatuur"
+- 🇬🇧 Engels: "Outdoor temperature display mode"
+- 🇩🇪 Duits: "Anzeigemodus Außentemperatur"
+- 🇫🇷 Frans: "Mode d'affichage température extérieure"
+- 🇮🇹 Italiaans: "Modalità visualizzazione temperatura esterna"
+- 🇪🇸 Spaans: "Modo visualización temperatura exterior"
+- 🇺🇦 Oekraïens: "Режим відображення зовнішньої температури"
+
+### 🌐 VERTALINGEN
+
+Nieuwe translation keys voor alle 7 talen:
+- `show_temperature_ticks_label`
+- `show_temperature_ticks_description`
+- `temperature_ticks_color_label`
+- `temperature_ticks_color_description`
+
+### 🔧 TECHNISCHE DETAILS
+
+**Config Schema Update**:
+```javascript
+{
+  // ... bestaande config
+  show_temperature_ticks: false,        // NEW
+  temperature_ticks_color: '#ffffff'    // NEW
+}
+```
+
+**Ticks Generatie**:
+```javascript
+// Generate temperature ticks HTML
+let ticksHTML = '';
+if (showTemperatureTicks) {
+  const ticks = [];
+  // Generate ticks for every 0.5 degree
+  for (let temp = minTemp; temp <= maxTemp; temp += 0.5) {
+    const isWhole = temp % 1 === 0;
+    const percent = this._tempToPercent(temp, minTemp, maxTemp);
+    ticks.push(`<div class="temp-tick ${isWhole ? 'whole' : 'half'}" style="left: ${percent}%"></div>`);
+  }
+  ticksHTML = ticks.join('');
+}
+```
+
+**CSS Styling**:
+```css
+.temp-tick {
+  position: absolute;
+  bottom: -8px;
+  transform: translateX(-50%);
+  background: ${temperatureTicksColor};
+  width: 1px;
+  pointer-events: none;
+}
+
+.temp-tick.whole {
+  height: 6px;
+  bottom: -10px;
+}
+
+.temp-tick.half {
+  height: 3px;
+  bottom: -7px;
+}
+```
+
+**HTML Structuur**:
+```html
+<div class="slider-container">
+  <div class="slider-track" data-slider="true">
+    ${ticksHTML}  <!-- Ticks achter markers -->
+    <div class="slider-marker current"></div>
+    <div class="slider-marker target"></div>
+  </div>
+</div>
+```
+
+**Editor UI**:
+- Checkbox in "Basis Instellingen" sectie
+- Color picker verschijnt conditioneel bij checkbox
+- Dynamic show/hide met JavaScript:
+```javascript
+showTemperatureTicks.addEventListener('change', (e) => {
+  const colorRow = this.shadowRoot.querySelector('#temperature-ticks-color-row');
+  if (colorRow) {
+    colorRow.style.display = e.target.checked ? 'block' : 'none';
+  }
+});
+```
+
+### 📊 IMPACT
+
+**Gebruikerservaring**:
+- Betere visuele referentie voor temperatuur positie
+- Duidelijker label voor outdoor temperature modus
+- Meer aanpasbare UI met kleurkeuze voor streepjes
+- Optionele feature die standaard uitstaat (backwards compatible)
+
+**Design**:
+- Streepjes zijn subtiel en interfereren niet met bestaande UI
+- `pointer-events: none` zorgt dat ze niet clickable zijn
+- Automatische berekening betekent dat het werkt voor elke temperatuur range
+
+**Performance**:
+- Streepjes worden gegenereerd tijdens render
+- Geen runtime overhead (statische HTML)
+- Minimale DOM impact (1 div per 0.5 graad, typisch 40-60 elementen)
+
+**Backwards Compatibility**:
+- Feature is standaard uitgeschakeld
+- Bestaande configuraties blijven ongewijzigd werken
+- Geen breaking changes
+
 ## [1.16.0] - 2025-10-17
 
 ### ✨ NIEUWE FEATURES
