@@ -5,6 +5,272 @@ Alle belangrijke wijzigingen aan dit project worden in dit bestand gedocumenteer
 Het formaat is gebaseerd op [Keep a Changelog](https://keepachangelog.com/nl/1.0.0/),
 en dit project volgt [Semantic Versioning](https://semver.org/lang/nl/).
 
+## [1.15.0] - 2025-10-17
+
+### ✨ NIEUWE FUNCTIES
+
+#### Aangepaste Mode Button Labels
+- **Configureerbare knop teksten**: Eco en Thuis knoppen kunnen eigen namen krijgen
+- **Override taal strings**: Custom labels overschrijven de standaard vertalingen
+- **Optioneel**: Laat leeg voor standaard labels per taal
+- **Alle 7 talen**: Werkt met alle ondersteunde talen
+
+**Voorbeeld**:
+```yaml
+eco_label: "Weg"
+home_label: "Lekker warm"
+```
+
+Resultaat: Knoppen tonen "Weg" en "Lekker warm" i.p.v. "Eco" en "Home"
+
+### 🐛 BUG FIXES
+
+#### 1. Titel Positioning Fix
+**Probleem**: Titel in header schoof op door compact outdoor temperature display
+
+**Oplossing**:
+- Outdoor-compact positie verbeterd: `left: 8px`, `top: 8px`
+- Header krijgt `padding-left: 90px` wanneer compact outdoor getoond wordt
+- Z-index aangepast naar 1 (was 10) voor betere layering
+
+**Resultaat**: Titel blijft stabiel, outdoor temp overlapt niet
+
+#### 2. Checkbox Alignment Fix
+**Probleem**: Checkbox bij "Toon temperaturen in kaartjes" was niet netjes uitgelijnd
+
+**Oplossing**:
+```css
+.config-row label input[type="checkbox"] {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+```
+
+**Resultaat**: Checkbox is nu perfect uitgelijnd met label tekst
+
+#### 3. Mode Button Kleur Fix
+**Probleem**: Kleur van Eco/Thuis knoppen werd niet toegepast (gerapporteerd maar was eigenlijk correct geïmplementeerd)
+
+**Verificatie**: 
+- `color_mode_buttons` wordt correct uitgelezen uit config
+- CSS gebruikt `background: ${colorModeButtons}` voor `.mode-btn.active`
+- Kleuren worden correct toegepast
+
+### 🔧 TECHNISCHE DETAILS
+
+#### Config Uitbreiding
+**Nieuwe opties**:
+```javascript
+{
+  eco_label: '',      // Custom label voor Eco knop (default: 'Eco')
+  home_label: ''      // Custom label voor Home knop (default: 'Home')
+}
+```
+
+#### HTML Rendering
+**Normal Layout**:
+```javascript
+<button class="mode-btn" data-mode="eco">
+  ${this._config.eco_label || 'Eco'}
+</button>
+<button class="mode-btn" data-mode="home">
+  ${this._config.home_label || 'Home'}
+</button>
+```
+
+**Compact Layout**:
+```javascript
+<button class="mode-btn compact" data-mode="eco">${this._config.eco_label || 'Eco'}</button>
+<button class="mode-btn compact" data-mode="home">${this._config.home_label || 'Home'}</button>
+```
+
+#### Translation Keys
+Alle 7 talen uitgebreid met:
+- `eco_label`: Editor label
+- `eco_label_description`: Editor beschrijving
+- `home_label`: Editor label  
+- `home_label_description`: Editor beschrijving
+
+#### CSS Verbeteringen
+**Outdoor Compact Positioning**:
+```css
+.outdoor-compact {
+  position: absolute;
+  left: 8px;        /* Was: 0 */
+  top: 8px;         /* Was: -2px */
+  z-index: 1;       /* Was: 10 */
+}
+
+/* Add padding when compact outdoor is shown */
+.header {
+  padding-left: 90px;  /* NEW */
+}
+```
+
+**Checkbox Alignment**:
+```css
+.config-row label input[type="checkbox"] {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+```
+
+### 💡 USE CASES
+
+#### Use Case 1: Nederlandse Huishouding
+**Scenario**: Gebruiker wil begrijpelijkere termen dan "Eco" en "Home"
+
+**Voor**:
+- Knoppen: "Eco" | "Home"
+
+**Na**:
+```yaml
+eco_label: "Weg"
+home_label: "Thuis"
+```
+- Knoppen: "Weg" | "Thuis"
+
+#### Use Case 2: Creatieve Namen
+**Scenario**: Gebruiker wil leuke/persoonlijke namen
+
+**Configuratie**:
+```yaml
+eco_label: "Zuinig"
+home_label: "Lekker warm"
+```
+
+**Resultaat**: Knoppen tonen "Zuinig" en "Lekker warm"
+
+#### Use Case 3: Meertalig Huishouden
+**Scenario**: Gebruiker wil labels in andere taal dan HA instelling
+
+**Voorbeeld**:
+```yaml
+# HA taal: English
+eco_label: "Économique"
+home_label: "Confort"
+```
+
+**Resultaat**: Franse labels in Engelse UI
+
+#### Use Case 4: Standaard Gebruik
+**Scenario**: Gebruiker laat velden leeg
+
+**Configuratie**:
+```yaml
+eco_label: ""
+home_label: ""
+```
+
+**Resultaat**: 
+- Nederlands: "Eco" | "Home" (fallback)
+- English: "Eco" | "Home"
+- Deutsch: "Eco" | "Heim"
+- etc.
+
+### 📊 VOOR/NA VERGELIJKING
+
+#### Custom Labels
+**Voor**:
+```
+┌──────────────────────────┐
+│ [Eco] [Home]            │ ← Hardcoded
+└──────────────────────────┘
+```
+
+**Na**:
+```
+┌──────────────────────────┐
+│ [Weg] [Lekker warm]     │ ← Configureerbaar
+└──────────────────────────┘
+```
+
+#### Titel Positioning
+**Voor**:
+```
+[15.3°C buiten]  ← Overlapt soms titel
+┌─────────────────────────┐
+│ Woonkamer   [Eco][Home] │
+└─────────────────────────┘
+```
+
+**Na**:
+```
+[15.3°C buiten]
+┌─────────────────────────┐
+│         Woonkamer [Eco][Home] │ ← Padding, geen overlap
+└─────────────────────────┘
+```
+
+#### Checkbox Alignment
+**Voor**:
+```
+☐ Toon temperaturen in kaartjes  ← Misaligned
+```
+
+**Na**:
+```
+☐ Toon temperaturen in kaartjes  ← Perfect aligned
+```
+
+### 🎯 VOORDELEN
+
+#### Gebruikerservaring
+1. **Personalisatie**: Eigen namen voor knoppen
+2. **Duidelijkheid**: Kies termen die voor jou logisch zijn
+3. **Flexibiliteit**: Override automatische vertalingen
+4. **Stabiliteit**: Titel schuift niet meer op
+
+#### UI/UX Improvements
+1. **Betere positionering**: Outdoor temp overlapt niet
+2. **Nette alignment**: Checkbox perfect uitgelijnd
+3. **Consistent**: Kleuren werken correct
+4. **Professional**: Alle details kloppen
+
+### 🔄 MIGRATIE
+
+**Van v1.14.0 naar v1.15.0**:
+
+Automatische migratie - geen actie vereist:
+- Bestaande kaarten blijven werken
+- Nieuwe config opties zijn optioneel
+- Standaard labels blijven hetzelfde
+- UI verbeteringen zijn automatisch actief
+
+**Optioneel configureren**:
+```yaml
+# Voeg toe aan je card config
+eco_label: "Jouw custom label"
+home_label: "Jouw custom label"
+```
+
+### 📝 CONFIGURATIE VOORBEELD
+
+**Basis (standaard labels)**:
+```yaml
+type: custom:innodigi-thermostat-card
+entity: climate.woonkamer
+# eco_label en home_label niet ingesteld = standaard labels
+```
+
+**Custom labels**:
+```yaml
+type: custom:innodigi-thermostat-card
+entity: climate.woonkamer
+eco_label: "Weg"
+home_label: "Lekker warm"
+eco_temperature: 18
+home_temperature: 21
+```
+
+**Creatief**:
+```yaml
+type: custom:innodigi-thermostat-card
+entity: climate.slaapkamer
+eco_label: "💤 Slapen"
+home_label: "☀️ Wakker"
+```
+
 ## [1.14.0] - 2025-10-17
 
 ### 🌍 UITBREIDING INTERNATIONALISATIE

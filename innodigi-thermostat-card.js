@@ -32,6 +32,10 @@ const TRANSLATIONS = {
     eco_temp_description: 'Target temperature for Eco mode',
     home_temp_label: 'Home Temperature (°C)',
     home_temp_description: 'Target temperature for Home mode',
+    eco_label: 'Eco Button Label (optional)',
+    eco_label_description: 'Custom name for the Eco button (default: "Eco")',
+    home_label: 'Home Button Label (optional)',
+    home_label_description: 'Custom name for the Home button (default: "Home")',
     // Editor - Slider colors
     section_slider_colors: 'Slider Colors',
     color_cold_label: 'Cold Color',
@@ -112,6 +116,10 @@ const TRANSLATIONS = {
     eco_temp_description: 'Doeltemperatuur voor Eco modus',
     home_temp_label: 'Thuis Temperatuur (°C)',
     home_temp_description: 'Doeltemperatuur voor Thuis modus',
+    eco_label: 'Eco Knop Label (optioneel)',
+    eco_label_description: 'Aangepaste naam voor de Eco knop (standaard: "Eco")',
+    home_label: 'Thuis Knop Label (optioneel)',
+    home_label_description: 'Aangepaste naam voor de Thuis knop (standaard: "Thuis")',
     // Editor - Slider colors
     section_slider_colors: 'Slider Kleuren',
     color_cold_label: 'Koude Kleur',
@@ -192,6 +200,10 @@ const TRANSLATIONS = {
     eco_temp_description: 'Zieltemperatur für Eco-Modus',
     home_temp_label: 'Heimtemperatur (°C)',
     home_temp_description: 'Zieltemperatur für Heim-Modus',
+    eco_label: 'Eco Taste Beschriftung (optional)',
+    eco_label_description: 'Benutzerdefinierter Name für die Eco-Taste (Standard: "Eco")',
+    home_label: 'Heim Taste Beschriftung (optional)',
+    home_label_description: 'Benutzerdefinierter Name für die Heim-Taste (Standard: "Heim")',
     // Editor - Slider colors
     section_slider_colors: 'Schieberegler Farben',
     color_cold_label: 'Kalte Farbe',
@@ -272,6 +284,10 @@ const TRANSLATIONS = {
     eco_temp_description: 'Température cible pour le mode Éco',
     home_temp_label: 'Température Maison (°C)',
     home_temp_description: 'Température cible pour le mode Maison',
+    eco_label: 'Libellé bouton Éco (facultatif)',
+    eco_label_description: 'Nom personnalisé pour le bouton Éco (par défaut: "Éco")',
+    home_label: 'Libellé bouton Maison (facultatif)',
+    home_label_description: 'Nom personnalisé pour le bouton Maison (par défaut: "Maison")',
     // Editor - Slider colors
     section_slider_colors: 'Couleurs du curseur',
     color_cold_label: 'Couleur froide',
@@ -352,6 +368,10 @@ const TRANSLATIONS = {
     eco_temp_description: 'Temperatura target per la modalità Eco',
     home_temp_label: 'Temperatura Casa (°C)',
     home_temp_description: 'Temperatura target per la modalità Casa',
+    eco_label: 'Etichetta pulsante Eco (opzionale)',
+    eco_label_description: 'Nome personalizzato per il pulsante Eco (predefinito: "Eco")',
+    home_label: 'Etichetta pulsante Casa (opzionale)',
+    home_label_description: 'Nome personalizzato per il pulsante Casa (predefinito: "Casa")',
     // Editor - Slider colors
     section_slider_colors: 'Colori cursore',
     color_cold_label: 'Colore freddo',
@@ -432,6 +452,10 @@ const TRANSLATIONS = {
     eco_temp_description: 'Temperatura objetivo para el modo Eco',
     home_temp_label: 'Temperatura Casa (°C)',
     home_temp_description: 'Temperatura objetivo para el modo Casa',
+    eco_label: 'Etiqueta botón Eco (opcional)',
+    eco_label_description: 'Nombre personalizado para el botón Eco (predeterminado: "Eco")',
+    home_label: 'Etiqueta botón Casa (opcional)',
+    home_label_description: 'Nombre personalizado para el botón Casa (predeterminado: "Casa")',
     // Editor - Slider colors
     section_slider_colors: 'Colores del deslizador',
     color_cold_label: 'Color frío',
@@ -512,6 +536,10 @@ const TRANSLATIONS = {
     eco_temp_description: 'Цільова температура для режиму Еко',
     home_temp_label: 'Температура Дім (°C)',
     home_temp_description: 'Цільова температура для режиму Дім',
+    eco_label: 'Назва кнопки Еко (необов\'язково)',
+    eco_label_description: 'Власна назва для кнопки Еко (за замовчуванням: "Еко")',
+    home_label: 'Назва кнопки Дім (необов\'язково)',
+    home_label_description: 'Власна назва для кнопки Дім (за замовчуванням: "Дім")',
     // Editor - Slider colors
     section_slider_colors: 'Кольори повзунка',
     color_cold_label: 'Холодний колір',
@@ -720,7 +748,10 @@ class InnodigiThermostatCard extends HTMLElement {
       temp_target_tap_action: 'more-info',
       temp_outdoor_tap_action: 'more-info',
       eco_temperature: 18,
-      home_temperature: 21
+      home_temperature: 21,
+      // Mode button labels
+      eco_label: '',
+      home_label: ''
     };
   }
 
@@ -816,18 +847,25 @@ class InnodigiThermostatCard extends HTMLElement {
 
         .outdoor-compact {
           position: absolute;
-          left: 0;
-          top: -2px;
+          left: 8px;
+          top: 8px;
           font-size: 12px;
           font-weight: 300;
           color: ${colorOutdoorTemp};
           display: ${outdoorDisplayMode === 'compact' && hasOutdoor ? 'block' : 'none'};
           opacity: 0.8;
-          z-index: 10;
+          z-index: 1;
           padding: 2px 4px;
           background: rgba(0, 0, 0, 0.1);
           border-radius: 4px;
         }
+        
+        /* Add padding to header when compact outdoor is shown */
+        ${outdoorDisplayMode === 'compact' && hasOutdoor && !isCompact ? `
+        .header {
+          padding-left: 90px;
+        }
+        ` : ''}
 
         ${outdoorDisplayMode === 'compact' && hasOutdoor ? `
         /* Hide inline outdoor when compact mode is forced */
@@ -1098,10 +1136,10 @@ class InnodigiThermostatCard extends HTMLElement {
             <div class="title">${this._config.name || entity.attributes.friendly_name || 'Thermostaat'}</div>
             <div class="mode-buttons">
               <button class="mode-btn ${presetMode === 'eco' ? 'active' : ''}" data-mode="eco">
-                Eco
+                ${this._config.eco_label || 'Eco'}
               </button>
               <button class="mode-btn ${presetMode === 'home' || presetMode === 'comfort' ? 'active' : ''}" data-mode="home">
-                Thuis
+                ${this._config.home_label || 'Home'}
               </button>
             </div>
           </div>
@@ -1143,10 +1181,10 @@ class InnodigiThermostatCard extends HTMLElement {
 
           ${isCompact ? `
           <div class="controls">
-            <button class="mode-btn compact ${presetMode === 'eco' ? 'active' : ''}" data-mode="eco">Eco</button>
+            <button class="mode-btn compact ${presetMode === 'eco' ? 'active' : ''}" data-mode="eco">${this._config.eco_label || 'Eco'}</button>
             <button class="control-btn" data-action="decrease">−</button>
             <button class="control-btn" data-action="increase">+</button>
-            <button class="mode-btn compact ${presetMode === 'home' || presetMode === 'comfort' ? 'active' : ''}" data-mode="home">Thuis</button>
+            <button class="mode-btn compact ${presetMode === 'home' || presetMode === 'comfort' ? 'active' : ''}" data-mode="home">${this._config.home_label || 'Home'}</button>
           </div>
           ` : `
           <div class="controls">
@@ -1455,6 +1493,9 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       temp_outdoor_tap_action: 'more-info',
       eco_temperature: 18,
       home_temperature: 21,
+      // Mode button labels
+      eco_label: '',
+      home_label: '',
       ...config
     };
     
@@ -1539,6 +1580,11 @@ class InnodigiThermostatCardEditor extends HTMLElement {
           margin-bottom: 8px;
           font-weight: 500;
           color: var(--primary-text-color);
+        }
+        
+        .config-row label input[type="checkbox"] {
+          margin-right: 8px;
+          vertical-align: middle;
         }
         
         .config-row input,
@@ -1629,6 +1675,18 @@ class InnodigiThermostatCardEditor extends HTMLElement {
             <label>${getTranslation(this._hass, 'home_temp_label')}</label>
             <input type="number" id="home-temp" min="5" max="35" step="0.5" value="${this._config.home_temperature}">
             <div class="description">${getTranslation(this._hass, 'home_temp_description')}</div>
+          </div>
+          
+          <div class="config-row">
+            <label>${getTranslation(this._hass, 'eco_label')}</label>
+            <input type="text" id="eco-label" placeholder="Eco" value="${this._config.eco_label || ''}">
+            <div class="description">${getTranslation(this._hass, 'eco_label_description')}</div>
+          </div>
+          
+          <div class="config-row">
+            <label>${getTranslation(this._hass, 'home_label')}</label>
+            <input type="text" id="home-label" placeholder="Home" value="${this._config.home_label || ''}">
+            <div class="description">${getTranslation(this._hass, 'home_label_description')}</div>
           </div>
         </div>
 
@@ -1855,6 +1913,23 @@ class InnodigiThermostatCardEditor extends HTMLElement {
       });
     }
 
+    // Mode button labels
+    const ecoLabel = this.shadowRoot.querySelector('#eco-label');
+    if (ecoLabel) {
+      ecoLabel.addEventListener('change', (e) => {
+        this._config.eco_label = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
+    const homeLabel = this.shadowRoot.querySelector('#home-label');
+    if (homeLabel) {
+      homeLabel.addEventListener('change', (e) => {
+        this._config.home_label = e.target.value;
+        this.configChanged(this._config);
+      });
+    }
+
     // Native color pickers - simple change event
     if (colorCold) {
       colorCold.addEventListener('change', (e) => {
@@ -2011,7 +2086,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c INNODIGI-THERMOSTAT-CARD %c v1.14.0 `,
+  `%c INNODIGI-THERMOSTAT-CARD %c v1.15.0 `,
   'color: white; background: #039be5; font-weight: 700;',
   'color: #039be5; background: white; font-weight: 700;'
 );
