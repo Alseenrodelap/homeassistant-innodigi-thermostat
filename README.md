@@ -1,37 +1,37 @@
-# Innodigi Thermostaat Kaart voor Home Assistant
+# Innodigi Thermostat Card for Home Assistant
 
-Een moderne, touch-vriendelijke thermostaat kaart voor Home Assistant met een intuïtieve horizontale slider interface.
+A modern, touch-friendly thermostat card for Home Assistant with an intuitive horizontal slider interface.
 
 ![Innodigi Thermostat Card](screenshot.png)
 
 ## Features
 
-- 🌡️ **Dubbele temperatuurweergave**: Toont zowel huidige als doeltemperatuur
-- 📊 **Horizontale slider**: Touch-vriendelijke balk in plaats van circulaire interface
-- 🎯 **Visuele feedback**: Grote temperatuurweergave tijdens het slepen
-- 🏠 **Preset modes**: Snel schakelen tussen Eco en Thuis modus
-- ➕➖ **Plus/Min knoppen**: Nauwkeurige temperatuurcontrole
-- 🎨 **Moderne UI**: Vloeiende animaties en gradient slider
-- 🔄 **Realtime updates**: Onmiddellijke feedback bij interactie
-- ✅ **Compatibel**: Werkt met alle generieke thermostaat entiteiten
-- 🎛️ **Visuele editor**: Eenvoudig configureren via de UI zonder YAML
+- 🌡️ **Dual temperature display**: Shows both current and target temperature
+- 📊 **Horizontal slider**: Touch-friendly bar instead of circular interface
+- 🎯 **Visual feedback**: Large temperature display while dragging
+- 🏠 **Preset modes**: Quick switching between Eco and Home modes
+- ➕➖ **Plus/Minus buttons**: Precise temperature control
+- 🎨 **Modern UI**: Smooth animations and gradient slider
+- 🔄 **Real-time updates**: Immediate feedback on interaction
+- ✅ **Compatible**: Works with all generic thermostat entities
+- 🎛️ **Visual editor**: Easy configuration via UI without YAML
 
-## Installatie
+## Installation
 
-### HACS (Aanbevolen)
+### HACS (Recommended)
 
-1. Open HACS in je Home Assistant
-2. Ga naar "Frontend"
-3. Klik op de "+" knop
-4. Zoek naar "Innodigi Thermostat Card"
-5. Klik op "Install"
-6. Herstart Home Assistant
+1. Open HACS in your Home Assistant
+2. Go to "Frontend"
+3. Click the "+" button
+4. Search for "Innodigi Thermostat Card"
+5. Click "Install"
+6. Restart Home Assistant
 
-### Handmatige installatie
+### Manual Installation
 
 1. Download `innodigi-thermostat-card.js`
-2. Kopieer het bestand naar `/config/www/` in je Home Assistant installatie
-3. Voeg de volgende regel toe aan je `configuration.yaml`:
+2. Copy the file to `/config/www/` in your Home Assistant installation
+3. Add the following line to your `configuration.yaml`:
 
 ```yaml
 lovelace:
@@ -40,48 +40,48 @@ lovelace:
       type: module
 ```
 
-4. Herstart Home Assistant
+4. Restart Home Assistant
 
-## Configuratie
+## Configuration
 
-### Via de Visuele Editor (Aanbevolen) ⭐
+### Via Visual Editor (Recommended) ⭐
 
-1. Ga naar je dashboard
-2. Klik rechtsboven op het menu (⋮) en selecteer "Bewerken dashboard"
-3. Klik op "+ VOEG KAART TOE"
-4. Scroll naar beneden en selecteer **"Custom: Innodigi Thermostaat Kaart"**
-5. Configureer de kaart:
-   - **Basis Instellingen**:
-     - Selecteer je thermostaat entity via de dropdown
-     - Voeg optioneel een aangepaste naam toe
-   - **Temperatuur Instellingen**:
-     - Stel de Eco doeltemperatuur in (standaard 18°C)
-     - Stel de Thuis doeltemperatuur in (standaard 21°C)
-   - **Kleur Instellingen**:
-     - Kies de kleur voor koude temperaturen (links)
-     - Kies de kleur voor middel temperaturen (midden)
-     - Kies de kleur voor warme temperaturen (rechts)
-6. Klik op "OPSLAAN"
+1. Go to your dashboard
+2. Click the menu button (⋮) in the top right and select "Edit Dashboard"
+3. Click "+ ADD CARD"
+4. Scroll down and select **"Custom: Innodigi Thermostat Card"**
+5. Configure the card:
+   - **Basic Settings**:
+     - Select your thermostat entity via the dropdown
+     - Optionally add a custom name
+   - **Temperature Settings**:
+     - Set the Eco target temperature (default 18°C)
+     - Set the Home target temperature (default 21°C)
+   - **Color Settings**:
+     - Choose the color for cold temperatures (left)
+     - Choose the color for medium temperatures (middle)
+     - Choose the color for warm temperatures (right)
+6. Click "SAVE"
 
-De kaart heeft een visuele editor met live preview, dus je hoeft geen YAML te schrijven! 🎉
+The card has a visual editor with live preview, so you don't need to write YAML! 🎉
 
-### Via YAML (Alternatief)
+### Via YAML (Alternative)
 
-Je kunt de kaart ook handmatig configureren:
+You can also configure the card manually:
 
-#### Basis configuratie
+#### Basic configuration
 
 ```yaml
 type: custom:innodigi-thermostat-card
-entity: climate.woonkamer
+entity: climate.living_room
 ```
 
-#### Volledige configuratie
+#### Full configuration
 
 ```yaml
 type: custom:innodigi-thermostat-card
-entity: climate.woonkamer
-name: Woonkamer Thermostaat
+entity: climate.living_room
+name: Living Room Thermostat
 color_cold: '#3498db'
 color_medium: '#2ecc71'
 color_hot: '#e74c3c'
@@ -89,115 +89,78 @@ eco_temperature: 18
 home_temperature: 21
 ```
 
-## Configuratie opties
+## Configuration Options
 
-| Optie | Type | Verplicht | Standaard | Beschrijving |
-|-------|------|-----------|-----------|--------------|
-| `type` | string | Ja | - | `custom:innodigi-thermostat-card` |
-| `entity` | string | Ja | - | De climate entity ID |
-| `name` | string | Nee | Entiteitsnaam | Naam van de thermostaat |
-| `color_cold` | string | Nee | `#3498db` | Kleur linkerkant balk (koud) |
-| `color_medium` | string | Nee | `#2ecc71` | Kleur midden balk |
-| `color_hot` | string | Nee | `#e74c3c` | Kleur rechterkant balk (warm) |
-| `eco_temperature` | number | Nee | `18` | Doeltemperatuur voor Eco mode |
-| `home_temperature` | number | Nee | `21` | Doeltemperatuur voor Thuis mode |
+| Option | Type | Required | Default | Description |
+|--------|------|----------|---------|-------------|
+| `type` | string | Yes | - | `custom:innodigi-thermostat-card` |
+| `entity` | string | Yes | - | The climate entity ID |
+| `name` | string | No | Entity name | Name of the thermostat |
+| `color_cold` | string | No | `#3498db` | Color for left side of bar (cold) |
+| `color_medium` | string | No | `#2ecc71` | Color for middle of bar |
+| `color_hot` | string | No | `#e74c3c` | Color for right side of bar (warm) |
+| `eco_temperature` | number | No | `18` | Target temperature for Eco mode |
+| `home_temperature` | number | No | `21` | Target temperature for Home mode |
 
-## Gebruik
+## Usage
 
-### Temperatuur instellen
+### Setting Temperature
 
-Er zijn drie manieren om de doeltemperatuur in te stellen:
+There are three ways to set the target temperature:
 
-1. **Slepen op de balk**: Klik of raak de gekleurde balk aan en sleep. De witte cirkel volgt je vinger en toont de temperatuur.
-2. **Plus/Min knoppen**: Gebruik de + en - knoppen voor nauwkeurige aanpassingen.
-3. **Direct klikken**: Klik of raak een punt op de balk aan om direct die temperatuur in te stellen.
+1. **Dragging on the bar**: Click or touch the colored bar and drag. The white circle follows your finger and shows the temperature.
+2. **Plus/Minus buttons**: Use the + and - buttons for precise adjustments.
+3. **Direct clicking**: Click or touch a point on the bar to directly set that temperature.
 
-### Preset modes
+### Preset Modes
 
-- **Eco**: Zet de thermostaat op je geconfigureerde Eco temperatuur (standaard 18°C)
-- **Thuis**: Zet de thermostaat op je geconfigureerde Thuis temperatuur (standaard 21°C)
+- **Eco**: Sets the thermostat to your configured Eco temperature (default 18°C)
+- **Home**: Sets the thermostat to your configured Home temperature (default 21°C)
 
-Klik op de knoppen bovenaan de kaart om snel naar deze vooringestelde temperaturen te schakelen. Je kunt deze temperaturen aanpassen in de visuele editor!
+Click the buttons at the top of the card to quickly switch to these preset temperatures. You can adjust these temperatures in the visual editor!
 
-### Visuele indicatoren
+### Visual Indicators
 
-- **Witte lijn**: Toont de huidige temperatuur
-- **Witte cirkel**: Toont de doeltemperatuur
-- **Kleurverloop**: Van blauw (koud) via groen naar rood (warm)
+- **White line**: Shows the current temperature
+- **White circle**: Shows the target temperature
+- **Color gradient**: From blue (cold) through green to red (warm)
 
-## Compatibiliteit
+## Compatibility
 
-Deze kaart werkt met alle climate entiteiten die de volgende attributen ondersteunen:
+This card works with all climate entities that support the following attributes:
 
-- `current_temperature` - Huidige temperatuur
-- `temperature` - Doeltemperatuur
-- `min_temp` - Minimale temperatuur
-- `max_temp` - Maximale temperatuur
-- `target_temp_step` - Temperatuurstap (optioneel, standaard 0.5)
-- `preset_mode` - Huidige preset mode (optioneel)
+- `current_temperature` - Current temperature
+- `temperature` - Target temperature
+- `min_temp` - Minimum temperature
+- `max_temp` - Maximum temperature
+- `target_temp_step` - Temperature step (optional, default 0.5)
+- `preset_mode` - Current preset mode (optional)
 
-Compatible thermostaten:
+Compatible thermostats:
 - Generic Thermostat
 - Netatmo
 - Nest
 - Tado
 - Honeywell
-- En vele anderen
+- And many others
 
-## Ontwikkeling
+## License
 
-### Lokaal testen
-
-1. Clone de repository
-2. Kopieer `innodigi-thermostat-card.js` naar je Home Assistant `/config/www/` directory
-3. Voeg de resource toe aan je Lovelace configuratie
-4. Herlaad de frontend (Developer Tools > YAML > Frontend herladen)
-
-### Aanpassingen
-
-De kaart is gebouwd met vanilla JavaScript en gebruikt Home Assistant's design tokens voor consistente styling. Je kunt de kleuren en afmetingen aanpassen in de `<style>` sectie van het bestand.
-
-## Troubleshooting
-
-### De kaart wordt niet geladen
-
-1. Controleer of het bestand correct is geplaatst in `/config/www/`
-2. Controleer of de resource is toegevoegd aan de configuratie
-3. Herlaad de frontend of herstart Home Assistant
-4. Controleer de browser console voor foutmeldingen (F12)
-
-### De slider reageert niet
-
-1. Controleer of je thermostaat entity correct is geconfigureerd
-2. Controleer of de entity de juiste attributen heeft (`min_temp`, `max_temp`)
-3. Controleer de browser console voor JavaScript fouten
-
-### Preset modes werken niet
-
-Niet alle thermostaten ondersteunen preset modes. Controleer of je thermostaat de `preset_mode` service ondersteunt:
-
-1. Ga naar Developer Tools > Services
-2. Zoek naar `climate.set_preset_mode`
-3. Controleer welke preset modes beschikbaar zijn voor je entiteit
-
-## Licentie
-
-MIT License - Zie LICENSE bestand voor details
+MIT License - See LICENSE file for details
 
 ## Credits
 
-Ontwikkeld door Elco voor gebruik met Innodigi thermostaten en compatibele systemen.
+Developed by Elco for use with Innodigi thermostats and compatible systems.
 
 ## Support
 
-Voor vragen, bugs of feature requests, open een issue op GitHub:
+For questions, bugs, or feature requests, please open an issue on GitHub:
 https://github.com/elco/homeassistant-innodigi-thermostat/issues
 
-## ☕ Doneren
+## ☕ Donate
 
-Vind je deze custom card nuttig? Overweeg een donatie om de ontwikkeling te ondersteunen!
+Do you find this custom card useful? Consider a donation to support development!
 
-[![Donate with PayPal](https://www.paypalobjects.com/nl_NL/NL/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=KYWBUB3324S9G)
+[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=KYWBUB3324S9G)
 
-Elke bijdrage wordt gewaardeerd en helpt om de kaart te blijven verbeteren en onderhouden. Dank je wel! 🙏
-
+Every contribution is appreciated and helps keep the card improving and maintained. Thank you! 🙏
