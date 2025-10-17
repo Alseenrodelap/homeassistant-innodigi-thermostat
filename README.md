@@ -4,6 +4,14 @@ A modern, touch-friendly thermostat card for Home Assistant with an intuitive ho
 
 ![Innodigi Thermostat Card](screenshot.png)
 
+## ☕ Donate
+
+Do you find this custom card useful? Consider a donation to support development!
+
+[![Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
+
+Every contribution is appreciated and helps keep the card improving and maintained. Thank you! 🙏
+
 ## Features
 
 - 🌡️ **Dual temperature display**: Shows both current and target temperature
