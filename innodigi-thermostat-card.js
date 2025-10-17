@@ -1211,6 +1211,7 @@ class InnodigiThermostatCard extends HTMLElement {
         .mode-btn.compact {
           padding: 6px 12px;
           font-size: 12px;
+          background: ${colorModeButtons} !important;
         }
       </style>
 
