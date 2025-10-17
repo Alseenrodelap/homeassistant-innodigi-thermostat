@@ -8,7 +8,7 @@ A modern, touch-friendly thermostat card for Home Assistant with an intuitive ho
 
 Do you find this custom card useful? Consider a donation to support development!
 
-[Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
+![Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
 
 Every contribution is appreciated and helps keep the card improving and maintained. Thank you! 🙏
 
@@ -186,6 +186,6 @@ https://github.com/elco/homeassistant-innodigi-thermostat/issues
 
 Do you find this custom card useful? Consider a donation to support development!
 
-[Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
+![Donate with PayPal](https://www.paypal.com/ncp/payment/KYWBUB3324S9G)
 
 Every contribution is appreciated and helps keep the card improving and maintained. Thank you! 🙏
