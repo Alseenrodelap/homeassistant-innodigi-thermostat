@@ -663,6 +663,8 @@ class InnodigiThermostatCard extends HTMLElement {
     this._interactionTimeout = null;
     this._localTargetTemp = null; // Local target temperature for instant UI updates
     this._syncTimeout = null; // Debounce timer for syncing to thermostat
+    this._heartbeatInterval = null; // Heartbeat to keep UI in sync
+    this._lastEntityState = null; // Track entity state for change detection
   }
 
   set hass(hass) {
@@ -678,6 +680,12 @@ class InnodigiThermostatCard extends HTMLElement {
       }
     }
     
+    // Always update values to ensure UI stays in sync with entity state
+    this.updateValues();
+    
+    // Start heartbeat to ensure continuous updates
+    this._startHeartbeat();
+    
     // Only re-render if entity state actually changed or first render
     if (!oldHass || !this._cardInitialized) {
       this.updateCard();
@@ -690,13 +698,8 @@ class InnodigiThermostatCard extends HTMLElement {
           const entityTemp = parseFloat(entity.attributes.temperature) || 20;
           if (this._localTargetTemp !== entityTemp) {
             this._localTargetTemp = entityTemp;
-            this.updateValues();
           }
         }
-      }
-      // When dragging, still update UI (will use _dragValue via _getCurrentTargetTemp)
-      else if (this._dragging) {
-        this.updateValues();
       }
     }
   }
@@ -766,8 +769,56 @@ class InnodigiThermostatCard extends HTMLElement {
     return this._localTargetTemp !== null ? this._localTargetTemp : 20;
   }
 
+  _startHeartbeat() {
+    // Clear existing heartbeat
+    if (this._heartbeatInterval) {
+      clearInterval(this._heartbeatInterval);
+    }
+    
+    // Start new heartbeat every 30 seconds to ensure UI stays in sync
+    this._heartbeatInterval = setInterval(() => {
+      if (this._hass && this._config && !this._interacting && !this._dragging) {
+        this._forceUpdateFromEntity();
+      }
+    }, 30000); // 30 seconds
+  }
+
+  _stopHeartbeat() {
+    if (this._heartbeatInterval) {
+      clearInterval(this._heartbeatInterval);
+      this._heartbeatInterval = null;
+    }
+  }
+
+  _forceUpdateFromEntity() {
+    if (!this._hass || !this._config) return;
+    
+    const entity = this._hass.states[this._config.entity];
+    if (entity) {
+      const entityTemp = parseFloat(entity.attributes.temperature) || 20;
+      const entityState = entity.state;
+      
+      // Check if entity state has changed
+      if (this._lastEntityState !== entityState || this._localTargetTemp !== entityTemp) {
+        this._lastEntityState = entityState;
+        this._localTargetTemp = entityTemp;
+        this.updateValues();
+      }
+    } else {
+      // Entity not found - try to reinitialize
+      console.warn('InnoDIGI Thermostat Card: Entity not found during heartbeat, attempting to reinitialize');
+      this._cardInitialized = false;
+      this.updateCard();
+    }
+  }
+
   getCardSize() {
     return 3;
+  }
+
+  disconnectedCallback() {
+    // Clean up heartbeat when card is removed
+    this._stopHeartbeat();
   }
 
   static getConfigElement() {
@@ -1293,11 +1344,23 @@ class InnodigiThermostatCard extends HTMLElement {
   }
 
   updateValues() {
-    if (!this._hass || !this._config || !this.shadowRoot.querySelector('.temp-value')) return;
+    if (!this._hass || !this._config) return;
+    
+    // Ensure shadowRoot exists and has content
+    if (!this.shadowRoot || !this.shadowRoot.querySelector('.temp-value')) {
+      // If shadowRoot is not ready, try to render the card
+      if (this._cardInitialized) {
+        this.updateCard();
+      }
+      return;
+    }
     
     const entityId = this._config.entity;
     const entity = this._hass.states[entityId];
-    if (!entity) return;
+    if (!entity) {
+      console.warn('InnoDIGI Thermostat Card: Entity not found:', entityId);
+      return;
+    }
 
     const currentTemp = parseFloat(entity.attributes.current_temperature) || 0;
     const targetTemp = this._getCurrentTargetTemp();
@@ -1305,6 +1368,9 @@ class InnodigiThermostatCard extends HTMLElement {
     const maxTemp = parseFloat(entity.attributes.max_temp) || 35;
     const unit = this._hass.config.unit_system.temperature;
     const presetMode = entity.attributes.preset_mode || 'none';
+    
+    // Store current entity state for change detection
+    this._lastEntityState = entity.state;
 
     // Update outdoor temperature if available
     const outdoorEntityId = this._config.outdoor_entity;
